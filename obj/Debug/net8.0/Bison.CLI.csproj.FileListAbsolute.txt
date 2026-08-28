@@ -1,0 +1,14 @@
+/mnt/c/Users/librn/Bison.CLI/bin/Debug/net8.0/Bison.CLI
+/mnt/c/Users/librn/Bison.CLI/bin/Debug/net8.0/Bison.CLI.deps.json
+/mnt/c/Users/librn/Bison.CLI/bin/Debug/net8.0/Bison.CLI.runtimeconfig.json
+/mnt/c/Users/librn/Bison.CLI/bin/Debug/net8.0/Bison.CLI.dll
+/mnt/c/Users/librn/Bison.CLI/bin/Debug/net8.0/Bison.CLI.pdb
+/mnt/c/Users/librn/Bison.CLI/obj/Debug/net8.0/Bison.CLI.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/c/Users/librn/Bison.CLI/obj/Debug/net8.0/Bison.CLI.AssemblyInfoInputs.cache
+/mnt/c/Users/librn/Bison.CLI/obj/Debug/net8.0/Bison.CLI.AssemblyInfo.cs
+/mnt/c/Users/librn/Bison.CLI/obj/Debug/net8.0/Bison.CLI.csproj.CoreCompileInputs.cache
+/mnt/c/Users/librn/Bison.CLI/obj/Debug/net8.0/Bison.CLI.dll
+/mnt/c/Users/librn/Bison.CLI/obj/Debug/net8.0/refint/Bison.CLI.dll
+/mnt/c/Users/librn/Bison.CLI/obj/Debug/net8.0/Bison.CLI.pdb
+/mnt/c/Users/librn/Bison.CLI/obj/Debug/net8.0/Bison.CLI.genruntimeconfig.cache
+/mnt/c/Users/librn/Bison.CLI/obj/Debug/net8.0/ref/Bison.CLI.dll
