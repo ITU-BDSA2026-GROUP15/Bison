@@ -1,31 +1,29 @@
 {
   "format": 1,
   "restore": {
-    "/Users/laerkeroest/Bison/Bison.CLI.csproj": {}
+    "/mnt/c/Users/librn/Desktop/Bison/Bison.CLI.csproj": {}
   },
   "projects": {
-    "/Users/laerkeroest/Bison/Bison.CLI.csproj": {
+    "/mnt/c/Users/librn/Desktop/Bison/Bison.CLI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/laerkeroest/Bison/Bison.CLI.csproj",
+        "projectUniqueName": "/mnt/c/Users/librn/Desktop/Bison/Bison.CLI.csproj",
         "projectName": "Bison.CLI",
-        "projectPath": "/Users/laerkeroest/Bison/Bison.CLI.csproj",
-        "packagesPath": "/Users/laerkeroest/.nuget/packages/",
-        "outputPath": "/Users/laerkeroest/Bison/obj/",
+        "projectPath": "/mnt/c/Users/librn/Desktop/Bison/Bison.CLI.csproj",
+        "packagesPath": "/home/librni/.nuget/packages/",
+        "outputPath": "/mnt/c/Users/librn/Desktop/Bison/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/laerkeroest/.nuget/NuGet/NuGet.Config"
+          "/home/librni/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "/opt/homebrew/Cellar/dotnet/10.0.400/libexec/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
-            "framework": "net8.0",
             "targetAlias": "net8.0",
             "projectReferences": {}
           }
@@ -39,12 +37,10 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "10.0.400"
+        }
       },
       "frameworks": {
         "net8.0": {
-          "framework": "net8.0",
           "targetAlias": "net8.0",
           "imports": [
             "net461",
@@ -57,26 +53,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.30, 8.0.30]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.osx-arm64",
-              "version": "[8.0.30, 8.0.30]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.30, 8.0.30]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet/10.0.400/libexec/sdk/10.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/snap/dotnet-sdk/256/sdk/8.0.407/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "3I7Azu27V/I=",
+  "dgSpecHash": "HENVTTHyqDw=",
   "success": true,
-  "projectFilePath": "/Users/laerkeroest/Bison/Bison.CLI.csproj",
-  "expectedPackageFiles": [
-    "/Users/laerkeroest/.nuget/packages/microsoft.netcore.app.ref/8.0.30/microsoft.netcore.app.ref.8.0.30.nupkg.sha512",
-    "/Users/laerkeroest/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.30/microsoft.aspnetcore.app.ref.8.0.30.nupkg.sha512",
-    "/Users/laerkeroest/.nuget/packages/microsoft.netcore.app.host.osx-arm64/8.0.30/microsoft.netcore.app.host.osx-arm64.8.0.30.nupkg.sha512"
-  ],
+  "projectFilePath": "/mnt/c/Users/librn/Desktop/Bison/Bison.CLI.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }

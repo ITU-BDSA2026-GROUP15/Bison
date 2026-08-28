@@ -1,1 +1,6 @@
-dotnet new gitignore 
+# dotnet new gitignore 
+[Oo]bj/
+[Bb]in/
+
+
+
