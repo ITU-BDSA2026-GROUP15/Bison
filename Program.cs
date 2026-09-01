@@ -3,19 +3,29 @@ using System.IO;
 
 class Program {
     public static void Main() {
-    
-        //StreamReader needs a try/catch block
-        try {
-            readFile();
+        Console.WriteLine("Hi and welcome, how would you like to proceed?");
+        Console.WriteLine("Write 'aisplay' if you wanna see the file");
+        Console.WriteLine("Write 'append' if you wanna add to the file");
+
+
+        string command = Console.ReadLine();
+
+        if (command.Equals("display")) {
+            display();
         }
 
-        catch (Exception e) {
-            Console.WriteLine("File could not be read: ");
-            Console.WriteLine(e.Message);
+        if (command.Equals("append")) {
+            //append();
         }
+
+    
     }
 
-    private static void readFile() {
+    private static void display() {
+        //StreamReader needs a try/catch block
+        
+        try {
+        
         using (StreamReader sr = new StreamReader("bison_observe_cli_db.csv")) {
                 //read headline and not print it in console
                 string headLine = sr.ReadLine();
@@ -39,6 +49,13 @@ class Program {
 
                 }
             }
+        }
+
+        catch (Exception e) {
+            Console.WriteLine("File could not be read: ");
+            Console.WriteLine(e.Message);
+        }
+
     }
 
     //method to convert time into correct format
