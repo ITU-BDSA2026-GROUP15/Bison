@@ -31,23 +31,23 @@ class Program {
 
                     //removing the quotes to get correct format
                     string observation = values[1].Trim('"');
-                    
+
                     string timestamp = values[2]; 
-                    DateTimeOffset time = convertTime(timestamp);
+                    DateTime time = convertTime(timestamp);
                     
-                    Console.WriteLine(author + " @ " + time + " " + observation);
+                    Console.WriteLine(author + " @ " + time + ": " + observation);
 
                 }
             }
     }
 
     //method to convert time into correct format
-    private static DateTimeOffset convertTime(string timestamp) {
+    private static DateTime convertTime(string timestamp) {
         //DTO needs a long, so we need to parse the string into a long
         long unixSeconds = long.Parse(timestamp);
         
         //now using the DTO library to convert unix seconds into actual time
-        DateTimeOffset time = DateTimeOffset.FromUnixTimeSeconds(unixSeconds);
+        DateTime time = DateTimeOffset.FromUnixTimeSeconds(unixSeconds).UtcDateTime;
         
         //returning the time back to the formatting
         return time;
