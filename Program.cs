@@ -28,7 +28,10 @@ class Program {
                     
                     //format wants author in upper
                     string author = values[0].ToUpper();
-                    string observation = values[1];
+
+                    //removing the quotes to get correct format
+                    string observation = values[1].Trim('"');
+                    
                     string timestamp = values[2]; 
                     DateTimeOffset time = convertTime(timestamp);
                     
