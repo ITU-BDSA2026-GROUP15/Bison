@@ -6,6 +6,9 @@ class Program {
         
         try {
             using (StreamReader sr = new StreamReader("bison_observe_cli_db.csv")) {
+                //read headline and not print it in console
+                string headLine = sr.ReadLine();
+                
                 string line;
 
                 while ((line =sr.ReadLine()) != null) {
