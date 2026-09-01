@@ -2,26 +2,21 @@
 using System.IO;
 
 class Program {
-    public static void Main() {
-        Console.WriteLine("Hi and welcome, how would you like to proceed?");
-        Console.WriteLine("Write 'aisplay' if you wanna see the file");
-        Console.WriteLine("Write 'append' if you wanna add to the file");
-
-
-        string command = Console.ReadLine();
-
-        if (command.Equals("display")) {
-            display();
+    public static void Main(string[] args) {
+        
+        if (args[0].Equals("read")) {
+            read();
         }
 
-        if (command.Equals("append")) {
-            //append();
+        if (args[0].Equals("observe")) {
+            string observation = args[1];
+            observe(observation);
         }
 
     
     }
 
-    private static void display() {
+    private static void read() {
         //StreamReader needs a try/catch block
         
         try {
@@ -70,15 +65,14 @@ class Program {
         return time;
     }
 
-/*
-    public static append (string line) {
-        //creating a path to the file where we want to append
-        using (StreamWriter sw = File.CreateText(sr)) {
-            sw.WriteLine(author);
-            sw.Write(" @ ") ;
-            sw.Write(timestamp);
-            sw.Write(observation);
-        }
+    public static void observe(string line) {
+            string observation = line;
+            string author = Environment.UserName;
+            
+            DateTimeOffset localtime = DateTimeOffset.Now;
+
+            Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
+
     }
-*/
+
 }
