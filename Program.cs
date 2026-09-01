@@ -15,7 +15,7 @@ class Program {
         }
     }
 
-    public static void readFile() {
+    private static void readFile() {
         using (StreamReader sr = new StreamReader("bison_observe_cli_db.csv")) {
                 //read headline and not print it in console
                 string headLine = sr.ReadLine();
@@ -30,11 +30,24 @@ class Program {
                     string author = values[0].ToUpper();
                     string observation = values[1];
                     string timestamp = values[2]; 
+                    DateTimeOffset time = convertTime(timestamp);
                     
-                    Console.WriteLine(author + " @ " + timestamp + " " + observation);
+                    Console.WriteLine(author + " @ " + time + " " + observation);
 
                 }
             }
+    }
+
+    //method to convert time into correct format
+    private static DateTimeOffset convertTime(string timestamp) {
+        //DTO needs a long, so we need to parse the string into a long
+        long unixSeconds = long.Parse(timestamp);
+        
+        //now using the DTO library to convert unix seconds into actual time
+        DateTimeOffset time = DateTimeOffset.FromUnixTimeSeconds(unixSeconds);
+        
+        //returning the time back to the formatting
+        return time;
     }
 
 /*
