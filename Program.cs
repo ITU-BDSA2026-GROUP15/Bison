@@ -35,7 +35,7 @@ class Program {
                     string timestamp = values[2]; 
                     DateTime time = convertTime(timestamp);
                     
-                    Console.WriteLine(author + " @ " + time + ": " + observation);
+                    Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
 
                 }
             }
