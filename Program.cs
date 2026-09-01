@@ -29,7 +29,7 @@ class Program {
                 string line;
 
                 while ((line =sr.ReadLine()) != null) {
-                    string[] values = line.Split(',');
+                    string[] values = line.Trim('"').Split(',');
                     
                     //format wants author in upper
                     string author = values[0].ToUpper();
@@ -38,7 +38,7 @@ class Program {
                     string observation = values[1].Trim('"');
 
                     string timestamp = values[2]; 
-                    DateTime time = convertTime(timestamp);
+                    DateTimeOffset time = convertTime(timestamp);
                     
                     Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
 
@@ -54,12 +54,12 @@ class Program {
     }
 
     //method to convert time into correct format
-    private static DateTime convertTime(string timestamp) {
+    private static DateTimeOffset convertTime(string timestamp) {
         //DTO needs a long, so we need to parse the string into a long
         long unixSeconds = long.Parse(timestamp);
         
         //now using the DTO library to convert unix seconds into actual time
-        DateTime time = DateTimeOffset.FromUnixTimeSeconds(unixSeconds).UtcDateTime;
+        DateTimeOffset time = DateTimeOffset.FromUnixTimeSeconds(unixSeconds).ToLocalTime();
         
         //returning the time back to the formatting
         return time;
@@ -70,7 +70,14 @@ class Program {
             string author = Environment.UserName;
             
             DateTimeOffset localtime = DateTimeOffset.Now;
+            long time = localtime.ToUnixTimeSeconds();
+           
 
+            using (StreamWriter sw = File.AppendText("bison_observe_cli_db.csv")) {
+                sw.WriteLine($"\"{author},\"\"{observation}\"\",{time}\"");
+            }
+
+            Console.WriteLine("The following observation has been added to the file:");
             Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
 
     }
