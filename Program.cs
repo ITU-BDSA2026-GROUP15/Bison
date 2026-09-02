@@ -13,7 +13,6 @@ class Program {
             observe(observation);
         }
 
-    
     }
 
     private static void read() {
@@ -72,14 +71,12 @@ class Program {
             DateTimeOffset localtime = DateTimeOffset.Now;
             long time = localtime.ToUnixTimeSeconds();
            
-
             using (StreamWriter sw = File.AppendText("bison_observe_cli_db.csv")) {
                 sw.WriteLine($"\"{author},\"\"{observation}\"\",{time}\"");
             }
 
             Console.WriteLine("The following observation has been added to the file:");
             Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
-
     }
 
 }
