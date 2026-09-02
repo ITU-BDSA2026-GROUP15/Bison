@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/mnt/c/Users/librn/Desktop/Bison/Bison.CLI.csproj": {}
+    "/Users/annevestbo/Desktop/ADSa/Bison/Bison.CLI.csproj": {}
   },
   "projects": {
-    "/mnt/c/Users/librn/Desktop/Bison/Bison.CLI.csproj": {
+    "/Users/annevestbo/Desktop/ADSa/Bison/Bison.CLI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/c/Users/librn/Desktop/Bison/Bison.CLI.csproj",
+        "projectUniqueName": "/Users/annevestbo/Desktop/ADSa/Bison/Bison.CLI.csproj",
         "projectName": "Bison.CLI",
-        "projectPath": "/mnt/c/Users/librn/Desktop/Bison/Bison.CLI.csproj",
-        "packagesPath": "/home/librni/.nuget/packages/",
-        "outputPath": "/mnt/c/Users/librn/Desktop/Bison/obj/",
+        "projectPath": "/Users/annevestbo/Desktop/ADSa/Bison/Bison.CLI.csproj",
+        "packagesPath": "/Users/annevestbo/.nuget/packages/",
+        "outputPath": "/Users/annevestbo/Desktop/ADSa/Bison/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/librni/.nuget/NuGet/NuGet.Config"
+          "/Users/annevestbo/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -32,11 +32,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -58,7 +53,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/snap/dotnet-sdk/256/sdk/8.0.407/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet@8/8.0.130/libexec/sdk/8.0.130/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
