@@ -98,7 +98,6 @@ class Program {
             .WithParsed<ObserveOptions>(options =>
             {
                 observe(options.Observation);
-            }
                 
             });
     }
