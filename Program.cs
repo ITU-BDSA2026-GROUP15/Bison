@@ -93,6 +93,8 @@ class Program {
 
             .WithParsed<ReadOptions>(options =>
             {
+                //makes sure that the program does not execute if "read" recives extra arguments
+                //with a error message, and returns to the terminal without executing the read() method
                 if (options.UnexpectedArguments.Any()){
                     Console.WriteLine("Error: Unexpected arguments provided for the 'read' command.");
                     return;
