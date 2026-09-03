@@ -1,6 +1,11 @@
 using CommandLine;
 
+[Verb("read", HelpText = "Read the observations from the database.")]
+
 public class ReadOptions{
-        [Option('r', "read", Required = false, HelpText = "Set output to verbose messages.")]
-        public bool Verbose { get; set; }
+
+    [Value(0,MetaName="Readings from the database",Required=false, HelpText="")]
+
+    
+
     }
