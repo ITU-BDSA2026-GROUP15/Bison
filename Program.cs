@@ -93,6 +93,10 @@ class Program {
 
             .WithParsed<ReadOptions>(options =>
             {
+                if (options.UnexpectedArguments.Any()){
+                    Console.WriteLine("Error: Unexpected arguments provided for the 'read' command.");
+                    return;
+                }
                 read();
             })
             .WithParsed<ObserveOptions>(options =>
