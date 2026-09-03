@@ -5,17 +5,32 @@ class Program {
     public static void Main(string[] args) {
         
         if (args[0].Equals("read")) {
-            read();
+            Read();
         }
 
         if (args[0].Equals("observe")) {
             string observation = args[1];
-            observe(observation);
+            Observe(observation);
+        }
+
+        if (args[0].Equals("comment"))
+        {
+            int commentId = Int32.Parse(args[1]);
+            string com = args [2];
+            Comment(com, commentId);
+
+        }
+
+        //NEW: printing comments related to an ID
+        if (args[0].Equals("discussion"))
+        {
+            int id = Int32.Parse(args[1]);
+            Discussion(id);
         }
 
     }
 
-    private static void read() {
+    private static void Read() {
         //StreamReader needs a try/catch block
         
         try {
@@ -40,7 +55,7 @@ class Program {
                     string observation = values[2].Trim('"');
 
                     string timestamp = values[3]; 
-                    DateTimeOffset time = convertTime(timestamp);
+                    DateTimeOffset time = ConvertTime(timestamp);
                     
                     Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + "ID:" + id + " " + observation);
 
@@ -56,7 +71,7 @@ class Program {
     }
 
     //method to convert time into correct format
-    private static DateTimeOffset convertTime(string timestamp) {
+    private static DateTimeOffset ConvertTime(string timestamp) {
         //DTO needs a long, so we need to parse the string into a long
         long unixSeconds = long.Parse(timestamp);
         
@@ -67,9 +82,9 @@ class Program {
         return time;
     }
 
-    private static void observe(string line) {
+    private static void Observe(string line) {
             // NEW: added counter for ID on observations
-            int id = maxId();
+            int id = MaxId();
             
             string observation = line;
             string author = Environment.UserName;
@@ -91,7 +106,7 @@ class Program {
 
     //NEW: maxId
     //only works if no observations have been logged initially
-    private static int maxId()
+    private static int MaxId()
     {
         int id = 3;
         int currentId = id;
@@ -102,9 +117,9 @@ class Program {
 
     //NEW: function for comment added to program
     //Refactor later to fit new structure of code
-    private static void comment(string comment, int id) {
+    private static void Comment(string comment, int id) {
         //use the id counter to check if an observation exist
-        int max = maxId();
+        int max = MaxId();
         
         if (id > max){
             //if ID provided are larger than the max, no observation will exist
@@ -122,6 +137,45 @@ class Program {
 
         Console.WriteLine("The following comment has been added to the file:");
         Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + id + comment);
+    }
+
+
+    //NEW: function for listing comments is now added
+    //Refactor later
+    private static void Discussion(int commentId){
+        try {
+        
+            using (StreamReader sr = new StreamReader("bison_comment_cli_db.csv")) {
+                    //read headline and not print it in console
+                    string headLine = sr.ReadLine();
+                    
+                    //get the next line
+                    string line;
+
+                    while ((line =sr.ReadLine()) != null) {
+                        string[] values = line.Trim('"').Split(',');
+                        
+                        int id = int.Parse(values[1]);
+
+                        //comments are only relevant if they match the id
+                        if (id == commentId){
+                            string author = values[0].ToUpper();
+
+                            string comment = values[2];
+
+                            string timestamp = values[3]; 
+                            DateTimeOffset time = ConvertTime(timestamp);
+                        
+                            Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + "ID:" + id + " " + comment);
+                        }
+                    }
+            }
+        }
+
+        catch (Exception e) {
+            Console.WriteLine("No comments have been made for this observation");
+            Console.WriteLine(e.Message);
+        }
     }
 
 }
