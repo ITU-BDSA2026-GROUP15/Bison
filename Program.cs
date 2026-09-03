@@ -33,7 +33,8 @@ class Program {
                     //format wants author in upper
                     string author = values[0].ToUpper();
 
-                    int id = (int) values[1];
+                    //NEW: ID parsing added to reading observations
+                    int id = int.Parse(values[1]);
 
                     //removing the quotes to get correct format
                     string observation = values[2].Trim('"');
@@ -66,9 +67,9 @@ class Program {
         return time;
     }
 
-    public static void observe(string line) {
+    private static void observe(string line) {
             // NEW: added counter for ID on observations
-            int id = 0;
+            int id = maxId();
             
             string observation = line;
             string author = Environment.UserName;
@@ -86,6 +87,38 @@ class Program {
             
             //NEW: increment ID for every observation registered
             id++;
+    }
+
+    //NEW: maxId
+    //only works if no observations have been logged initially
+    private static int maxId()
+    {
+        int id = 0;
+        int currentId = id;
+        id++;
+
+        return currentId;
+    }
+
+    //NEW: function for comment added to program
+    //Refactor later to fit new structure of code
+    private static void comment(string comment, int id) {
+        //use the id counter to check if an observation exist
+        int max = maxId();
+        
+        if (id > max){
+            //if ID provided are larger than the max, no observation will exist
+            Console.WriteLine("No observations with ID: " + id + "currently exists");
+            return;
+        }
+        string author = Environment.UserName;
+        DateTimeOffset localtime = DateTimeOffset.Now;
+        long time = localtime.ToUnixTimeSeconds();
+
+        //NEW FILE: bison_comment, CSV where comments are added
+        using (StreamWriter sw = File.AppendText("bison_comment_cli_db.csv")) {
+                sw.WriteLine($"\"{author}, {id}, \"\"{comment}\"\",{time}\"");
+            }
     }
 
 }
