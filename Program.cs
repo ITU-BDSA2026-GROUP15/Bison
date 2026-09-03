@@ -4,7 +4,7 @@ using System.IO;
 class Program {
     // NEW: added counter for ID on observations
 
-    static int id = 0;
+    private static int id = 0;
     public static void Main(string[] args) {
         
         if (args[0].Equals("read")) {
@@ -121,7 +121,7 @@ class Program {
 
         //NEW FILE: bison_comment, CSV where comments are added
         using (StreamWriter sw = File.AppendText("bison_comment_cli_db.csv")) {
-                sw.WriteLine($"\"{author}, {comId}, \"\"{comment}\"\",{time}\"");
+                sw.WriteLine($"\"{author}, {comId}, \"{comment}\",{time}\"");
             }
 
         Console.WriteLine("The following comment has been added to the file:");
@@ -149,7 +149,7 @@ class Program {
                         if (obsId == comId){
                             string author = values[0].ToUpper();
 
-                            string comment = values[2];
+                            string comment = values[2].Trim(' ','"');
 
                             string timestamp = values[3]; 
                             DateTimeOffset time = ConvertTime(timestamp);
