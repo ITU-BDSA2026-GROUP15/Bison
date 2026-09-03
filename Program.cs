@@ -42,7 +42,7 @@ class Program {
                     string timestamp = values[3]; 
                     DateTimeOffset time = convertTime(timestamp);
                     
-                    Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
+                    Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + "ID:" + id + " " + observation);
 
                 }
             }
@@ -93,7 +93,7 @@ class Program {
     //only works if no observations have been logged initially
     private static int maxId()
     {
-        int id = 0;
+        int id = 3;
         int currentId = id;
         id++;
 
@@ -119,6 +119,9 @@ class Program {
         using (StreamWriter sw = File.AppendText("bison_comment_cli_db.csv")) {
                 sw.WriteLine($"\"{author}, {id}, \"\"{comment}\"\",{time}\"");
             }
+
+        Console.WriteLine("The following comment has been added to the file:");
+        Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + id + comment);
     }
 
 }
