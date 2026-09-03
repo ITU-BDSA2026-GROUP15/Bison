@@ -102,14 +102,4 @@ class Program {
             });
     }
 
-
-    public class ReadOptions{
-        [Option('r', "read", Required = false, HelpText = "Set output to verbose messages.")]
-        public bool Verbose { get; set; }
-    }
-    public class ObserveOptions{
-        [Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
-        public bool Verbose { get; set; }
-    }
-
 }
