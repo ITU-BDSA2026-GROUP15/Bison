@@ -15,6 +15,7 @@ public class ObserveOptions{
     //get and set are used to get and set the value of the property
     //set allows the commandLinePaser to store the text supplied by the user.
     //get allows the program access to retrive that stored text afterwareds.
+    //string.Empty gives the property a non-null initial value.
     public string Observation { get; set; } = string.Empty;
 
     }
