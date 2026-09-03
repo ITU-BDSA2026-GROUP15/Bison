@@ -85,19 +85,21 @@ class Program {
 
     public static void parseArguments(string[] args){
 
-        Parser.Default.ParseArguments<Options>(args)
-            .WithParsed<Options>(o =>
+        //here we give the complete args array to commandlineparser
+        //the only two values that are vaild is "ReadOptions" and "ObserveOptions"
+        Parser.Default.ParseArguments<ReadOptions, ObserveOptions>(args)
+
+        //the parser only runs when the user writes "read"
+
+            .WithParsed<ReadOptions>(options =>
             {
-                if (o.Verbose)
-                {
-                    Console.WriteLine($"Verbose output enabled. Current Arguments: -v {o.Verbose}");
-                    Console.WriteLine("Quick Start Example! App is in Verbose mode!");
-                }
-                else
-                {
-                    Console.WriteLine($"Current Arguments: -v {o.Verbose}");
-                    Console.WriteLine("Quick Start Example!");
-                }
+                read();
+            })
+            .WithParsed<ObserveOptions>(options =>
+            {
+                observe(options.Observation);
+            }
+                
             });
     }
 
