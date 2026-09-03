@@ -16,7 +16,7 @@ class Program {
         
         using (StreamReader sr = new StreamReader("bison_observe_cli_db.csv")) {
                 //read headline and not print it in console
-                string headLine = sr.ReadLine();
+                string headLine = sr.ReadLine();//im getting a warning for a possible null value woth the ReadLine.
                 
                 //get the next line
                 string line;
