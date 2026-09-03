@@ -33,10 +33,12 @@ class Program {
                     //format wants author in upper
                     string author = values[0].ToUpper();
 
-                    //removing the quotes to get correct format
-                    string observation = values[1].Trim('"');
+                    int id = (int) values[1];
 
-                    string timestamp = values[2]; 
+                    //removing the quotes to get correct format
+                    string observation = values[2].Trim('"');
+
+                    string timestamp = values[3]; 
                     DateTimeOffset time = convertTime(timestamp);
                     
                     Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
@@ -65,6 +67,9 @@ class Program {
     }
 
     public static void observe(string line) {
+            // NEW: added counter for ID on observations
+            int id = 0;
+            
             string observation = line;
             string author = Environment.UserName;
             
@@ -72,11 +77,15 @@ class Program {
             long time = localtime.ToUnixTimeSeconds();
            
             using (StreamWriter sw = File.AppendText("bison_observe_cli_db.csv")) {
-                sw.WriteLine($"\"{author},\"\"{observation}\"\",{time}\"");
+                //NEW: added ID to the output line
+                sw.WriteLine($"\"{author}, {id}, \"\"{observation}\"\",{time}\"");
             }
 
             Console.WriteLine("The following observation has been added to the file:");
-            Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
+            Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + id + observation);
+            
+            //NEW: increment ID for every observation registered
+            id++;
     }
 
 }
