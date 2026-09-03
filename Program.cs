@@ -1,21 +1,11 @@
 ﻿using System;
 using System.IO;
+using CommandLine;
 
 class Program {
     public static void Main(string[] args) {//args is what you write in the terminal after the program name, for example: dotnet run observe
         
-        if(args.Length == 0) {//default case if no arguments are provided
-            Console.WriteLine("Please provide an argument: read or observe");
-            return;
-        }
-        if (args[0].Equals("read")) {
-            read();
-        }
-
-        if (args[0].Equals("observe")) {
-            string observation = args[1];// this is a range operator, it takes all the elements from index 1 to the end of the array.
-            observe(observation);
-        }
+        parseArguments(args);
 
     }
 
@@ -91,6 +81,34 @@ class Program {
 
             Console.WriteLine("The following observation has been added to the file:");
             Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
+    }
+
+    public static void parseArguments(string[] args){
+
+        Parser.Default.ParseArguments<Options>(args)
+            .WithParsed<Options>(o =>
+            {
+                if (o.Verbose)
+                {
+                    Console.WriteLine($"Verbose output enabled. Current Arguments: -v {o.Verbose}");
+                    Console.WriteLine("Quick Start Example! App is in Verbose mode!");
+                }
+                else
+                {
+                    Console.WriteLine($"Current Arguments: -v {o.Verbose}");
+                    Console.WriteLine("Quick Start Example!");
+                }
+            });
+    }
+
+
+    public class ReadOptions{
+        [Option('r', "read", Required = false, HelpText = "Set output to verbose messages.")]
+        public bool Verbose { get; set; }
+    }
+    public class ObserveOptions{
+        [Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
+        public bool Verbose { get; set; }
     }
 
 }
