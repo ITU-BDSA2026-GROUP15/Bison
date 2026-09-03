@@ -86,7 +86,7 @@ class Program {
     public static void parseArguments(string[] args){
 
         //here we give the complete args array to commandlineparser
-        //the only two values that are vaild is "ReadOptions" and "ObserveOptions"
+        //the only two types the parser can produce are either "ReadOptions" or "ObserveOptions"
         Parser.Default.ParseArguments<ReadOptions, ObserveOptions>(args)
 
         //the parser only runs when the user writes "read"
