@@ -2,6 +2,9 @@
 using System.IO;
 
 class Program {
+    // NEW: added counter for ID on observations
+
+    static int id = 0;
     public static void Main(string[] args) {
         
         if (args[0].Equals("read")) {
@@ -82,10 +85,7 @@ class Program {
         return time;
     }
 
-    private static void Observe(string line) {
-            // NEW: added counter for ID on observations
-            int id = MaxId();
-            
+    private static void Observe(string line) {            
             string observation = line;
             string author = Environment.UserName;
             
@@ -98,32 +98,21 @@ class Program {
             }
 
             Console.WriteLine("The following observation has been added to the file:");
-            Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + id + observation);
+            Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + id + " " + observation);
             
             //NEW: increment ID for every observation registered
             id++;
     }
 
-    //NEW: maxId
-    //only works if no observations have been logged initially
-    private static int MaxId()
-    {
-        int id = 3;
-        int currentId = id;
-        id++;
-
-        return currentId;
-    }
 
     //NEW: function for comment added to program
     //Refactor later to fit new structure of code
-    private static void Comment(string comment, int id) {
+    private static void Comment(string comment, int comId) {
         //use the id counter to check if an observation exist
-        int max = MaxId();
         
-        if (id > max){
+        if (comId > id){
             //if ID provided are larger than the max, no observation will exist
-            Console.WriteLine("No observations with ID: " + id + "currently exists");
+            Console.WriteLine("No observations with ID: " + comId + "currently exists");
             return;
         }
         string author = Environment.UserName;
@@ -132,17 +121,16 @@ class Program {
 
         //NEW FILE: bison_comment, CSV where comments are added
         using (StreamWriter sw = File.AppendText("bison_comment_cli_db.csv")) {
-                sw.WriteLine($"\"{author}, {id}, \"\"{comment}\"\",{time}\"");
+                sw.WriteLine($"\"{author}, {comId}, \"\"{comment}\"\",{time}\"");
             }
 
         Console.WriteLine("The following comment has been added to the file:");
-        Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + id + comment);
+        Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + comId + " " + comment);
     }
-
 
     //NEW: function for listing comments is now added
     //Refactor later
-    private static void Discussion(int commentId){
+    private static void Discussion(int comId){
         try {
         
             using (StreamReader sr = new StreamReader("bison_comment_cli_db.csv")) {
@@ -155,10 +143,10 @@ class Program {
                     while ((line =sr.ReadLine()) != null) {
                         string[] values = line.Trim('"').Split(',');
                         
-                        int id = int.Parse(values[1]);
+                        int obsId = int.Parse(values[1]);
 
                         //comments are only relevant if they match the id
-                        if (id == commentId){
+                        if (obsId == comId){
                             string author = values[0].ToUpper();
 
                             string comment = values[2];
@@ -166,7 +154,7 @@ class Program {
                             string timestamp = values[3]; 
                             DateTimeOffset time = ConvertTime(timestamp);
                         
-                            Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + "ID:" + id + " " + comment);
+                            Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + "ID:" + comId + " " + comment);
                         }
                     }
             }
