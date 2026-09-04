@@ -23,23 +23,29 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         using (var reader=  new StreamReader("bison_observe_cli_db.csv"))
         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture)) {
             
-            var cheeps= csv.GetRecords<Cheep>();
+            var cheeps= csv.GetRecords<T>().ToList();
 
-            foreach (var cheep in cheeps) {
-
-                PrintObservations(cheep.Author, cheep.Observation, cheep.Timestamp);
-    
-                }
+            return limit.HasValue ? cheeps.Take(limit.Value) : cheeps;
             }
         }
 
         catch (Exception e) {
             Console.WriteLine("File could not be read: ");
             Console.WriteLine(e.Message);
+            
+            return Enumerable.Empty<T>();
         }
-
     }
 
+    public void Printing (var cheeps)
+    {
+        foreach (var cheep in cheeps) {
+
+                PrintObservations(cheep.Author, cheep.Observation, cheep.Timestamp);
+    
+        }
+    }
+    
     public void Store(T record)
     {
         // write CSV here with CsvHelper

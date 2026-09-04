@@ -3,13 +3,15 @@ using System;
 using System.IO;
 using System.Globalization;
 
-using static UserInterface ;
+using static UserInterface;
+using SimpleDB;
+using C
 
 class Program {
     public static void Main(string[] args) {
         
         if (args[0].Equals("read")) {
-            Read();
+            Read(args);
         }
 
         if (args[0].Equals("observe")) {
