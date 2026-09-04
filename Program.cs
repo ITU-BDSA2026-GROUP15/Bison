@@ -55,12 +55,12 @@ class Program {
                     int id = int.Parse(values[1]);
 
                     //removing the quotes to get correct format
-                    string observation = values[2].Trim('"');
+                    string observation = values[2];
 
                     string timestamp = values[3]; 
                     DateTimeOffset time = ConvertTime(timestamp);
                     
-                    Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + "ID:" + id + " " + observation);
+                    Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + "ID:" + id + " " + observation.Trim('"'));
 
                 }
             }
@@ -149,7 +149,7 @@ class Program {
                         if (obsId == comId){
                             string author = values[0].ToUpper();
 
-                            string comment = values[2].Trim(' ','"');
+                            string comment = values[2];
 
                             string timestamp = values[3]; 
                             DateTimeOffset time = ConvertTime(timestamp);
