@@ -1,5 +1,9 @@
-﻿using System;
+﻿using CsvHelper;
+using System;
 using System.IO;
+using System.Globalization;
+
+using static UserInterface ;
 
 class Program {
     public static void Main(string[] args) {
@@ -20,27 +24,17 @@ class Program {
         
         try {
         
-        using (StreamReader sr = new StreamReader("bison_observe_cli_db.csv")) {
-                //read headline and not print it in console
-                string headLine = sr.ReadLine();
-                
-                //get the next line
-                string line;
+        using (var reader=  new StreamReader("bison_observe_cli_db.csv"))
+        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture)) {
+            
+            var cheeps= csv.GetRecords<Cheep>();
 
-                while ((line =sr.ReadLine()) != null) {
-                    string[] values = line.Trim('"').Split(',');
-                    
-                    //format wants author in upper
-                    string author = values[0].ToUpper();
+            foreach (var cheep in cheeps) {
 
-                    //removing the quotes to get correct format
-                    string observation = values[1].Trim('"');
+                DateTimeOffset time = convertTime(cheep.Timestamp);
 
-                    string timestamp = values[2]; 
-                    DateTimeOffset time = convertTime(timestamp);
-                    
-                    Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
-
+                PrintObservations(cheep.Author, cheep.Observation, time);
+    
                 }
             }
         }
@@ -53,9 +47,10 @@ class Program {
     }
 
     //method to convert time into correct format
-    private static DateTimeOffset convertTime(string timestamp) {
+    private static DateTimeOffset convertTime(long timestamp) {
         //DTO needs a long, so we need to parse the string into a long
-        long unixSeconds = long.Parse(timestamp);
+        long unixSeconds = timestamp;
+        //Removed long.parse - since it is already long 
         
         //now using the DTO library to convert unix seconds into actual time
         DateTimeOffset time = DateTimeOffset.FromUnixTimeSeconds(unixSeconds).ToLocalTime();
@@ -64,19 +59,23 @@ class Program {
         return time;
     }
 
-    public static void observe(string line) {
-            string observation = line;
+    public static void observe(string observation) {
+            
             string author = Environment.UserName;
             
-            DateTimeOffset localtime = DateTimeOffset.Now;
-            long time = localtime.ToUnixTimeSeconds();
-           
-            using (StreamWriter sw = File.AppendText("bison_observe_cli_db.csv")) {
-                sw.WriteLine($"\"{author},\"\"{observation}\"\",{time}\"");
-            }
+            DateTimeOffset now = DateTimeOffset.Now;
+            
+            long timestamp = now.ToUnixTimeSeconds();
+            
+            var cheep = new Cheep(author, observation, timestamp);
+            using (var writer= new StreamWriter("bison_observe_cli_db.csv", true))
+            using (var csv= new CsvWriter(writer, CultureInfo.InvariantCulture)) {
+            csv.WriteRecord(cheep);
+            csv.NextRecord();
 
-            Console.WriteLine("The following observation has been added to the file:");
-            Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
+            PrintObservationAdded(cheep.Author, cheep.Observation, now);
+            
     }
 
+}
 }
