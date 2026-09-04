@@ -3,6 +3,8 @@ using System;
 using System.IO;
 using System.Globalization;
 
+using static UserInterface ;
+
 class Program {
     public static void Main(string[] args) {
         
@@ -31,10 +33,8 @@ class Program {
 
                 DateTimeOffset time = convertTime(cheep.Timestamp);
 
-
-                Console.WriteLine(cheep.Author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + cheep.Observation);
-
-            
+                PrintObservations(cheep.Author, time, cheep.Observation);
+    
                 }
             }
         }
