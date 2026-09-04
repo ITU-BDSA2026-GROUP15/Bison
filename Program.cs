@@ -68,7 +68,7 @@ class Program {
            
             var cheep = new Cheep(author, observation, timestamp);
             using (var writer= new StreamWriter("bison_observe_cli_db.csv", true))
-            using (var csv= new CsvWriter(writer, CultureInfo.InvariantCulture)) {
+            using (var csv= new CsvWriter(writer, CultureInfo.InvariantCulture)) {         
             csv.WriteRecord(cheep);
             csv.NextRecord();
 
