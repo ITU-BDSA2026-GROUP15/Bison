@@ -1,109 +1,87 @@
-﻿using System;
+﻿using CsvHelper;
+using System;
 using System.IO;
+using System.Globalization;
+
+using System.Linq;
+
+using static UserInterface;
+using SimpleDB;
+using CommandLine;
+using CsvHelper.Configuration.Attributes;
 
 class Program {
-    // NEW: added counter for ID on observations
 
     private static int id = 0;
-    public static void Main(string[] args) {
+
+    public static void Main(string[] args) {//args is what you write in the terminal after the program name, for example: dotnet run observe
         
-        if (args[0].Equals("read")) {
-            Read();
-        }
-
-        if (args[0].Equals("observe")) {
-            string observation = args[1];
-            Observe(observation);
-        }
-
-        if (args[0].Equals("comment"))
-        {
-            int commentId = Int32.Parse(args[1]);
-            string com = args [2];
-            Comment(com, commentId);
-
-        }
-
-        //NEW: printing comments related to an ID
-        if (args[0].Equals("discussion"))
-        {
-            int id = Int32.Parse(args[1]);
-            Discussion(id);
-        }
+        parseArguments(args);
 
     }
 
-    private static void Read() {
-        //StreamReader needs a try/catch block
-        
-        try {
-        
-        using (StreamReader sr = new StreamReader("bison_observe_cli_db.csv")) {
-                //read headline and not print it in console
-                string headLine = sr.ReadLine();
-                
-                //get the next line
-                string line;
+        public static void parseArguments(string[] args){
 
-                while ((line =sr.ReadLine()) != null) {
-                    string[] values = line.Trim('"').Split(',');
-                    
-                    //format wants author in upper
-                    string author = values[0].ToUpper();
+        //here we give the complete args array to commandlineparser
+        //the only two types the parser can produce are either "ReadOptions" or "ObserveOptions"
+        Parser.Default.ParseArguments<ReadOptions, ObserveOptions>(args)
 
-                    //NEW: ID parsing added to reading observations
-                    int id = int.Parse(values[1]);
+        //the parser only runs when the user writes "read"
 
-                    //removing the quotes to get correct format
-                    string observation = values[2];
-
-                    string timestamp = values[3]; 
-                    DateTimeOffset time = ConvertTime(timestamp);
-                    
-                    Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + "ID:" + id + " " + observation.Trim('"'));
-
+            .WithParsed<ReadOptions>(options =>
+            {
+                //makes sure that the program does not execute if "read" recives extra arguments
+                //with a error message, and returns to the terminal without executing the read() method
+                if (options.UnexpectedArguments.Any()){
+                    Console.WriteLine("Error: Unexpected arguments provided for the 'read' command.");
+                    return;
                 }
-            }
-        }
 
-        catch (Exception e) {
-            Console.WriteLine("File could not be read: ");
-            Console.WriteLine(e.Message);
-        }
+                read();
+            })
 
+            .WithParsed<CommentOption>(options =>
+            {
+                comment(options.Comment);
+            })
+
+            .WithParsed<DiscussionOption>(options =>
+            {
+                discussion(options.Discussion);
+            })
+
+            .WithParsed<ObserveOptions>(options =>
+            {
+                observe(options.Observation);
+                
+            });
     }
+    
+    private static void read() {
+        var db = new CSVDatabase <Cheep>("bison_observe_cli_db.csv");
+        var cheeps = db.Read();
 
-    //method to convert time into correct format
-    private static DateTimeOffset ConvertTime(string timestamp) {
-        //DTO needs a long, so we need to parse the string into a long
-        long unixSeconds = long.Parse(timestamp);
+        //NEW: ID parsing added to reading observations
+        int id = int.Parse(values[1]);
         
-        //now using the DTO library to convert unix seconds into actual time
-        DateTimeOffset time = DateTimeOffset.FromUnixTimeSeconds(unixSeconds).ToLocalTime();
+        UserInterface.PrintObservations(cheeps);
         
-        //returning the time back to the formatting
-        return time;
     }
 
-    private static void Observe(string line) {            
-            string observation = line;
-            string author = Environment.UserName;
-            
-            DateTimeOffset localtime = DateTimeOffset.Now;
-            long time = localtime.ToUnixTimeSeconds();
-           
-            using (StreamWriter sw = File.AppendText("bison_observe_cli_db.csv")) {
-                //NEW: added ID to the output line
-                sw.WriteLine($"\"{author}, {id}, \"\"{observation}\"\",{time}\"");
-            }
+    
+    private static void observe(string observation) {
+        var db = new CSVDatabase<Cheep>("bison_observe_cli_db.csv");
 
-            Console.WriteLine("The following observation has been added to the file:");
-            Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + id + " " + observation);
-            
-            //NEW: increment ID for every observation registered
-            id++;
+        string author = Environment.UserName;
+        DateTimeOffset now = DateTimeOffset.Now;
+        long timestamp = now.ToUnixTimeSeconds();
+
+        var cheep = new Cheep(author, observation, timestamp);
+
+        db.Store(cheep);
+        
+        UserInterface.PrintObservationAdded(cheep);
     }
-
 
     //NEW: function for comment added to program
     //Refactor later to fit new structure of code
