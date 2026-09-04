@@ -48,7 +48,7 @@ class Program {
 
             .WithParsed<DiscussionOptions>(options =>
             {
-                discussion(options.Discussion);
+                discussion(options.ObservationId);
             })
 
             .WithParsed<ObserveOptions>(options =>
@@ -106,7 +106,7 @@ class Program {
     }
 
     //NEW: function for listing comments is now added
-    private static void discussion(int comId){
+    private static void discussion(int obsId){
 
         var db = new CSVDatabase <Cheep>("bison_comment_cli_db.csv");
         var cheeps = db.Read();
@@ -114,7 +114,7 @@ class Program {
         foreach (Cheep cheep in cheeps)
         {
             //comments are only relevant if they match the id
-            if (cheep.ID == comId){
+            if (cheep.ID == obsId){
             UserInterface.PrintObservations(cheeps);
             }
         }

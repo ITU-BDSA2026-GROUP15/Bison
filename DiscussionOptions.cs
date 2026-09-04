@@ -15,6 +15,5 @@ public class DiscussionOptions{
     
     //stores unexpected arguments as a string and initializes it to an empty collection.
     //uses generics to allow the collection to store any number of strings, and not just a single string. thereby using System.Collections.Generic imported.
-    public IEnumerable<int> UnexpectedArguments { get; set; }
-        = Array.Empty<int>();//this uses system, thereby using System imported;
+    public int ObservationId { get; set; }
 }
