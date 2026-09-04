@@ -1,6 +1,7 @@
 namespace SimpleDB;
 
 using CsvHelper;
+using CsvHelper.Configuration;
 using System.Globalization;
 using System.IO;
 using System;
@@ -13,11 +14,13 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         _filePath = filePath;
     }
 
-    public IEnumerable<T> Read(int? limit = null)
+    public IEnumerable<T> Read(string file, int? limit = null)
     {
         try {
         
-        using (var reader=  new StreamReader("bison_observe_cli_db.csv"))
+        using (var reader=  new StreamReader(file))
+        
+
         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture)) {
             
             var cheeps= csv.GetRecords<T>().ToList();
@@ -44,4 +47,5 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
             csv.NextRecord();
         } 
     }
+
 }

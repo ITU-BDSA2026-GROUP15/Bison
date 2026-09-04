@@ -13,7 +13,7 @@ using System.Data.Common;
 
 class Program {
 
-    private static int idTracker = 0; //NEW: ID parsing added to reading observations
+    private static int idTracker = 3; //NEW: ID parsing added to reading observations
 
     public static void Main(string[] args) {//args is what you write in the terminal after the program name, for example: dotnet run observe
         
@@ -25,7 +25,7 @@ class Program {
 
         //here we give the complete args array to commandlineparser
         //the only two types the parser can produce are either "ReadOptions" or "ObserveOptions"
-        Parser.Default.ParseArguments<ReadOptions, ObserveOptions>(args)
+        Parser.Default.ParseArguments<ReadOptions, ObserveOptions, CommentOptions, DiscussionOptions>(args)
 
         //the parser only runs when the user writes "read"
 
@@ -59,8 +59,9 @@ class Program {
     }
     
     private static void read() {
-        var db = new CSVDatabase <Cheep>("bison_observe_cli_db.csv");
-        var cheeps = db.Read();
+        string file = "bison_observe_cli_db.csv";
+        var db = new CSVDatabase <Cheep>(file);
+        var cheeps = db.Read(file);
         
         UserInterface.PrintObservations(cheeps);
         
@@ -107,9 +108,9 @@ class Program {
 
     //NEW: function for listing comments is now added
     private static void discussion(int obsId){
-
-        var db = new CSVDatabase <Cheep>("bison_comment_cli_db.csv");
-        var cheeps = db.Read();
+        string file = "bison_comment_cli_db.csv";
+        var db = new CSVDatabase <Cheep>(file);
+        var cheeps = db.Read(file);
         
         foreach (Cheep cheep in cheeps)
         {
