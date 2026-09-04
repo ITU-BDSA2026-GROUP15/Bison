@@ -9,10 +9,11 @@ using static UserInterface;
 using SimpleDB;
 using CommandLine;
 using CsvHelper.Configuration.Attributes;
+using System.Data.Common;
 
 class Program {
 
-    private static int id = 0;
+    private static int idTracker = 0; //NEW: ID parsing added to reading observations
 
     public static void Main(string[] args) {//args is what you write in the terminal after the program name, for example: dotnet run observe
         
@@ -40,12 +41,12 @@ class Program {
                 read();
             })
 
-            .WithParsed<CommentOption>(options =>
+            .WithParsed<CommentOptions>(options =>
             {
-                comment(options.Comment);
+                comment(options.Id, options.Comment);
             })
 
-            .WithParsed<DiscussionOption>(options =>
+            .WithParsed<DiscussionOptions>(options =>
             {
                 discussion(options.Discussion);
             })
@@ -60,9 +61,6 @@ class Program {
     private static void read() {
         var db = new CSVDatabase <Cheep>("bison_observe_cli_db.csv");
         var cheeps = db.Read();
-
-        //NEW: ID parsing added to reading observations
-        int id = int.Parse(values[1]);
         
         UserInterface.PrintObservations(cheeps);
         
@@ -76,71 +74,49 @@ class Program {
         DateTimeOffset now = DateTimeOffset.Now;
         long timestamp = now.ToUnixTimeSeconds();
 
-        var cheep = new Cheep(author, observation, timestamp);
+        var cheep = new Cheep(author, idTracker, observation, timestamp); //NEW added ID
 
         db.Store(cheep);
         
         UserInterface.PrintObservationAdded(cheep);
+        
+        idTracker++; //Increment ID by 1 for each cheep
     }
 
     //NEW: function for comment added to program
-    //Refactor later to fit new structure of code
-    private static void Comment(string comment, int comId) {
+    private static void comment(int id, string comment) {
+        var db = new CSVDatabase<Cheep>("bison_comment_cli_db.csv"); //path to CSV file for comments
+
+        string author = Environment.UserName;
+        DateTimeOffset now = DateTimeOffset.Now;
+        long timestamp = now.ToUnixTimeSeconds();
+
+        var cheep = new Cheep(author, id, comment, timestamp); //Cheep as a comment
+
         //use the id counter to check if an observation exist
-        
-        if (comId > id){
+        if (id > idTracker){
             //if ID provided are larger than the max, no observation will exist
-            Console.WriteLine("No observations with ID: " + comId + "currently exists");
+            Console.WriteLine("No observations with ID: (" + id + ")currently exists");
             return;
         }
-        string author = Environment.UserName;
-        DateTimeOffset localtime = DateTimeOffset.Now;
-        long time = localtime.ToUnixTimeSeconds();
 
-        //NEW FILE: bison_comment, CSV where comments are added
-        using (StreamWriter sw = File.AppendText("bison_comment_cli_db.csv")) {
-                sw.WriteLine($"\"{author}, {comId}, \"{comment}\",{time}\"");
-            }
+        db.Store(cheep);
 
-        Console.WriteLine("The following comment has been added to the file:");
-        Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + comId + " " + comment);
+        UserInterface.PrintCommentAdded(cheep);
     }
 
     //NEW: function for listing comments is now added
-    //Refactor later
-    private static void Discussion(int comId){
-        try {
+    private static void discussion(int comId){
+
+        var db = new CSVDatabase <Cheep>("bison_comment_cli_db.csv");
+        var cheeps = db.Read();
         
-            using (StreamReader sr = new StreamReader("bison_comment_cli_db.csv")) {
-                    //read headline and not print it in console
-                    string headLine = sr.ReadLine();
-                    
-                    //get the next line
-                    string line;
-
-                    while ((line =sr.ReadLine()) != null) {
-                        string[] values = line.Trim('"').Split(',');
-                        
-                        int obsId = int.Parse(values[1]);
-
-                        //comments are only relevant if they match the id
-                        if (obsId == comId){
-                            string author = values[0].ToUpper();
-
-                            string comment = values[2];
-
-                            string timestamp = values[3]; 
-                            DateTimeOffset time = ConvertTime(timestamp);
-                        
-                            Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + "ID:" + comId + " " + comment);
-                        }
-                    }
+        foreach (Cheep cheep in cheeps)
+        {
+            //comments are only relevant if they match the id
+            if (cheep.ID == comId){
+            UserInterface.PrintObservations(cheeps);
             }
-        }
-
-        catch (Exception e) {
-            Console.WriteLine("No comments have been made for this observation");
-            Console.WriteLine(e.Message);
         }
     }
 

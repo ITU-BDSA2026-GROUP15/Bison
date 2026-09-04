@@ -7,7 +7,7 @@ static class UserInterface
         foreach (var cheep in cheeps) {
         DateTimeOffset time = convertTime(cheep.Timestamp);
         
-        Console.WriteLine(cheep.Author.ToUpper() + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + cheep.Observation);
+        Console.WriteLine(cheep.Author.ToUpper() + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + "(" + cheep.ID.ToString() + ") "+ cheep.Observation);
         }
     }
 
@@ -16,7 +16,16 @@ static class UserInterface
         DateTimeOffset time = convertTime(cheep.Timestamp);
 
         Console.WriteLine("The following observation has been added to the file:");
-        Console.WriteLine(cheep.Author.ToUpper() + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + cheep.Observation);
+        Console.WriteLine(cheep.Author.ToUpper() + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + "(" + cheep.ID.ToString() + ") " + cheep.Observation);
+    }
+
+    //NEW: added new function for printing output when new comment is added
+    public static void PrintCommentAdded(Cheep cheep)
+    {
+        DateTimeOffset time = convertTime(cheep.Timestamp);
+
+        Console.WriteLine("The following comment has been added to the file:");
+        Console.WriteLine(cheep.Author.ToUpper() + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + "(" + cheep.ID.ToString() + ") "+ cheep.Observation);
     }
 
     

@@ -1,2 +1,3 @@
 
-public record Cheep(string Author, string Observation, long Timestamp);
+public record Cheep(string Author, int ID, string Observation, long Timestamp);
+//NEW: added ID to cheeps
