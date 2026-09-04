@@ -18,5 +18,3 @@ public class ReadOptions{
     public IEnumerable<string> UnexpectedArguments { get; set; }
         = Array.Empty<string>();//this uses system, thereby using System imported;
 }
-//there is a bug: when i write dotnet run -- read extra it is suppose to give me an error
-// it does not.

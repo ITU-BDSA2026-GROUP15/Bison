@@ -3,6 +3,8 @@ using System;
 using System.IO;
 using System.Globalization;
 
+using System.Linq;
+
 using static UserInterface;
 using SimpleDB;
 using CommandLine;
