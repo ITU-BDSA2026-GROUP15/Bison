@@ -33,7 +33,7 @@ class Program {
 
                 DateTimeOffset time = convertTime(cheep.Timestamp);
 
-                PrintObservations(cheep.Author, time, cheep.Observation);
+                PrintObservations(cheep.Author, cheep.Observation, time);
     
                 }
             }
@@ -64,14 +64,16 @@ class Program {
             string author = Environment.UserName;
             
             DateTimeOffset now = DateTimeOffset.Now;
+            
             long timestamp = now.ToUnixTimeSeconds();
-           
+            
             var cheep = new Cheep(author, observation, timestamp);
             using (var writer= new StreamWriter("bison_observe_cli_db.csv", true))
             using (var csv= new CsvWriter(writer, CultureInfo.InvariantCulture)) {
             csv.WriteRecord(cheep);
             csv.NextRecord();
 
+            PrintObservationAdded(cheep.Author, cheep.Observation, now);
             
     }
 
