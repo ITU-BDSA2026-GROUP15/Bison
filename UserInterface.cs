@@ -7,9 +7,9 @@ static class UserInterface
         Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
     }
 
-    static void PrintObservationAdded(string author, DateTimeOffset time, string observation)
+    static void PrintObservationAdded(string author, DateTimeOffset localtime, string observation)
     {
         Console.WriteLine("The following observation has been added to the file:");
-        Console.WriteLine(author + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
+        Console.WriteLine(author + " @ " + localtime.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
     }
 }
