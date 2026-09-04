@@ -29,22 +29,10 @@ class Program {
 
 
     public static void observe(string observation) {
-            
-            string author = Environment.UserName;
-            
-            DateTimeOffset now = DateTimeOffset.Now;
-            
-            long timestamp = now.ToUnixTimeSeconds();
-            
-            var cheep = new Cheep(author, observation, timestamp);
-            using (var writer= new StreamWriter("bison_observe_cli_db.csv", true))
-            using (var csv= new CsvWriter(writer, CultureInfo.InvariantCulture)) {
-            csv.WriteRecord(cheep);
-            csv.NextRecord();
+         var db = new CSVDatabase <Cheep>("bison_observe_cli_db.csv");
+         var cheeps = db.Store(observation);
 
-            PrintObservationAdded(cheep.Author, cheep.Observation, now);
+         UserInterface.PrintObservationAdded(cheeps.Observation);
         
     }
-
-}
 }

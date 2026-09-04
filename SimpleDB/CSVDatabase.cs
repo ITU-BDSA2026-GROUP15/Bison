@@ -39,5 +39,19 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     public void Store(T record)
     {
         // write CSV here with CsvHelper
+        // string author = Environment.UserName;
+            
+        DateTimeOffset now = DateTimeOffset.Now;
+            
+        //long timestamp = now.ToUnixTimeSeconds();
+            
+        var cheep = new Cheep(author, observation, timestamp);
+        using (var writer= new StreamWriter("bison_observe_cli_db.csv", true))
+        using (var csv= new CsvWriter(writer, CultureInfo.InvariantCulture)) {
+            csv.WriteRecord(cheep);
+            csv.NextRecord();
+
+            PrintObservationAdded(cheep.Author, cheep.Observation, now);
+        }
     }
 }
