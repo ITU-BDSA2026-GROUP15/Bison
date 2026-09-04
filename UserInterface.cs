@@ -13,8 +13,10 @@ static class UserInterface
 
     public static void PrintObservationAdded(Cheep cheep)
     {
+        DateTimeOffset time = convertTime(cheep.Timestamp);
+
         Console.WriteLine("The following observation has been added to the file:");
-        Console.WriteLine(cheep.Author.ToUpper() + " @ " + cheep.Timestamp.ToString("MM/dd/yy HH:mm:ss") + ": " + cheep.Observation);
+        Console.WriteLine(cheep.Author.ToUpper() + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + cheep.Observation);
     }
 
     
