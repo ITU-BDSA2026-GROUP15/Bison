@@ -2,11 +2,13 @@ using System;
 
 static class UserInterface
 {
-    public static void PrintObservations(var cheeps)
-    {
-        DateTimeOffset time = convertTime(timestamp);
-
-        Console.WriteLine(author.ToUpper() + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
+    public static void PrintObservations(IEnumerable<Cheep> cheeps)
+    {    
+        foreach (var cheep in cheeps) {
+        DateTimeOffset time = convertTime(cheep.Timestamp);
+        
+        Console.WriteLine(cheep.Author.ToUpper() + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + cheep.Observation);
+        }
     }
 
     public static void PrintObservationAdded(string author, string observation, DateTimeOffset time)

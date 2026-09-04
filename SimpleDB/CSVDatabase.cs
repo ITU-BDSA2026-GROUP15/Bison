@@ -1,8 +1,6 @@
 namespace SimpleDB;
 
-using static Program;
 using CsvHelper;
-using static UserInterface ;
 using System.Globalization;
 using System.IO;
 using System;
@@ -34,15 +32,6 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
             Console.WriteLine(e.Message);
             
             return Enumerable.Empty<T>();
-        }
-    }
-
-    public void Printing (IEnumerable<T> cheeps)
-    {
-        foreach (var cheep in cheeps) {
-
-                PrintObservations(cheep.Author, cheep.Observation, cheep.Timestamp);
-    
         }
     }
     
