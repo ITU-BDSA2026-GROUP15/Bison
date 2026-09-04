@@ -35,6 +35,8 @@ class Program {
         var cheep = new Cheep(author, observation, timestamp);
 
         db.Store(cheep);
+        
+        UserInterface.PrintObservationAdded(cheep);
     }
 
     public static void parseArguments(string[] args){

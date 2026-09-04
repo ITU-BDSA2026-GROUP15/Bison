@@ -11,10 +11,10 @@ static class UserInterface
         }
     }
 
-    public static void PrintObservationAdded(string author, string observation, DateTimeOffset time)
+    public static void PrintObservationAdded(Cheep cheep)
     {
         Console.WriteLine("The following observation has been added to the file:");
-        Console.WriteLine(author.ToUpper() + " @ " + time.ToString("MM/dd/yy HH:mm:ss") + ": " + observation);
+        Console.WriteLine(cheep.Author.ToUpper() + " @ " + cheep.Timestamp.ToString("MM/dd/yy HH:mm:ss") + ": " + cheep.Observation);
     }
 
     
