@@ -22,8 +22,9 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture)) {
             
             var cheeps= csv.GetRecords<T>().ToList();
-
-            return limit.HasValue ? cheeps.Take(limit.Value) : cheeps;
+            
+            // ??????
+            return limit.HasValue ? cheeps.Take(limit.Value) : cheeps; //tilføj forklaring her :)
             }
         }
 
