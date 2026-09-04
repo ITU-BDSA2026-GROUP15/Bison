@@ -27,12 +27,29 @@ class Program {
         UserInterface.PrintObservations(cheeps);
     }
 
-
+/*
     public static void observe(string observation) {
          var db = new CSVDatabase <Cheep>("bison_observe_cli_db.csv");
          var cheeps = db.Store(observation);
 
          UserInterface.PrintObservationAdded(cheeps.Observation);
         
-    }
+    }*/
+
+    
+    public static void observe(string observation)
+{
+    var db = new CSVDatabase<Cheep>("bison_observe_cli_db.csv");
+
+    string author = Environment.UserName;
+    DateTimeOffset now = DateTimeOffset.Now;
+    long timestamp = now.ToUnixTimeSeconds();
+
+    var cheep = new Cheep(author, observation, timestamp);
+
+    db.Store(cheep);
+
+    UserInterface.PrintObservationAdded(author, observation, now);
+}
+
 }
