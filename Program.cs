@@ -5,13 +5,12 @@ using System.Globalization;
 
 using static UserInterface;
 using SimpleDB;
-using C
 
 class Program {
     public static void Main(string[] args) {
         
         if (args[0].Equals("read")) {
-            Read(args);
+            read(args);
         }
 
         if (args[0].Equals("observe")) {
@@ -20,20 +19,13 @@ class Program {
         }
 
     }
-/*
-    //method to convert time into correct format
-    public static DateTimeOffset convertTime(long timestamp) {
-        //DTO needs a long, so we need to parse the string into a long
-        long unixSeconds = timestamp;
-        //Removed long.parse - since it is already long 
+    
+    static void read(string[] args) {
+        var db = new CsvDataBase<Cheep>("bison_observe_cli_db.csv");
         
-        //now using the DTO library to convert unix seconds into actual time
-        DateTimeOffset time = DateTimeOffset.FromUnixTimeSeconds(unixSeconds).ToLocalTime();
         
-        //returning the time back to the formatting
-        return time;
     }
-    */
+
 
     public static void observe(string observation) {
             
