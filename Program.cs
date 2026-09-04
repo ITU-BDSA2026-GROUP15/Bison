@@ -14,11 +14,12 @@ class Program {
 
     }
     
-    static void read(string[] args) {
+    static void read() {
         var db = new CSVDatabase <Cheep>("bison_observe_cli_db.csv");
         var cheeps = db.Read();
         
         UserInterface.PrintObservations(cheeps);
+        
     }
 
     
@@ -50,8 +51,10 @@ class Program {
                     Console.WriteLine("Error: Unexpected arguments provided for the 'read' command.");
                     return;
                 }
+
                 read();
             })
+
             .WithParsed<ObserveOptions>(options =>
             {
                 observe(options.Observation);
