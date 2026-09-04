@@ -2,7 +2,7 @@ using System;
 
 static class UserInterface
 {
-    public static void PrintObservations(string author, string observation, long timestamp)
+    public static void PrintObservations(var cheeps)
     {
         DateTimeOffset time = convertTime(timestamp);
 

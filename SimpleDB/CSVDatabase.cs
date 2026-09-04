@@ -37,7 +37,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
         }
     }
 
-    public void Printing (var cheeps)
+    public void Printing (IEnumerable<T> cheeps)
     {
         foreach (var cheep in cheeps) {
 

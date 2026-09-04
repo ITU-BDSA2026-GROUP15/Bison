@@ -21,9 +21,10 @@ class Program {
     }
     
     static void read(string[] args) {
-        var db = new CsvDataBase<Cheep>("bison_observe_cli_db.csv");
+        var db = new CSVDatabase<Cheep>("bison_observe_cli_db.csv");
+        var cheeps = db.Read();
         
-        
+        UserInterface.PrintObservations(cheeps);
     }
 
 
