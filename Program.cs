@@ -9,7 +9,7 @@ class Program {
     public static void Main(string[] args) {
         
         if (args[0].Equals("read")) {
-            read();
+            Read();
         }
 
         if (args[0].Equals("observe")) {
@@ -18,36 +18,9 @@ class Program {
         }
 
     }
-
-    private static void read() {
-        //StreamReader needs a try/catch block
-        
-        try {
-        
-        using (var reader=  new StreamReader("bison_observe_cli_db.csv"))
-        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture)) {
-            
-            var cheeps= csv.GetRecords<Cheep>();
-
-            foreach (var cheep in cheeps) {
-
-                DateTimeOffset time = convertTime(cheep.Timestamp);
-
-                PrintObservations(cheep.Author, cheep.Observation, time);
-    
-                }
-            }
-        }
-
-        catch (Exception e) {
-            Console.WriteLine("File could not be read: ");
-            Console.WriteLine(e.Message);
-        }
-
-    }
-
+/*
     //method to convert time into correct format
-    private static DateTimeOffset convertTime(long timestamp) {
+    public static DateTimeOffset convertTime(long timestamp) {
         //DTO needs a long, so we need to parse the string into a long
         long unixSeconds = timestamp;
         //Removed long.parse - since it is already long 
@@ -58,6 +31,7 @@ class Program {
         //returning the time back to the formatting
         return time;
     }
+    */
 
     public static void observe(string observation) {
             
@@ -74,7 +48,7 @@ class Program {
             csv.NextRecord();
 
             PrintObservationAdded(cheep.Author, cheep.Observation, now);
-            
+        
     }
 
 }
