@@ -1,0 +1,36 @@
+
+name: .NET
+
+on:
+  push:
+    tags:
+      -'git tag*' #runs for all commands starting with git tag, when pushed
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4 #Actions are versioned like packages; v4 is the current major version.
+
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Publish single-file executable
+      run: >
+        dotnet publish Bison.CLI/Bison.CLI.csproj
+        -c Release
+        -r linux-x64
+        --self-contained true
+        -p:PublishSingleFile=true
+        -p:IncludeNativeLibrariesForSelfExtract=true
+        -o ./publish
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ./publish/Bison.CLI
+
