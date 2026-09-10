@@ -25,7 +25,7 @@ class Program {
 
         //here we give the complete args array to commandlineparser
         //the only two types the parser can produce are either "ReadOptions" or "ObserveOptions"
-        Parser.Default.ParseArguments<ReadOptions, ObserveOptions, CommentOptions, DiscussionOptions>(args)
+        Parser.Default.ParseArguments<ReadOptions, ObserveOptions, CommentOptions, DiscussionOptions,LocationOptions>(args)
 
         //the parser only runs when the user writes "read"
 
@@ -55,7 +55,12 @@ class Program {
             {
                 observe(options.Observation, options.Location);
                 
+            })
+            .WithParsed<LocationOptions>(options =>
+            {
+                readLocation(options.Location);
             });
+
     }
     
     private static void read() {
