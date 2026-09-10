@@ -1,0 +1,88 @@
+
+name: .NET
+
+on:
+  push:
+    tags:
+      -'v*' #only runs for commands starting with v, when pushed
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1 #applies to every step of this job (1=not sending data)
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4 #Actions are versioned like packages; v4 is the current major version.
+
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore
+      run: dotnet restore #
+
+    - name: Test
+      run: dotnet test --configuration Release #runs before publishing, which means the tests will run before any actions are made
+
+      #linux
+    - name: Publish linux
+      # '>' is a folded block that will join the lines with a space instead of new lines
+      run: >
+        dotnet publish Bison.CLI/Bison.CLI.csproj
+        -c Release
+        -r linux-x64
+        -p:PublishSingleFile=true --self-contained false
+        -o publish/linux-x64
+      # r -> runtime identifyer, what makes the cross compilation possible
+      # --selfcontained false gives us a framework dependent single-file
+      # be aware of the path where we publish the Bison.CLI -> might need refactoring
+
+      #windows
+    - name: Publish windows
+      run: >
+        dotnet publish Bison.CLI/Bison.CLI.csproj
+        -c Release
+        -r win-x64 
+        -p:PublishSingleFile=true --self-contained false
+        -p:IncludeNativeLibrariesForSelfExtract=true
+        -o publish/win-x64
+
+      #macOS
+    - name: Publish  macOS
+      # dotnet publish will produce folders of files and not zips
+      run: >
+        dotnet publish Bison.CLI/Bison.CLI.csproj
+        -c Release
+        -r osx-x64
+        -p:PublishSingleFile=true --self-contained false
+        -p:IncludeNativeLibrariesForSelfExtract=true
+        -o publish/osx-x64
+    
+    # here compressing the folder of files to a zip
+    - name: Zip files
+      # the '|' indicates that everything after is treated as a single-line, but keeps format
+      # it's a simple formatting issue that makes sure the input is handled correctly
+      # run expects a single-line så using '|' ensures that the lines are run after each other
+      # the command itself: we go inside said folder (cd ...),
+      # then zip it recursively (-r) to include ALL files and subfolders
+      # then we define the destination (../../bison-xxx)
+      # (.) makes sure to include everything in the current directory
+      # and at last we go back to the previous directory
+      run: |
+        cd publish/win-x64 && zip -r ../../bison-win-x64.zip . && cd -
+        cd publish/osx-x64 && zip -r ../../bison-osx-x64.zip . && cd -
+        cd publish/linux-x64 && zip -r ../../bison-linux-x64.zip . && cd -
+
+      # the release action wants files to attach to the github release
+      # needs to be a zip file as per the assignment
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2 # this is the release action itself
+      with:
+        files: | 
+          bison-win-x64.zip
+          bison-osx-x64.zip
+          bison-linux-x64.zip
+
