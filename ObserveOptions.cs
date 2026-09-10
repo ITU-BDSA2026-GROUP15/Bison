@@ -11,11 +11,14 @@ public class ObserveOptions {
      //Required = true means that the user must provide this value, otherwise the parser will throw an error if there is no value.
      //MetaName is the name of the value that will be displayed in the help text/output
     [Value(0, MetaName = "observation", Required = true, HelpText = "The observation to add.")]
-        
+ public string Observation { get; set; } = string.Empty;
+    // Position 1 means the second value.
+    [Value(1,MetaName = "location", Required = true, HelpText ="The location of the observation" )]    
     //stores the parsed observation, which is a string
     //get and set are used to get and set the value of the property
     //set allows the CommandLineParser to store the text supplied by the user.
     //get allows the program access to retrive that stored text afterwareds.
     //string.Empty gives the property a non-null initial value.
-    public string Observation { get; set; } = string.Empty;
+    public string Location { get; set; } = string.Empty;
+
 }
