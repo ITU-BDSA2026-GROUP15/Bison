@@ -53,7 +53,7 @@ class Program {
 
             .WithParsed<ObserveOptions>(options =>
             {
-                observe(options.Observation, );
+                observe(options.Observation, options.Location);
                 
             });
     }
@@ -92,7 +92,7 @@ class Program {
         DateTimeOffset now = DateTimeOffset.Now;
         long timestamp = now.ToUnixTimeSeconds();
 
-        var cheep = new Cheep(author, id, comment, timestamp, location); //Cheep as a comment
+        var cheep = new Cheep(author, id, comment, timestamp, string.Empty); //Cheep as a comment
 
         //use the id counter to check if an observation exist
         if (id > idTracker){
