@@ -125,5 +125,17 @@ class Program {
             }
         }
     }
+    //db creates acces to the observation database
+    //cheeps reads all observations and keeps only those from the requested location
+    // the comparison ignores differences between uppercase and lowercase
+    //userintercase - displays the matching observation in the terminal
+    private static void readLocation(string location) {
+        string file = "bison_observe_cli_db.csv";
+        var db = new CSVDatabase<Cheep>(file);
+        var cheeps = db.Read(file).Where(cheep => string.Equals(cheep.Location,location, StringComparison.OrdinalIgnoreCase ));
+
+        UserInterface.PrintObservations(cheeps);
+
+    }
 
 }
