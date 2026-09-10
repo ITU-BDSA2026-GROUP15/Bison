@@ -1,5 +1,5 @@
-
-name: .NET
+# This workflow will create a github release
+name: github release  
 
 on:
   push:

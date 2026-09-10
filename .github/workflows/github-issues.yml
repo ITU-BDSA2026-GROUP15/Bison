@@ -1,0 +1,24 @@
+# this worklflow automates labeling issues from github
+
+name: Label Issues
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+    issues: write
+    contents: read
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: github/issues-labeler@v3.4
+        with:
+          configuration-path: .github/issue-labeler.yml
+          include-title: 1
+          include-body: 1
+          enable-versioned-regex: 0
+          repo-token: ${{ github.token }} #built in and autoprovided by github, makes implementation easier

@@ -1,0 +1,17 @@
+# This workflow will automate github pull request
+
+name: github pull requests
+
+on:
+  pull_request_target: #runs when a pull_request opens or synchronizes
+    types: [opened, synchronize]
+
+jobs:
+    label:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read #allowed to read repo contents and figure out what parts have changed
+            pull-requests: write #allowed to apply labels to the pull request
+        steps:
+        - uses: actions/labeler@v5 # a prebuilt action that does the actual labeling
+        
