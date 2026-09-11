@@ -1,0 +1,21 @@
+# the ation github-pr uses this file to actual label the pull requests
+# the action checks WHAT changed and then the correct label is added
+# only existing labels can be apllied, it cannot create new ones (do that in github)
+
+"cli":
+  - changed-files:
+      - any-glob-to-any-file: 'src/Bison.CLI/**'
+      # src doesnt exist yet
+
+"database":
+  - changed-files:
+      - any-glob-to-any-file: 'src/SimpleDB/**'
+      # src doesnt exist yet
+
+"tests":
+  - changed-files:
+      - any-glob-to-any-file: '**/*Tests/**'
+
+"ci/cd":
+  - changed-files:
+      - any-glob-to-any-file: '.github/workflows/**'
