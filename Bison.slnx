@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Bison.CLI/Bison.CLI.csproj" />
+    <Project Path="src/SimpleDB/SimpleDB.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Bison.CLI.Tests/Bison.CLI.Tests.csproj" />
+    <Project Path="test/SimpleDB.Tests/SimpleDB.Tests.csproj" />
+  </Folder>
+</Solution>
