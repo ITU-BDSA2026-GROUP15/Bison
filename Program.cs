@@ -97,7 +97,7 @@ class Program {
         //use the id counter to check if an observation exist
         if (id > idTracker){
             //if ID provided are larger than the max, no observation will exist
-            Console.WriteLine("No observations with ID: (" + id + ")currently exists");
+            Console.WriteLine("No observations with ID: (" + id + ") currently exists");
             return;
         }
 

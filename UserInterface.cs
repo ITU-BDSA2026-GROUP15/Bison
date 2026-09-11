@@ -29,7 +29,7 @@ static class UserInterface
     }
 
     
-//method to convert time into correct format
+    //method to convert time into correct format
     public static DateTimeOffset convertTime(long timestamp) {
         //DTO needs a long, so we need to parse the string into a long
         long unixSeconds = timestamp;

@@ -1,4 +1,3 @@
-
 //import the CommandLineParser library, which is used to parse command line arguments
   using CommandLine;
 
@@ -8,6 +7,7 @@
   
 public class CommentOptions{
     [Value(0, MetaName = "id", Required = true, HelpText = "The ID of the observation to comment on.")]
+    
     public int Id { get; set; }
 
      //defines the first value after the command "observe".
