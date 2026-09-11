@@ -16,7 +16,7 @@ class Program {
     private static int idTracker = 3; //NEW: ID parsing added to reading observations
 
     public static void Main(string[] args) {//args is what you write in the terminal after the program name, for example: dotnet run observe
-        
+
         parseArguments(args);
 
     }
@@ -54,20 +54,20 @@ class Program {
             .WithParsed<ObserveOptions>(options =>
             {
                 observe(options.Observation);
-                
+
             });
     }
-    
+
     private static void read() {
         string file = "bison_observe_cli_db.csv";
         var db = new CSVDatabase <Cheep>(file);
         var cheeps = db.Read(file);
-        
+
         UserInterface.PrintObservations(cheeps);
-        
+
     }
 
-    
+
     private static void observe(string observation) {
         var db = new CSVDatabase<Cheep>("bison_observe_cli_db.csv");
 
@@ -78,14 +78,14 @@ class Program {
         var cheep = new Cheep(author, idTracker, observation, timestamp); //NEW added ID
 
         db.Store(cheep);
-        
+
         UserInterface.PrintObservationAdded(cheep);
-        
+
         idTracker++; //Increment ID by 1 for each cheep
     }
 
     //NEW: function for comment added to program
-    private static void comment(int id, string comment) {
+    internal static void comment(int id, string comment) {
         var db = new CSVDatabase<Cheep>("bison_comment_cli_db.csv"); //path to CSV file for comments
 
         string author = Environment.UserName;
@@ -111,7 +111,7 @@ class Program {
         string file = "bison_comment_cli_db.csv";
         var db = new CSVDatabase <Cheep>(file);
         var cheeps = db.Read(file);
-        
+
         foreach (Cheep cheep in cheeps)
         {
             //comments are only relevant if they match the id
@@ -121,4 +121,8 @@ class Program {
         }
     }
 
+    public static int GetIdTracker()
+    {
+        return idTracker;
+    }
 }
