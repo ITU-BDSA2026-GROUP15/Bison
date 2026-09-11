@@ -60,7 +60,7 @@ class Program {
 
     private static void read() {
         string file = "bison_observe_cli_db.csv";
-        var db = new CSVDatabase <Cheep>(file);
+        var db = CSVDatabase<Cheep>.Instance;
         var cheeps = db.Read(file);
 
         UserInterface.PrintObservations(cheeps);
@@ -69,7 +69,8 @@ class Program {
 
 
     private static void observe(string observation) {
-        var db = new CSVDatabase<Cheep>("bison_observe_cli_db.csv");
+        string file = "bison_observe_cli_db.csv";
+        var db = CSVDatabase<Cheep>.Instance;
 
         string author = Environment.UserName;
         DateTimeOffset now = DateTimeOffset.Now;
@@ -77,7 +78,7 @@ class Program {
 
         var cheep = new Cheep(author, idTracker, observation, timestamp); //NEW added ID
 
-        db.Store(cheep);
+        db.Store("bison_observe_cli_db.csv", cheep);
 
         UserInterface.PrintObservationAdded(cheep);
 
@@ -85,8 +86,9 @@ class Program {
     }
 
     //NEW: function for comment added to program
-    internal static void comment(int id, string comment) {
-        var db = new CSVDatabase<Cheep>("bison_comment_cli_db.csv"); //path to CSV file for comments
+    private static void comment(int id, string comment) {
+        string file = "bison_observe_cli_db.csv";
+        var db = CSVDatabase<Cheep>.Instance; //path to CSV file for comments
 
         string author = Environment.UserName;
         DateTimeOffset now = DateTimeOffset.Now;
@@ -101,7 +103,7 @@ class Program {
             return;
         }
 
-        db.Store(cheep);
+        db.Store(file, cheep);
 
         UserInterface.PrintCommentAdded(cheep);
     }
@@ -109,7 +111,8 @@ class Program {
     //NEW: function for listing comments is now added
     private static void discussion(int obsId){
         string file = "bison_comment_cli_db.csv";
-        var db = new CSVDatabase <Cheep>(file);
+        var db = CSVDatabase<Cheep>.Instance;
+
         var cheeps = db.Read(file);
 
         foreach (Cheep cheep in cheeps)
@@ -121,8 +124,4 @@ class Program {
         }
     }
 
-    public static int GetIdTracker()
-    {
-        return idTracker;
-    }
 }
