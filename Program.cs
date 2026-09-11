@@ -13,7 +13,7 @@ using System.Data.Common;
 
 class Program {
 
-    private static int idTracker = 3; //NEW: ID parsing added to reading observations
+    private static int idTracker = 3; 
 
     public static void Main(string[] args) {//args is what you write in the terminal after the program name, for example: dotnet run observe
         
@@ -25,7 +25,7 @@ class Program {
 
         //here we give the complete args array to commandlineparser
         //the only two types the parser can produce are either "ReadOptions" or "ObserveOptions"
-        Parser.Default.ParseArguments<ReadOptions, ObserveOptions, CommentOptions, DiscussionOptions>(args)
+        Parser.Default.ParseArguments<ReadOptions, ObserveOptions, CommentOptions, DiscussionOptions,LocationOptions>(args)
 
         //the parser only runs when the user writes "read"
 
@@ -53,9 +53,14 @@ class Program {
 
             .WithParsed<ObserveOptions>(options =>
             {
-                observe(options.Observation);
+                observe(options.Observation, options.Location);
                 
+            })
+            .WithParsed<LocationOptions>(options =>
+            {
+                readLocation(options.Location);
             });
+
     }
     
     private static void read() {
@@ -67,15 +72,15 @@ class Program {
         
     }
 
-    
-    private static void observe(string observation) {
+    //added location
+    private static void observe(string observation, string location) {
         var db = new CSVDatabase<Cheep>("bison_observe_cli_db.csv");
 
         string author = Environment.UserName;
         DateTimeOffset now = DateTimeOffset.Now;
         long timestamp = now.ToUnixTimeSeconds();
 
-        var cheep = new Cheep(author, idTracker, observation, timestamp); //NEW added ID
+        var cheep = new Cheep(author, idTracker, observation, timestamp, location); //NEW added ID
 
         db.Store(cheep);
         
@@ -84,7 +89,7 @@ class Program {
         idTracker++; //Increment ID by 1 for each cheep
     }
 
-    //NEW: function for comment added to program
+    
     private static void comment(int id, string comment) {
         var db = new CSVDatabase<Cheep>("bison_comment_cli_db.csv"); //path to CSV file for comments
 
@@ -92,7 +97,7 @@ class Program {
         DateTimeOffset now = DateTimeOffset.Now;
         long timestamp = now.ToUnixTimeSeconds();
 
-        var cheep = new Cheep(author, id, comment, timestamp); //Cheep as a comment
+        var cheep = new Cheep(author, id, comment, timestamp, string.Empty); //Cheep as a comment
 
         //use the id counter to check if an observation exist
         if (id > idTracker){
@@ -106,7 +111,7 @@ class Program {
         UserInterface.PrintCommentAdded(cheep);
     }
 
-    //NEW: function for listing comments is now added
+
     private static void discussion(int obsId){
         string file = "bison_comment_cli_db.csv";
         var db = new CSVDatabase <Cheep>(file);
@@ -119,6 +124,18 @@ class Program {
             UserInterface.PrintObservations(cheeps);
             }
         }
+    }
+    //db creates acces to the observation database
+    //cheeps reads all observations and keeps only those from the requested location
+    // the comparison ignores differences between uppercase and lowercase
+    //userintercase - displays the matching observation in the terminal
+    private static void readLocation(string location) {
+        string file = "bison_observe_cli_db.csv";
+        var db = new CSVDatabase<Cheep>(file);
+        var cheeps = db.Read(file).Where(cheep => string.Equals(cheep.Location,location, StringComparison.OrdinalIgnoreCase ));
+
+        UserInterface.PrintObservations(cheeps);
+
     }
 
 }
