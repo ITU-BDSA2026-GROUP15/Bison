@@ -31,7 +31,6 @@ public class UnitTest
         string CommentText = "This should not be stored";
 
         // ACT
-
         comment(nonExistingId, CommentText);
 
         // ASSERT
