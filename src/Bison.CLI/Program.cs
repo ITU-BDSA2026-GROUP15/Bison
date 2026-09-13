@@ -15,6 +15,8 @@ class Program {
 
     private static int idTracker = 3; //NEW: ID parsing added to reading observations
 
+    internal static int GetIdTracker() => idTracker;
+
     public static void Main(string[] args) {//args is what you write in the terminal after the program name, for example: dotnet run observe
 
         parseArguments(args);
@@ -68,7 +70,7 @@ class Program {
     }
 
 
-    private static void observe(string observation) {
+    internal static void observe(string observation) {
         string file = "bison_observe_cli_db.csv";
         var db = CSVDatabase<Cheep>.Instance;
 
@@ -86,7 +88,7 @@ class Program {
     }
 
     //NEW: function for comment added to program
-    private static void comment(int id, string comment) {
+    internal static void comment(int id, string comment) {
         string file = "bison_observe_cli_db.csv";
         var db = CSVDatabase<Cheep>.Instance; //path to CSV file for comments
 

@@ -52,9 +52,17 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 
     public void Store(string file, T record)
     {
+        bool fileNeedsHeader = !File.Exists(file) || new FileInfo(file).Length == 0;
+
         using (var writer = new StreamWriter(file, true))
         using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
         {
+            if (fileNeedsHeader)
+            {
+                csv.WriteHeader<T>();
+                csv.NextRecord();
+            }
+
             csv.WriteRecord(record);
             csv.NextRecord();
         }
