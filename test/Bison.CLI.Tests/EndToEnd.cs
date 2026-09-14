@@ -67,10 +67,6 @@ public class EndToEnd
             string errorOutput = process.StandardError.ReadToEnd();
             process.WaitForExit();
 
-            // Midlertidig diagnostik - fjern igen når fejlen er fundet
-            Console.WriteLine("STDOUT:\n" + actualOutput);
-            Console.WriteLine("STDERR:\n" + errorOutput);
-
             // ASSERT
             Assert.Equal(0, process.ExitCode);
             foreach (string linje in forventedeOutputLinjer)
