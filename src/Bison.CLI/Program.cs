@@ -66,7 +66,7 @@ class Program {
     }
 
     private static void read() {
-        string file = "bison_observe_cli_db.csv";
+        string file = "../../bison_observe_cli_db.csv";
         var db = CSVDatabase<Cheep>.Instance;
         var cheeps = db.Read(file);
 
@@ -77,7 +77,7 @@ class Program {
     //added location
 
     internal static void observe(string observation, string location) {
-        string file = "bison_observe_cli_db.csv";
+        string file = "../../bison_observe_cli_db.csv";
         var db = CSVDatabase<Cheep>.Instance;
 
         string author = Environment.UserName;
@@ -86,7 +86,7 @@ class Program {
 
         var cheep = new Cheep(author, idTracker, observation, timestamp, location); //NEW added ID
 
-        db.Store("bison_observe_cli_db.csv", cheep);
+        db.Store(file, cheep);
 
         UserInterface.PrintObservationAdded(cheep);
 
@@ -96,7 +96,7 @@ class Program {
 
     //NEW: function for comment added to program
     internal static void comment(int id, string comment) {
-        string file = "bison_observe_cli_db.csv";
+        string file = "../../bison_observe_cli_db.csv";
         var db = CSVDatabase<Cheep>.Instance; //path to CSV file for comments
 
         string author = Environment.UserName;
@@ -119,7 +119,7 @@ class Program {
 
 
     private static void discussion(int obsId){
-        string file = "bison_comment_cli_db.csv";
+        string file = "../../bison_comment_cli_db.csv";
         var db = CSVDatabase<Cheep>.Instance;
 
         var cheeps = db.Read(file);
@@ -137,7 +137,7 @@ class Program {
     // the comparison ignores differences between uppercase and lowercase
     //userintercase - displays the matching observation in the terminal
     private static void readLocation(string location) {
-        string file = "bison_observe_cli_db.csv";
+        string file = "../../bison_observe_cli_db.csv";
         var db = CSVDatabase<Cheep>.Instance;
         var cheeps = db.Read(file).Where(cheep => string.Equals(cheep.Location,location, StringComparison.OrdinalIgnoreCase ));
 

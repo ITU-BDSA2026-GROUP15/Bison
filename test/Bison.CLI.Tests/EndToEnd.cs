@@ -7,7 +7,7 @@ namespace Bison.CLI.Tests;
 public class EndToEnd
 {
     private const string ExampleDataFile = "E2ETest.csv";
-    private const string ObserveFile = "bison_observe_cli_db.csv";
+    private const string ObserveFile = "../../bison_observe_cli_db.csv";
 
     private static string FindProjectPath()
     {
