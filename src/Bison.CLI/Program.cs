@@ -75,10 +75,8 @@ class Program {
     }
 
     //added location
-    private static void observe(string observation, string location) {
-        var db = new CSVDatabase<Cheep>("bison_observe_cli_db.csv");
 
-    internal static void observe(string observation) {
+    internal static void observe(string observation, string location) {
         string file = "bison_observe_cli_db.csv";
         var db = CSVDatabase<Cheep>.Instance;
 
@@ -140,7 +138,7 @@ class Program {
     //userintercase - displays the matching observation in the terminal
     private static void readLocation(string location) {
         string file = "bison_observe_cli_db.csv";
-        var db = new CSVDatabase<Cheep>(file);
+        var db = CSVDatabase<Cheep>.Instance;
         var cheeps = db.Read(file).Where(cheep => string.Equals(cheep.Location,location, StringComparison.OrdinalIgnoreCase ));
 
         UserInterface.PrintObservations(cheeps);
