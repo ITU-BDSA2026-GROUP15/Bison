@@ -13,10 +13,12 @@ using System.Data.Common;
 
 class Program {
 
-    private static int idTracker = 3; 
+    private static int idTracker = 3; //NEW: ID parsing added to reading observations
+
+    internal static int GetIdTracker() => idTracker;
 
     public static void Main(string[] args) {//args is what you write in the terminal after the program name, for example: dotnet run observe
-        
+
         parseArguments(args);
 
     }
@@ -54,7 +56,7 @@ class Program {
             .WithParsed<ObserveOptions>(options =>
             {
                 observe(options.Observation, options.Location);
-                
+
             })
             .WithParsed<LocationOptions>(options =>
             {
@@ -62,19 +64,23 @@ class Program {
             });
 
     }
-    
+
     private static void read() {
         string file = "bison_observe_cli_db.csv";
-        var db = new CSVDatabase <Cheep>(file);
+        var db = CSVDatabase<Cheep>.Instance;
         var cheeps = db.Read(file);
-        
+
         UserInterface.PrintObservations(cheeps);
-        
+
     }
 
     //added location
     private static void observe(string observation, string location) {
         var db = new CSVDatabase<Cheep>("bison_observe_cli_db.csv");
+
+    internal static void observe(string observation) {
+        string file = "bison_observe_cli_db.csv";
+        var db = CSVDatabase<Cheep>.Instance;
 
         string author = Environment.UserName;
         DateTimeOffset now = DateTimeOffset.Now;
@@ -82,16 +88,17 @@ class Program {
 
         var cheep = new Cheep(author, idTracker, observation, timestamp, location); //NEW added ID
 
-        db.Store(cheep);
-        
+        db.Store("bison_observe_cli_db.csv", cheep);
+
         UserInterface.PrintObservationAdded(cheep);
-        
+
         idTracker++; //Increment ID by 1 for each cheep
     }
 
-    
-    private static void comment(int id, string comment) {
-        var db = new CSVDatabase<Cheep>("bison_comment_cli_db.csv"); //path to CSV file for comments
+    //NEW: function for comment added to program
+    internal static void comment(int id, string comment) {
+        string file = "bison_observe_cli_db.csv";
+        var db = CSVDatabase<Cheep>.Instance; //path to CSV file for comments
 
         string author = Environment.UserName;
         DateTimeOffset now = DateTimeOffset.Now;
@@ -106,7 +113,7 @@ class Program {
             return;
         }
 
-        db.Store(cheep);
+        db.Store(file, cheep);
 
         UserInterface.PrintCommentAdded(cheep);
     }
@@ -114,9 +121,10 @@ class Program {
 
     private static void discussion(int obsId){
         string file = "bison_comment_cli_db.csv";
-        var db = new CSVDatabase <Cheep>(file);
+        var db = CSVDatabase<Cheep>.Instance;
+
         var cheeps = db.Read(file);
-        
+
         foreach (Cheep cheep in cheeps)
         {
             //comments are only relevant if they match the id
