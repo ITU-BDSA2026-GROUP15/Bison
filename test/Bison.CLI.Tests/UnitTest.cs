@@ -83,9 +83,9 @@ public class UnitTest
         try
         {
             // ACT
-            //NEEDS A LOCATION! UPDATED IN PROGRAM.CS
-            observe(firstObservation);
-            observe(secondObservation);
+            //ADDED LOCATION
+            observe(firstObservation, "ITU");
+            observe(secondObservation, "ITU");
 
             // ASSERT
             var db = CSVDatabase<Cheep>.Instance;

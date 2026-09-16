@@ -11,7 +11,7 @@ public class IntegrationTest
         // ARRANGE
         string testFilePath = ObserveFile;
         var db = CSVDatabase<Cheep>.Instance;
-        var expectedCheep = new Cheep("testUser", 0, "Test observation", 1690891760);
+        var expectedCheep = new Cheep("testUser", 0, "Test observation", 1690891760, "ITU");
 
         string? original = File.Exists(testFilePath) ? File.ReadAllText(testFilePath) : null;
         if (File.Exists(testFilePath))
