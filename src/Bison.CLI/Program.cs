@@ -95,6 +95,7 @@ class Program {
         idTracker++; //Increment ID by 1 for each cheep
     }
 
+
     //NEW: function for comment added to program
     internal static void comment(int id, string comment) {
         string file = "bison_observe_cli_db.csv";
