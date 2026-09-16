@@ -6,6 +6,7 @@ namespace Bison.CLI.Tests;
 
 public class UnitTest
 {
+
     private const string ObserveFile = "testfile_empty.csv";
 
     [Fact]
@@ -82,6 +83,7 @@ public class UnitTest
         try
         {
             // ACT
+            //NEEDS A LOCATION! UPDATED IN PROGRAM.CS
             observe(firstObservation);
             observe(secondObservation);
 

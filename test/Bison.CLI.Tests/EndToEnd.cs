@@ -117,8 +117,8 @@ public class EndToEnd
             string errorOutput = process.StandardError.ReadToEnd();
             process.WaitForExit();
 
-            Console.WriteLine("STDOUT:\n" + actualOutput);
-            Console.WriteLine("STDERR:\n" + errorOutput);
+            //Console.WriteLine("STDOUT:\n" + actualOutput);
+            //Console.WriteLine("STDERR:\n" +  errorOutput);
 
             // ASSERT
             Assert.Equal(0, process.ExitCode);
@@ -126,7 +126,7 @@ public class EndToEnd
             var db = CSVDatabase<Cheep>.Instance;
             var cheeps = db.Read(ObserveFile).ToList();
 
-            Assert.Contains(cheeps, c => c.Observation == "Penguin");
+            Assert.Contains(cheeps, c => c.Observation == "Penguin");//stores new observation
         }
         finally
         {
