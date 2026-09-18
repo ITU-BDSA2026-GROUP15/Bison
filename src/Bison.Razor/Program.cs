@@ -2,6 +2,12 @@ using System.ComponentModel.Design;
 using Microsoft.VisualBasic;
 using SimpleDB;
 
+//string propFile = "joined.csv";
+
+// indlæs joined.csv, identificer alle taxonIDer tilføj dem til en liste,
+// tjek listen igennem når en ny taxon registres i 'propsal'
+//vil jeg gøre et andet sted
+//hvad sagde du?
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +19,7 @@ string propFile = "../../bison_propose_cli_db.csv";
 
 var observationDb = CSVDatabase<Cheep>.Instance;
 var commentDb = CSVDatabase<Cheep>.Instance;
-var proposalDb = CSVDatabase<Cheep>.Instance;
+var proposalDb = CSVDatabase<Prop>.Instance;
 
 //MAPGET -> gets the observations/ the comments
 // MAPPOST -> create an observations/ a comment
@@ -50,25 +56,29 @@ app.MapPost("/comment", (Cheep comment)=>  {
 });
 
 // Proposals
-app.MapGet("/proposals", (taxonID) => {
+app.MapGet("/proposals", (int id) => {
     var allProposals = proposalDb.Read(propFile);
-    var matchingProposal = new List<Cheep>();
+    var matchingProposal = new List<Prop>();
     foreach(var proposal in allProposals) {
         if (proposal.ID == id) {
             matchingProposal.Add(proposal);
         }
         else {
             Console.WriteLine("invalid observation ID");
+            //how do i make it invalid????
         }
-        return matchingPorposal;
+        
     }
+    return matchingPorposal;
 
-    proposalDb.Store(propFile,proposal); 
 });
 
 
+app.MapPost("/proposal", (Prop TaxonID) => {
 
-app.MapPost("/proposal", (Cheep observation) => proposalDb.Store(propFile, proposal)
+
+proposalDb.Store(propFile, TaxonID);
+}
 );
 
 app.Run();
