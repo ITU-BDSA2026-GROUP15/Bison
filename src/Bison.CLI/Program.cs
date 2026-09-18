@@ -19,60 +19,65 @@ class Program {
 
     public static void Main(string[] args) { //args is what you write in the terminal after the program name, for example: dotnet run observe
 
+        idTracker = InitializeIdTracker();
+
         parseArguments(args);
 
     }
-        private static int InitializeIdTracker() {
 
-        string file = "bison_observe_cli_db.csv";
-        var db = new CSVDatabase<Cheep>.Instance;
+       private static int InitializeIdTracker() {
+
+        string file = "../../bison_observe_cli_db.csv";
+        var db = CSVDatabase<Cheep>.Instance;
 
         var cheeps = db.Read(file);
 
         return cheeps.Any() ? cheeps.Max(c => c.ID) + 1 : 0;
     }
 
-        public static void parseArguments(string[] args){
+    public static void parseArguments(string[] args){
 
-        //here we give the complete args array to commandlineparser
-        //the only two types the parser can produce are either "ReadOptions" or "ObserveOptions"
-        Parser.Default.ParseArguments<ReadOptions, ObserveOptions, CommentOptions, DiscussionOptions,LocationOptions>(args)
+    //here we give the complete args array to commandlineparser
+    //the only two types the parser can produce are either "ReadOptions" or "ObserveOptions"
+    Parser.Default.ParseArguments<ReadOptions, ObserveOptions, CommentOptions, DiscussionOptions,LocationOptions>(args)
 
-        //the parser only runs when the user writes "read"
+    //the parser only runs when the user writes "read"
 
-            .WithParsed<ReadOptions>(options =>
-            {
-                //makes sure that the program does not execute if "read" recives extra arguments
-                //with a error message, and returns to the terminal without executing the read() method
-                if (options.UnexpectedArguments.Any()){
-                    Console.WriteLine("Error: Unexpected arguments provided for the 'read' command.");
-                    return;
-                }
+        .WithParsed<ReadOptions>(options =>
+        {
+            //makes sure that the program does not execute if "read" recives extra arguments
+            //with a error message, and returns to the terminal without executing the read() method
+            if (options.UnexpectedArguments.Any()){
+                Console.WriteLine("Error: Unexpected arguments provided for the 'read' command.");
+                return;
+            }
 
-                read();
-            })
+            read();
+        })
 
-            .WithParsed<CommentOptions>(options =>
-            {
-                comment(options.Id, options.Comment);
-            })
+        .WithParsed<CommentOptions>(options =>
+        {
+            comment(options.Id, options.Comment);
+        })
 
-            .WithParsed<DiscussionOptions>(options =>
-            {
-                discussion(options.ObservationId);
-            })
+        .WithParsed<DiscussionOptions>(options =>
+        {
+            discussion(options.ObservationId);
+        })
 
-            .WithParsed<ObserveOptions>(options =>
-            {
-                observe(options.Observation, options.Location);
+        .WithParsed<ObserveOptions>(options =>
+        {
+            observe(options.Observation, options.Location);
 
-            })
-            .WithParsed<LocationOptions>(options =>
-            {
-                readLocation(options.Location);
-            });
+        })
+        .WithParsed<LocationOptions>(options =>
+        {
+            readLocation(options.Location);
+        });
 
-    }
+}
+
+ 
 
     private static void read() {
         string file = "../../bison_observe_cli_db.csv";
