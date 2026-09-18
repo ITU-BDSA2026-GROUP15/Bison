@@ -1,1 +1,1 @@
-public record Prop(string Author, int ID, string taxonID, string Observation, long Timestamp, string Location);
+public record Prop(string Author, int ID, string taxonID);
