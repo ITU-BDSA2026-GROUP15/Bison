@@ -6,4 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../SimpleDB/SimpleDB.csproj" />
+    <Compile Include="../../Cheep.cs" Link="Cheep.cs" />
+  </ItemGroup>
+
+
 </Project>
