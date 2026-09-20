@@ -13,13 +13,13 @@ var commentDb = CSVDatabase<Cheep>.Instance;
 // skal sende et kald til loggede observationer i stedet?? -> connecte dette til simpledb?
 app.MapGet("/observations", () => observationDb.Read(obsFile)); 
 app.MapPost("/observation", (Cheep observation) => {
-    return observationDb.Store(observation); });
+    return observationDb.Store(obsFile, observation); });
 
 app.MapGet("/comments", (int id)=> commentDb.Read(comFile).Where(comment => comment.ID == id));
 //app.MapGet("/comments", () => commentDb.Read(comFile)); 
 
 app.MapPost("/comment", (Cheep comment)=>  { 
-    return commentDb.Store(comment);});
+    return commentDb.Store(comFile, comment);});
 
 //er der noget som siger return all comment?
 //hvordan ved vi at den kommer ind i appsettings.json?
