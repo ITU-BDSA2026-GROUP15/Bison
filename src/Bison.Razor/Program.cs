@@ -13,7 +13,16 @@ var commentDb = CSVDatabase<Cheep>.Instance;
 // skal sende et kald til loggede observationer i stedet?? -> connecte dette til simpledb?
 app.MapGet("/observations", () => observationDb.Read(obsFile));
 app.MapPost("/observation", (Cheep observation) => {
-    /*return*/ observationDb.Store(obsFile, observation); });
+    // Servicen tildeler selv ID'et, i stedet for at bruge det
+    // klienten sender. Det er lidt unødvendigt at serveren sender et ID,
+    // men fordi Cheep bruger ID som parameter, skal der eksistere et ID fra klienten.
+    // Det ID, klienten sendte med, bliver ignoreret.
+    var existing = observationDb.Read(obsFile);
+    int nextId = existing.Any() ? existing.Max(c => c.ID) + 1 : 0;
+    var stored = observation with { ID = nextId };
+
+    observationDb.Store(obsFile, stored);
+    return stored; });
 
 app.MapGet("/comments", (int id)=> commentDb.Read(comFile).Where(comment => comment.ID == id));
 //app.MapGet("/comments", () => commentDb.Read(comFile));

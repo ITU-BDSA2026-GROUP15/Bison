@@ -94,43 +94,38 @@ class Program {
 
     //added location
 
+    // observe() poster nu til web servicen (POST /observation) i stedet for at skrive til CSV-filen direkte.
     internal static void observe(string observation, string location) {
-        string file = "../../bison_observe_cli_db.csv";
-        var db = CSVDatabase<Cheep>.Instance;
-
         string author = Environment.UserName;
         DateTimeOffset now = DateTimeOffset.Now;
         long timestamp = now.ToUnixTimeSeconds();
 
-        var cheep = new Cheep(author, idTracker, observation, timestamp, location); //NEW added ID
+        var newCheep = new Cheep(author, 0, observation, timestamp, location);
 
-        db.Store(file, cheep);
+        var response = httpClient.PostAsJsonAsync("/observation", newCheep).GetAwaiter().GetResult();
+        var storedCheep = response.Content.ReadFromJsonAsync<Cheep>().GetAwaiter().GetResult();
 
-        UserInterface.PrintObservationAdded(cheep);
-
-        idTracker++; //Increment ID by 1 for each cheep
+        UserInterface.PrintObservationAdded(storedCheep ?? newCheep);
     }
 
 
-    //NEW: function for comment added to program
+    // comment() poster nu til web servicen (POST /comment) i stedet for at skrive til CSV-filen direkte.
     internal static void comment(int id, string comment) {
-        string file = "../../bison_observe_cli_db.csv";
-        var db = CSVDatabase<Cheep>.Instance; //path to CSV file for comments
-
         string author = Environment.UserName;
         DateTimeOffset now = DateTimeOffset.Now;
         long timestamp = now.ToUnixTimeSeconds();
 
-        var cheep = new Cheep(author, id, comment, timestamp, string.Empty); //Cheep as a comment
+        var observations = httpClient.GetFromJsonAsync<List<Cheep>>("/observations").GetAwaiter().GetResult() ?? new List<Cheep>();
 
-        //use the id counter to check if an observation exist
-        if (id > idTracker){
-            //if ID provided are larger than the max, no observation will exist
+        if (!observations.Any(o => o.ID == id)) {
+            //if no observation with the given ID exists on the service
             Console.WriteLine("No observations with ID: (" + id + ") currently exists");
             return;
         }
 
-        db.Store(file, cheep);
+        var cheep = new Cheep(author, id, comment, timestamp, string.Empty); //Cheep as a comment
+
+        httpClient.PostAsJsonAsync("/comment", cheep).GetAwaiter().GetResult();
 
         UserInterface.PrintCommentAdded(cheep);
     }
@@ -154,6 +149,7 @@ class Program {
     //cheeps reads all observations and keeps only those from the requested location
     // the comparison ignores differences between uppercase and lowercase
     //userintercase - displays the matching observation in the terminal
+
     //NEW: readLocation() henter alle observationer fra web servicen (GET /observations) og filtrerer på
     //location client-side.
     private static void readLocation(string location) {
