@@ -4,6 +4,8 @@ using System.IO;
 using System.Globalization;
 
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 
 using static UserInterface;
 using SimpleDB;
@@ -12,6 +14,9 @@ using CsvHelper.Configuration.Attributes;
 using System.Data.Common;
 
 class Program {
+
+    //HttpClient snakker med Bison.CSVDBService (Bison.Razor) i stedet for at kalde SimpleDB direkte.
+    private static readonly HttpClient httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:5273") };
 
     private static int idTracker; //NEW: ID parsing added to reading observations
 
@@ -79,12 +84,11 @@ class Program {
 
 
 
+    // read() henter nu observationerne fra web servicen (GET /observations) i stedet for at læse CSV-filen direkte.
     private static void read() {
-        string file = "../../bison_observe_cli_db.csv";
-        var db = CSVDatabase<Cheep>.Instance;
-        var cheeps = db.Read(file);
+        var cheeps = httpClient.GetFromJsonAsync<List<Cheep>>("/observations").GetAwaiter().GetResult();
 
-        UserInterface.PrintObservations(cheeps);
+        UserInterface.PrintObservations(cheeps ?? new List<Cheep>());
 
     }
 
@@ -150,12 +154,13 @@ class Program {
     //cheeps reads all observations and keeps only those from the requested location
     // the comparison ignores differences between uppercase and lowercase
     //userintercase - displays the matching observation in the terminal
+    //NEW: readLocation() henter alle observationer fra web servicen (GET /observations) og filtrerer på
+    //location client-side.
     private static void readLocation(string location) {
-        string file = "../../bison_observe_cli_db.csv";
-        var db = CSVDatabase<Cheep>.Instance;
-        var cheeps = db.Read(file).Where(cheep => string.Equals(cheep.Location,location, StringComparison.OrdinalIgnoreCase ));
+        var cheeps = httpClient.GetFromJsonAsync<List<Cheep>>("/observations").GetAwaiter().GetResult();
+        var matches = (cheeps ?? new List<Cheep>()).Where(cheep => string.Equals(cheep.Location, location, StringComparison.OrdinalIgnoreCase));
 
-        UserInterface.PrintObservations(cheeps);
+        UserInterface.PrintObservations(matches);
 
     }
 
