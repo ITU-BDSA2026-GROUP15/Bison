@@ -10,4 +10,13 @@
     <ProjectReference Include="..\SimpleDB\SimpleDB.csproj" />
   </ItemGroup>
 
+  <!-- Uafklaret Razor Pages (Public/UserTimeline/BisonService). Filerne er bevidst
+       IKKE slettet, da jeg ikke vil slette noget uden jeres tilladelse, men de er udelukket fra build
+       her, så de ikke fejler eller crasher ved runtime. -->
+  <ItemGroup>
+    <Compile Remove="Pages/**/*.cs" />
+    <Content Remove="Pages/**/*.cshtml" />
+    <Compile Remove="BisonService.cs" />
+  </ItemGroup>
+
 </Project>
