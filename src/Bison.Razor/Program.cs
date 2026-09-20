@@ -15,7 +15,7 @@ app.MapGet("/observations", () => observationDb.Read(obsFile));
 app.MapPost("/observation", (Cheep observation) => {
     return observationDb.Store(observation); });
 
-app.MapGet("/comments", (int id)=> commentDb.Read(comFile));
+app.MapGet("/comments", (int id)=> commentDb.Read(comFile).Where(comment => comment.ID == id));
 //app.MapGet("/comments", () => commentDb.Read(comFile)); 
 
 app.MapPost("/comment", (Cheep comment)=>  { 
