@@ -131,19 +131,12 @@ class Program {
     }
 
 
+    // discussion() henter nu kommentarerne til en given observation fra web servicen (GET /comments?id=),
+    // som allerede filtrerer server-side. Klienten skal derfor ikke længere filtrere selv.
     private static void discussion(int obsId){
-        string file = "../../bison_comment_cli_db.csv"; // bug? læser ikke fra samme fil som comment og observe.
-        var db = CSVDatabase<Cheep>.Instance;
+        var cheeps = httpClient.GetFromJsonAsync<List<Cheep>>($"/comments?id={obsId}").GetAwaiter().GetResult();
 
-        var cheeps = db.Read(file);
-
-        foreach (Cheep cheep in cheeps)
-        {
-            //comments are only relevant if they match the id
-            if (cheep.ID == obsId){
-            UserInterface.PrintObservations(cheeps);
-            }
-        }
+        UserInterface.PrintObservations(cheeps ?? new List<Cheep>());
     }
     //db creates acces to the observation database
     //cheeps reads all observations and keeps only those from the requested location
