@@ -77,7 +77,7 @@ class Program {
 
 }
 
- 
+
 
     private static void read() {
         string file = "../../bison_observe_cli_db.csv";
@@ -133,7 +133,7 @@ class Program {
 
 
     private static void discussion(int obsId){
-        string file = "../../bison_comment_cli_db.csv";
+        string file = "../../bison_comment_cli_db.csv"; // bug? læser ikke fra samme fil som comment og observe.
         var db = CSVDatabase<Cheep>.Instance;
 
         var cheeps = db.Read(file);
