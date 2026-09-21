@@ -7,6 +7,11 @@ namespace Bison.Taxonomy;
 // i denne klasse læser vi fra csv filen vi fik på learnit, men den er embedded så den skal lige læses ekstra grundigt så at sige
 public class Taxonomy
 {
+    public Taxonomy()
+    {
+        _taxons = ReadTaxonsFromResource();
+    }
+
     public static List<Taxon> ReadTaxonsFromResource() // returnerer en liste med en taxon record for hver række i joined.csv
     {
         var assembly = Assembly.GetExecutingAssembly(); // dette skal bruges fordi det er en embedded ressource (i bytes i stedet for bogstaver). det skal vi bruge for at vi ikke kommer til at ændre i filen ved et uheld
@@ -20,7 +25,7 @@ public class Taxonomy
 
         csv.Read();
         csv.ReadHeader();
-        
+
         while (csv.Read())
         {
             // ! betyder at vi ved, at feltet aldrig er null. hvis værdierne kan være null, så kører vi den der betingelse ? hvis sand : hvis falsk
@@ -37,4 +42,25 @@ public class Taxonomy
 
         return taxons;
     }
+
+    public Taxon? GetById(string taxonId)
+    {
+        return _taxons.FirstOrDefault(t => t.TaxonId == taxonId);
+    }
+
+    public Taxon? GetByVernacularName(string name)
+    {
+        // TODO
+    }
+
+    public Taxon? GetSupertaxon(Taxon taxon)
+    {
+        // TODO
+    }
+
+    public List<Taxon> GetSubtaxa(Taxon taxon)
+    {
+        // TODO
+    }
+
 }
