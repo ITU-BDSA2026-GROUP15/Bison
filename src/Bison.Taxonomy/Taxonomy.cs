@@ -7,6 +7,8 @@ namespace Bison.Taxonomy;
 // i denne klasse læser vi fra csv filen vi fik på learnit, men den er embedded så den skal lige læses ekstra grundigt så at sige
 public class Taxonomy
 {
+    private readonly List<Taxon> _taxons;
+
     public Taxonomy()
     {
         _taxons = ReadTaxonsFromResource();
@@ -50,12 +52,12 @@ public class Taxonomy
 
     public Taxon? GetByVernacularName(string name)
     {
-        // TODO
+        return _taxons.FirstOrDefault(t => t.VernacularName == name);
     }
 
     public Taxon? GetSupertaxon(Taxon taxon)
     {
-        // TODO
+        return _taxons.FirstOrDefault(t => )
     }
 
     public List<Taxon> GetSubtaxa(Taxon taxon)
