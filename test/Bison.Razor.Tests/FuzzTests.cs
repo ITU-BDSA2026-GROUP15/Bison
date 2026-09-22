@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
-using System.Net.Https.Json;
+using System.Net.Http.Json;
 using SimpleDB;
 
 namespace Bison.Razor.Tests;
@@ -7,10 +7,10 @@ namespace Bison.Razor.Tests;
 public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
-    private static readonly _random = new ();
+    private static readonly Random _random = new();
 
-    private readonly list<Cheep> _sentOberservations = new();
-    private readonly list<Cheep> _sentComments = new();
+    private readonly List<Cheep> _sentOberservations = new();
+    private readonly List<Cheep> _sentComments = new();
 
 
 
@@ -29,8 +29,8 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 
     private Cheep GenerateRandomObservation()
     {
-        String author = sampleAuthors[_random.Next(sampleAuthors.Length)];
-        String message = sampleMessages[_random.Next(sampleMessages.length)];
+        String author = sampleAuthors[_random.Next(SampleAuthors.Length)];
+        String message = sampleMessages[_random.Next(sampleMessages.Length)];
         String location = sampleLocations[_random.Next(sampleLocations.Length)];
         long timestamp = RandomTimeStamp();
 
@@ -39,11 +39,11 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 
     private (Cheep comment, bool referenceRealObservation) GenerateRandomComment()
     {
-        string author = SampleAuthors[_random.Next(SampleAuthors.length)];
-        string message = SampleMessages[_random.Next(sampleMessages.length)];
+        string author = SampleAuthors[_random.Next(SampleAuthors.Length)];
+        string message = SampleMessages[_random.Next(sampleMessages.Length)];
         long timestamp = RandomTimeStamp();
 
-        bool usevalidID = _random.NextDouble() < 0.9 && _sentObservations.count > 0;
+        bool useValidID = _random.NextDouble() < 0.9 && _sentObservations.Count > 0;
 
         int id = useValidID
             ? _sentObservations[_random.Next(_sentObservations.Count)].ID
@@ -56,7 +56,7 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
     private static long RandomTimeStamp()
     {
         long minUnix = 946684800;
-        long maxUnix = dateTimeOffSet.UtcNow.ToUnixTimeSeconds();
+        long maxUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
         return (long)(minunix + _random.NextDouble() * (maxUnix - minUnix));
     }
@@ -73,10 +73,10 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 
             if (postObservations)
             {
-                var observation =  GenerateRandomObservation();
+                var observation = GenerateRandomObservation();
 
                 var response = await _client.PostAsJsonAsync("/observation", observation);
-                response.EnsureSuccesstatusCode();
+                response.EnsureSuccesStatusCode();
 
 
                 var stored = await response.content.ReadFromJsonAsync<Cheep>();
@@ -89,41 +89,60 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 
                 var response = await _client.PostAsJsonAsync("/comment", comment);
 
-                response.EnsureSuccesstatusCode();
+                //Work is needed before we can continue here - since /comments does not validate ID.
+                //The CLI method comment() does, but we need to make this a possibility for /comments
+
+                response.EnsureSuccesStatusCode();
                 _sentComments.Add(comment);
             }
+            //ORACLE Check - with get function
+
+
         }
 
-        //ORACLE Check - with get function
 
 
-    var actualObservations= await _client.PostAsJsonAsync<List<Cheep>> ("/observations");
-    // Alternative to:
-    // var response = await _client.GetAsync("/observations");
-    // var json = await response.Content.ReadAsStringAsync();
-    // var actualObservations = JsonSerializer.Deserialize<List<Cheep>>(json);
-    // Assert.NotNull(actualObservations);
 
-    foreach(var expected in _sentObservations)
-    }
-    //Assert.contains asks if there are any items in the collection that satisfies this...
-        Assert.Contains(actualObservations!,actual =>
-            actual.ID == expected.ID &&
-            actual.Author == expected.Author &&
-            actual.Observation == expected.Observation &&
-            actual.timestamp == expected.timestamp &&
-            actual.Location == expected.Location &&
+        var actualObservations = await _client.GetFromJsonAsync<List<Cheep>>("/observations");
+        // Alternative to:
+        // var response = await _client.GetAsync("/observations");
+        // var json = await response.Content.ReadAsStringAsync();
+        // var actualObservations = JsonSerializer.Deserialize<List<Cheep>>(json);
+        // Assert.NotNull(actualObservations);
+
+        foreach (var expected in _sentObservations)
+        {
+            //Assert.contains asks if there are any items in the collection that satisfies this...
+            Assert.Contains(actualObservations!, actual =>
+                actual.ID == expected.ID &&
+                actual.Author == expected.Author &&
+                actual.Observation == expected.Observation &&
+                actual.Timestamp == expected.Timestamp &&
+                actual.Location == expected.Location);
             // this means that the boolean only marks true if ALL actuals are equal to expected
-        )
 
+        }
+
+//Oracle test = GET /comments
+        foreach (var observation in _sentObservations)
+        {
+            var expectedComments = _sentComments.Where(c => c.ID == Observations.ID).ToList();
+
+            var actualComments = await _client.GetFromJsonAsync<List<Cheep>>($"/comments?id={observation.ID}");
+            Assert.NotNull(actualComments);
+
+            Assert.Equal(expectedComments.Count, actualComments.Count);
+
+            foreach (var expected in expectedComments)
+            {
+                Assert.Contains(actualComments!, actual =>
+
+                    actual.Author == expected.Author &&
+                    actual.Observation == expected.Observation &&
+                    actual.Timestamp == expected.Timestamp);
+
+            }
+        }
+    }
 }
 
-
-//Used for testing - since it cant find Program atm
-public partial class Program { }
-
-private class Randomizer()
-{
-    System.random();
-
-}

@@ -34,3 +34,5 @@ app.MapPost("/comment", (Cheep comment)=>  {
 //hvordan ved vi at den kommer ind i appsettings.json?
 
 app.Run();
+
+public partial class Program { }
