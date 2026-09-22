@@ -65,32 +65,21 @@ app.MapGet("/proposals", (int id) => {
 
 
 app.MapPost("/proposal", (Prop proposal) => {
-    
-    var observationExists = false;
+    // A proposal must refer to an observation that already exists.
+    var observations = observationDb.Read(obsFile);
 
-   var taxon = taxonomy.GetById(proposal.TaxonID);
-  foreach (var observation in observationDb.Read(obsFile)){
-    if (observation.ID == proposal.ID){
-            observationExists = true;
-            break;
-        }
-        
+    if (!ProposalValidator.ObservationExists(observations, proposal.ID)) {
+        return Results.BadRequest("Invalid observation ID");
     }
 
-    if(!observationExists) {
-        //stop
-        //the Results.BadRequest comes from the ASP.NET. 
-        //It creats a http-answer med a tatuscode - 400 bad request
-        return Results.BadRequest("Invalid observation ID");
-        }
-
-    if(taxon==null) {
+    // The taxon ID must exist in the taxonomy loaded at startup.
+    if (!ProposalValidator.TaxonExists(taxonomy, proposal.TaxonID)) {
         return Results.BadRequest("Invalid taxon ID");
     }
-    //okay is also something from the ASP.NET
+
+    // Store the proposal only after both IDs have been validated.
     proposalDb.Store(propFile, proposal);
     return Results.Ok(proposal);
-}
-);
+});
 
 app.Run();
