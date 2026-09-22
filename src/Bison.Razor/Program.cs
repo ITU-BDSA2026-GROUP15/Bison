@@ -69,8 +69,8 @@ app.MapPost("/proposal", (Prop proposal) => {
     var observationExists = false;
 
    var taxon = taxonomy.GetById(proposal.TaxonID);
-   foreach (var observation in observationDb.Read(obsFile))
-        if(observation.ID == proposal.ID) {
+  foreach (var observation in observationDb.Read(obsFile)){
+    if (observation.ID == proposal.ID){
             observationExists = true;
             break;
         }
