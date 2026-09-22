@@ -7,9 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../SimpleDB/SimpleDB.csproj" />
     <ProjectReference Include="..\Bison.Taxonomy\Bison.Taxonomy.csproj" />
-    <ProjectReference Include="..\SimpleDB\SimpleDB.csproj" />
+    <Compile Include="../Bison.CLI/Prop.cs" Link="Prop.cs" />
   </ItemGroup>
+
+
 
   <!-- Uafklaret Razor Pages (Public/UserTimeline/BisonService). Filerne er bevidst
        IKKE slettet, da jeg ikke vil slette noget uden jeres tilladelse, men de er udelukket fra build
