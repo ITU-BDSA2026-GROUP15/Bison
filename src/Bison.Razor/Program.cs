@@ -23,6 +23,7 @@ string propFile = "../../bison_propose_cli_db.csv";
 
 var observationDb= CSVDatabase<Cheep>.Instance;
 var commentDb = CSVDatabase<Cheep>.Instance;
+//Her fortæller Prop, hvilken type data proposal-databasen gemmer og læser.
 var proposalDb = CSVDatabase<Prop>.Instance;
 
 // skal sende et kald til loggede observationer i stedet?? -> connecte dette til simpledb?
@@ -52,7 +53,7 @@ app.MapPost("/comment", (Cheep comment)=>  {
 // Proposals
 app.MapGet("/proposals", (int id) => {
     var allProposals = proposalDb.Read(propFile);
-    var matchingProposal = new List<Prop>();
+    var matchingProposal = new List<Prop>();//Her indeholder listen Prop-objekter.
     foreach(var proposal in allProposals) {
         if (proposal.ID == id) {
             matchingProposal.Add(proposal);
@@ -64,7 +65,7 @@ app.MapGet("/proposals", (int id) => {
 });
 
 
-app.MapPost("/proposal", (Prop proposal) => {
+app.MapPost("/proposal", (Prop proposal) => {//Her oversætter ASP.NET automatisk JSON fra HTTP-requesten til en Prop-record.
     // A proposal must refer to an observation that already exists.
     var observations = observationDb.Read(obsFile);
 
@@ -78,7 +79,7 @@ app.MapPost("/proposal", (Prop proposal) => {
     }
 
     // Store the proposal only after both IDs have been validated.
-    proposalDb.Store(propFile, proposal);
+    proposalDb.Store(propFile, proposal);//gemmer den 
     return Results.Ok(proposal);
 });
 
