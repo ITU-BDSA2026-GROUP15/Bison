@@ -69,6 +69,9 @@ app.MapGet("/proposals", (int id) => {
 
 
 app.MapPost("/proposal", (Prop proposal) => {
+    
+    var observationExists = false;
+
     var taxon = taxonomy.GetByID(proposal.TaxonID);
 
     if(taxon == null) {
