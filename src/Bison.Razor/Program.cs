@@ -19,43 +19,29 @@ string obsFile = "../../bison_observe_cli_db.csv";
 string comFile = "../../bison_comment_cli_db.csv";
 string propFile = "../../bison_propose_cli_db.csv";
 
-var observationDb = CSVDatabase<Cheep>.Instance;
+var observationDb= CSVDatabase<Cheep>.Instance;
 var commentDb = CSVDatabase<Cheep>.Instance;
 var proposalDb = CSVDatabase<Prop>.Instance;
 
-//MAPGET -> gets the observations/ the comments
-// MAPPOST -> create an observations/ a comment
-
 // skal sende et kald til loggede observationer i stedet?? -> connecte dette til simpledb?
-app.MapGet("/observations", () => observationDb.Read(obsFile)); 
-
+app.MapGet("/observations", () => observationDb.Read(obsFile));
 app.MapPost("/observation", (Cheep observation) => {
-    observationDb.Store(obsFile,observation); 
-});
+    // Servicen tildeler selv ID'et, i stedet for at bruge det
+    // klienten sender. Det er lidt unødvendigt at serveren sender et ID,
+    // men fordi Cheep bruger ID som parameter, skal der eksistere et ID fra klienten.
+    // Det ID, klienten sendte med, bliver ignoreret.
+    var existing = observationDb.Read(obsFile);
+    int nextId = existing.Any() ? existing.Max(c => c.ID) + 1 : 0;
+    var stored = observation with { ID = nextId };
 
+    observationDb.Store(obsFile, stored);
+    return stored; });
 
+app.MapGet("/comments", (int id)=> commentDb.Read(comFile).Where(comment => comment.ID == id));
+//app.MapGet("/comments", () => commentDb.Read(comFile));
 
-
-
-//app.MapGet("/comments", (int id)=> commentDb.Read(comFile));
-//app.MapGet("/comments", () => commentDb.Read(comFile)); 
-
-app.MapGet("/comments", (int id) => {
-    var allComments = commentDb.Read(comFile);
-    var matchingComment = new List<Cheep>();
-    foreach(var comment in allComments){
-        
-        if (comment.ID == id){
-            matchingComment.Add(comment);
-        }
-    }
-    return matchingComment;
-});
-    
-//post, 
-app.MapPost("/comment", (Cheep comment)=>  { 
-    commentDb.Store(comFile,comment);
-});
+app.MapPost("/comment", (Cheep comment)=>  {
+    /*return*/ commentDb.Store(comFile, comment);});
 
 // Proposals
 app.MapGet("/proposals", (int id) => {
