@@ -20,7 +20,7 @@ public class Taxonomy
         using var stream = assembly.GetManifestResourceStream("Bison.Taxonomy.joined.csv")
                            ?? throw new InvalidOperationException("Resource not found");  // findes den ikke (forkert navn), får vi null, og så kaster vi en fejl
 
-        using var reader = new StreamReader(stream) // her begynder vi faktisk at læse filen
+        using var reader = new StreamReader(stream);// her begynder vi faktisk at læse filen
         using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
         var taxons = new List<Taxon>(); // opretter tom liste vi putter alle de forskellige arter osv ind i bagefter
@@ -30,7 +30,8 @@ public class Taxonomy
 
         while (csv.Read())
         {
-            // ! betyder at vi ved, at feltet aldrig er null. hvis værdierne kan være null, så kører vi den der betingelse ? hvis sand : hvis falsk
+            // ! betyder at vi ved, at feltet aldrig er null
+            // hvis værdierne kan være null, så kører vi den der betingelse ? hvis sand : hvis falsk
 
             var taxonId = csv.GetField("dwc:taxonID")!;
             var parentId = string.IsNullOrEmpty(csv.GetField("dwc:parentNameUsageID")) ? null : csv.GetField("dwc:parentNameUsageID");
@@ -47,22 +48,22 @@ public class Taxonomy
 
     public Taxon? GetById(string taxonId)
     {
-        return _taxons.FirstOrDefault(t => t.TaxonId == taxonId);
+        return _taxons.FirstOrDefault(t => t.TaxonId == taxonId); // finder den første taxon hvis id matcher
     }
 
     public Taxon? GetByVernacularName(string name)
     {
-        return _taxons.FirstOrDefault(t => t.VernacularName == name);
+        return _taxons.FirstOrDefault(t => t.VernacularName == name); // finder den første taxon hvis navn matcher
     }
 
     public Taxon? GetSupertaxon(Taxon taxon)
     {
-        return _taxons.FirstOrDefault(t => )
+        return _taxons.FirstOrDefault(t => t.TaxonId == taxon.ParentId); // finder den første taxon hvis id matcher forælderens id
     }
 
     public List<Taxon> GetSubtaxa(Taxon taxon)
     {
-        // TODO
+        return _taxons.Where(t => t.ParentId == taxon.TaxonId).ToList(); //finder børnene til den taxon man indtaster
     }
 
 }
