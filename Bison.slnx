@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/Bison.CLI/Bison.CLI.csproj" />
+    <Project Path="src/Bison.Taxonomy/Bison.Taxonomy.csproj" />
     <Project Path="src/SimpleDB/SimpleDB.csproj" />
     <Project Path="src/Bison.Razor/Bison.Razor.csproj" />
   </Folder>
