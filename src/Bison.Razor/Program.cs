@@ -57,10 +57,6 @@ app.MapGet("/proposals", (int id) => {
         if (proposal.ID == id) {
             matchingProposal.Add(proposal);
         }
-        else {
-            Console.WriteLine("invalid observation ID");
-            //how do i make it invalid????
-        }
         
     }
     return matchingProposal;
@@ -72,8 +68,8 @@ app.MapPost("/proposal", (Prop proposal) => {
     
     var observationExists = false;
 
-    var taxon = taxonomy.GetByID(proposal.TaxonID);
-    foreach (var obseration in observationsDb.Read(obsFile)) {
+   var taxon = taxonomy.GetById(proposal.TaxonID);
+   foreach (var observation in observationDb.Read(obsFile))
         if(observation.ID == proposal.ID) {
             observationExists = true;
             break;
