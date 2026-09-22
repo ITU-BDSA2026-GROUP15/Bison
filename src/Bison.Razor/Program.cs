@@ -1,16 +1,17 @@
 using System.ComponentModel.Design;
 using Microsoft.VisualBasic;
 using SimpleDB;
+using Bison.Taxonomy;
 
 //string propFile = "joined.csv";
 
 // indlæs joined.csv, identificer alle taxonIDer tilføj dem til en liste,
 // tjek listen igennem når en ny taxon registres i 'propsal'
-//vil jeg gøre et andet sted
-//hvad sagde du?
+//et andet sted?
 
 
-List<string> taxon_IDs = Taxons.start("../../taxons/joined.csv");
+var taxonomy = new Taxonomy();
+
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build(); //building the webapplication itself (metadata)
@@ -62,10 +63,14 @@ app.MapGet("/proposals", (int id) => {
 });
 
 
-app.MapPost("/proposal", (Prop TaxonID) => {
+app.MapPost("/proposal", (Prop proposal) => {
+    var taxon = taxonomy.GetByID(proposal.TaxonID);
 
+    if(taxon == null) {
+            //stop 
+        }
 
-proposalDb.Store(propFile, TaxonID);
+    proposalDb.Store(propFile, TaxonID);
 }
 );
 
