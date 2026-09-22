@@ -73,14 +73,24 @@ app.MapPost("/proposal", (Prop proposal) => {
     var observationExists = false;
 
     var taxon = taxonomy.GetByID(proposal.TaxonID);
-
-    if(taxon == null) {
-            //stop
-            //the Results.BadRequest comes from the ASP.NET. 
-            //It creats a http-answer med a tatuscode - 400 bad request
-            return Results.BadRequest("Invalid taxon ID");
+    foreach (var obseration in observationsDb.Read(obsFile)) {
+        if(observation.ID == proposal.ID) {
+            observationExists = true;
+            break;
+        }
+        
     }
-    
+
+    if(!observationExists) {
+        //stop
+        //the Results.BadRequest comes from the ASP.NET. 
+        //It creats a http-answer med a tatuscode - 400 bad request
+        return Results.BadRequest("Invalid observation ID");
+        }
+
+    if(taxon==null) {
+        return Results.BadRequest("Invalid taxon ID");
+    }
     //okay is also something from the ASP.NET
     proposalDb.Store(propFile, proposal);
     return Results.Ok(proposal);
