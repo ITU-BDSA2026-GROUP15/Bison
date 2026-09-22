@@ -2,11 +2,23 @@
 
 namespace Bison.Razor.Tests;
 
-public class FuzzTests
+public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 {
-    [Fact]
-    public void Test1()
+    private readonly WebApplicationFactory<Program> _factory;
+
+    public FuzzTests(WebApplicationFactory<Program> factory)
     {
+        _factory = factory;
+    }
+    [Fact]
+    public void PlaceHoldertest()
+    {
+        var client = _factory.CreateClient();
+        Assert.NotNull(client);
+        
 
     }
+   
 }
+//Used for testing - since it cant find Program atm
+public partial class Program { }
