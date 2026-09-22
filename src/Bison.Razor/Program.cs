@@ -34,3 +34,7 @@ app.MapPost("/comment", (Cheep comment)=>  {
 //hvordan ved vi at den kommer ind i appsettings.json?
 
 app.Run();
+
+// Gør den (ellers implicit genererede) Program-klasse offentlig og tilgængelig, så
+// WebApplicationFactory<Program> kan bruges fra Bison.Razor.Tests til at køre servicen in-memory.
+public partial class Program { }
