@@ -2,6 +2,7 @@ using System.ComponentModel.Design;
 using Microsoft.VisualBasic;
 using SimpleDB;
 using Bison.Taxonomy;
+using System.Xml.XPath;
 
 //string propFile = "joined.csv";
 
@@ -67,10 +68,15 @@ app.MapPost("/proposal", (Prop proposal) => {
     var taxon = taxonomy.GetByID(proposal.TaxonID);
 
     if(taxon == null) {
-            //stop 
-        }
-
+            //stop
+            //the Results.BadRequest comes from the ASP.NET. 
+            //It creats a http-answer med a tatuscode - 400 bad request
+            return Results.BadRequest("Invalid taxon ID");
+    }
+    
+    //okay is also something from the ASP.NET
     proposalDb.Store(propFile, TaxonID);
+    return Results.Ok(proposal);
 }
 );
 
