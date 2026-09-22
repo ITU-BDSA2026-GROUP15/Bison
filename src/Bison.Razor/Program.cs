@@ -45,6 +45,10 @@ app.MapGet("/comments", (int id)=> commentDb.Read(comFile).Where(comment => comm
 app.MapPost("/comment", (Cheep comment)=>  {
     /*return*/ commentDb.Store(comFile, comment);});
 
+
+
+
+
 // Proposals
 app.MapGet("/proposals", (int id) => {
     var allProposals = proposalDb.Read(propFile);
@@ -75,7 +79,7 @@ app.MapPost("/proposal", (Prop proposal) => {
     }
     
     //okay is also something from the ASP.NET
-    proposalDb.Store(propFile, TaxonID);
+    proposalDb.Store(propFile, proposal);
     return Results.Ok(proposal);
 }
 );
