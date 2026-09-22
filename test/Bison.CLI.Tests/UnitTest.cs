@@ -1,13 +1,21 @@
 using SimpleDB;
+using System.Net.Http.Json;
 using static UserInterface;
 using static Program;
 
 namespace Bison.CLI.Tests;
 
+// [Collection(...)] sørger for, at BisonRazorFixture kun startes én gang og deles mellem
+// alle tests i denne klasse, i stedet for at starte/stoppe web servicen for hver test.
+[Collection("Bison.Razor service")]
 public class UnitTest
 {
+    private readonly HttpClient client;
 
-    private const string ObserveFile = "testfile_empty.csv";
+    public UnitTest(BisonRazorFixture fixture)
+    {
+        client = fixture.Client;
+    }
 
     [Fact]
     public void ConvertTimeTest()
@@ -27,15 +35,11 @@ public class UnitTest
     public void NonexistingObservationTest()
     {
         // ARRANGE
-        int nonExistingId = GetIdTracker() + 1;
+        // Vi spørger web servicen om det nuværende højeste ID, i stedet for at bruge GetIdTracker()
+        var observations = client.GetFromJsonAsync<List<Cheep>>("/observations").GetAwaiter().GetResult() ?? new List<Cheep>();
+        int highestExistingId = observations.Any() ? observations.Max(o => o.ID) : -1;
+        int nonExistingId = highestExistingId + 1000; // et ID der garanteret ikke findes
         string commentText = "This should not be stored";
-
-        // Linjen nedenunder gemmer CSV filen som den ser ud inden vi nulstiller den til testen
-
-        // Gemmer CSV filen
-        string? originalContent = File.Exists(ObserveFile) ? File.ReadAllText(ObserveFile) : null;
-        // "Nulstiller" CSV filen
-        File.WriteAllText(ObserveFile, string.Empty);
 
         // Vi gemmer den originale TextWriter (almen terminal output) før vi overskriver den med en ny TextWriter.
         // Efter testen sætter vi den tilbage
@@ -49,9 +53,6 @@ public class UnitTest
             comment(nonExistingId, commentText);
 
             // ASSERT
-            string fileContentAfter = File.ReadAllText(ObserveFile);
-            Assert.Equal(string.Empty, fileContentAfter);
-
             string output = consoleOutput.ToString();
             Assert.Contains("No observations with ID", output);
         }
@@ -59,48 +60,33 @@ public class UnitTest
         {
             // CLEANUP
             Console.SetOut(originalOut);
-
-            if (originalContent is null)
-                File.Delete(ObserveFile);
-            else
-                File.WriteAllText(ObserveFile, originalContent);
         }
     }
-
-
 
     [Fact]
     public void ObserveIncrementsIdTrackerTest()
     {
         // ARRANGE
-        int idBefore = GetIdTracker();
-        string firstObservation = "First test observation";
-        string secondObservation = "Second test observation";
+        // idBefore regnes nu ud fra web servicens data (samme logik som servicen selv bruger
+        // til at tildele ID'er), i stedet for den lokale GetIdTracker()-variabel.
+        var before = client.GetFromJsonAsync<List<Cheep>>("/observations").GetAwaiter().GetResult() ?? new List<Cheep>();
+        int idBefore = before.Any() ? before.Max(o => o.ID) + 1 : 0;
 
-        string? originalContent = File.Exists(ObserveFile) ? File.ReadAllText(ObserveFile) : null;
-        File.WriteAllText(ObserveFile, string.Empty);
+        // Guid i observationsteksten sikrer, at vi finder netop vores egne observationer bagefter,
+        // selvom CSV-filen indeholder data fra tidligere testkørsler.
+        string firstObservation = "First test observation " + Guid.NewGuid();
+        string secondObservation = "Second test observation " + Guid.NewGuid();
 
-        try
-        {
-            // ACT
-            //ADDED LOCATION
-            observe(firstObservation, "ITU");
-            observe(secondObservation, "ITU");
+        // ACT
+        observe(firstObservation, "ITU");
+        observe(secondObservation, "ITU");
 
-            // ASSERT
-            var db = CSVDatabase<Cheep>.Instance;
-            var cheeps = db.Read(ObserveFile).ToList();
+        // ASSERT
+        var after = client.GetFromJsonAsync<List<Cheep>>("/observations").GetAwaiter().GetResult() ?? new List<Cheep>();
+        var first = after.Single(o => o.Observation == firstObservation);
+        var second = after.Single(o => o.Observation == secondObservation);
 
-            Assert.Equal(2, cheeps.Count);
-            Assert.Equal(idBefore + 1, cheeps[0].ID);
-            Assert.Equal(idBefore + 2, cheeps[1].ID);
-        }
-        finally
-        {
-            if (originalContent is null)
-                File.Delete(ObserveFile);
-            else
-                File.WriteAllText(ObserveFile, originalContent);
-        }
+        Assert.Equal(idBefore, first.ID);
+        Assert.Equal(idBefore + 1, second.ID);
     }
 }
