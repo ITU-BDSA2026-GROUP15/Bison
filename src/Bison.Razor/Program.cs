@@ -9,8 +9,10 @@ using SimpleDB;
 //vil jeg gøre et andet sted
 //hvad sagde du?
 
-var builder = WebApplication.CreateBuilder(args);
 
+List<string> taxon_IDs = Taxons.start("../../taxons/joined.csv");
+
+var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build(); //building the webapplication itself (metadata)
 
 string obsFile = "../../bison_observe_cli_db.csv";
@@ -69,7 +71,7 @@ app.MapGet("/proposals", (int id) => {
         }
         
     }
-    return matchingPorposal;
+    return matchingProposal;
 
 });
 

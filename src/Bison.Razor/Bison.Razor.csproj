@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="../SimpleDB/SimpleDB.csproj" />
     <Compile Include="../../Cheep.cs" Link="Cheep.cs" />
+    <Compile Include="../Bison.CLI/Prop.cs" Link="Prop.cs" />
   </ItemGroup>
 
 
