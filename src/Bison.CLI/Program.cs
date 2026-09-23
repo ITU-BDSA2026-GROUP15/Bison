@@ -24,26 +24,10 @@ class Program {
         httpClient.BaseAddress = new Uri("http://localhost:5273");
     }
 
-    private static int idTracker; //NEW: ID parsing added to reading observations
-
-    internal static int GetIdTracker() => idTracker;
-
     public static void Main(string[] args) { //args is what you write in the terminal after the program name, for example: dotnet run observe
-
-        idTracker = InitializeIdTracker();
 
         parseArguments(args);
 
-    }
-
-       private static int InitializeIdTracker() {
-
-        string file = "../../bison_observe_cli_db.csv";
-        var db = CSVDatabase<Cheep>.Instance;
-
-        var cheeps = db.Read(file);
-
-        return cheeps.Any() ? cheeps.Max(c => c.ID) + 1 : 0;
     }
 
     public static void parseArguments(string[] args){

@@ -19,9 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Bison.Razor\Bison.Razor.csproj" />
-    <ProjectReference Include="..\..\src\SimpleDB\SimpleDB.csproj" />
+    <ProjectReference Include="../../src/Bison.Razor/Bison.Razor.csproj" />
+   <!-- <ProjectReference Include="..\..\src\Bison.Razor\Bison.Razor.csproj" /> -->
   </ItemGroup>
-
 </Project>
-

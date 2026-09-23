@@ -33,7 +33,7 @@ app.MapPost("/observation", (Cheep observation) => {
     // men fordi Cheep bruger ID som parameter, skal der eksistere et ID fra klienten.
     // Det ID, klienten sendte med, bliver ignoreret.
     var existing = observationDb.Read(obsFile);
-    int nextId = existing.Any() ? existing.Max(c => c.ID) + 1 : 0;
+    int nextId = existing.Any() ? existing.Max(c => c.ID) + 1 : 0; // if eksisterer noget id, så existing.Max mapping noget, ellers 0
     var stored = observation with { ID = nextId };
 
     observationDb.Store(obsFile, stored);
@@ -57,7 +57,7 @@ app.MapGet("/proposals", (int id) => {
         if (proposal.ID == id) {
             matchingProposal.Add(proposal);
         }
-        
+
     }
     return matchingProposal;
 
@@ -84,4 +84,6 @@ app.MapPost("/proposal", (Prop proposal) => {
 
 app.Run();
 
+// Gør den (ellers implicit genererede) Program-klasse offentlig og tilgængelig, så
+// WebApplicationFactory<Program> kan bruges fra Bison.Razor.Tests til at køre servicen in-memory.
 public partial class Program { }
