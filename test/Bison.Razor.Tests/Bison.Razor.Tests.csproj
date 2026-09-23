@@ -1,5 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -20,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Bison.Razor\Bison.Razor.csproj" />
+    <ProjectReference Include="../../src/Bison.Razor/Bison.Razor.csproj" />
+   <!-- <ProjectReference Include="..\..\src\Bison.Razor\Bison.Razor.csproj" /> -->
   </ItemGroup>
-
 </Project>
