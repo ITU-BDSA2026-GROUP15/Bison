@@ -9,14 +9,14 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
     private readonly HttpClient _client;
     private static readonly Random _random = new();
 
-    private readonly List<Cheep> _sentObserservations = new();
+    private readonly List<Cheep> _sentObservations = new();
     private readonly List<Cheep> _sentComments = new();
 
 
 
     public FuzzTests(WebApplicationFactory<Program> factory)
     {
-        client = _factory.CreateClient();
+        _client = factory.CreateClient();
     }
 
 

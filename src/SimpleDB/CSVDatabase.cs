@@ -30,7 +30,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
     {
         try {
 
-        using (var reader =  new StreamReader(file))
+        using (var reader=  new StreamReader(file))
 
 
         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture)) {
