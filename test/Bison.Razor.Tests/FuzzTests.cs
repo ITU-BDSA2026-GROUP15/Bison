@@ -9,7 +9,7 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
     private readonly HttpClient _client;
     private static readonly Random _random = new();
 
-    private readonly List<Cheep> _sentOberservations = new();
+    private readonly List<Cheep> _sentObserservations = new();
     private readonly List<Cheep> _sentComments = new();
 
 
@@ -20,7 +20,7 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
 
-    private static readonly string[] SampleAuthors = { "Anne", "Theo", "line", "Lærke", "Nicklas" };
+    private static readonly string[] sampleAuthors = { "Anne", "Theo", "line", "Lærke", "Nicklas" };
 
     private static readonly string[] sampleMessages =
         { "Do", "You", "Remember", "The", "Twenty-first", "night", "of", "September" };
@@ -29,7 +29,7 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 
     private Cheep GenerateRandomObservation()
     {
-        String author = sampleAuthors[_random.Next(SampleAuthors.Length)];
+        String author = sampleAuthors[_random.Next(sampleAuthors.Length)];
         String message = sampleMessages[_random.Next(sampleMessages.Length)];
         String location = sampleLocations[_random.Next(sampleLocations.Length)];
         long timestamp = RandomTimeStamp();
@@ -39,8 +39,8 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 
     private (Cheep comment, bool referenceRealObservation) GenerateRandomComment()
     {
-        string author = SampleAuthors[_random.Next(SampleAuthors.Length)];
-        string message = SampleMessages[_random.Next(sampleMessages.Length)];
+        string author = sampleAuthors[_random.Next(sampleAuthors.Length)];
+        string message = sampleMessages[_random.Next(sampleMessages.Length)];
         long timestamp = RandomTimeStamp();
 
         bool useValidID = _random.NextDouble() < 0.9 && _sentObservations.Count > 0;
@@ -58,7 +58,7 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
         long minUnix = 946684800;
         long maxUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-        return (long)(minunix + _random.NextDouble() * (maxUnix - minUnix));
+        return (long)(minUnix + _random.NextDouble() * (maxUnix - minUnix));
     }
 
     //What the fuzztest going on here
@@ -76,10 +76,10 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
                 var observation = GenerateRandomObservation();
 
                 var response = await _client.PostAsJsonAsync("/observation", observation);
-                response.EnsureSuccesStatusCode();
+                response.EnsureSuccessStatusCode();
 
 
-                var stored = await response.content.ReadFromJsonAsync<Cheep>();
+                var stored = await response.Content.ReadFromJsonAsync<Cheep>();
                 Assert.NotNull(stored);
                 _sentObservations.Add(stored);
             }
@@ -92,7 +92,7 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
                 //Work is needed before we can continue here - since /comments does not validate ID.
                 //The CLI method comment() does, but we need to make this a possibility for /comments
 
-                response.EnsureSuccesStatusCode();
+                response.EnsureSuccessStatusCode();
                 _sentComments.Add(comment);
             }
             //ORACLE Check - with get function
@@ -126,7 +126,7 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 //Oracle test = GET /comments
         foreach (var observation in _sentObservations)
         {
-            var expectedComments = _sentComments.Where(c => c.ID == Observations.ID).ToList();
+            var expectedComments = _sentComments.Where(c => c.ID == observation.ID).ToList();
 
             var actualComments = await _client.GetFromJsonAsync<List<Cheep>>($"/comments?id={observation.ID}");
             Assert.NotNull(actualComments);
