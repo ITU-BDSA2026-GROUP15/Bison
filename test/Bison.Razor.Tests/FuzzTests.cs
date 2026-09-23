@@ -5,6 +5,8 @@ using SimpleDB;
 namespace Bison.Razor.Tests;
 
 public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
+    // IClassFixture<WebApplicationFactory<Program>> Tells the Xunit to boot Razor once, in-memory and share the same instance
+    // instead of starting a fresh app per test,
 {
     private readonly HttpClient _client;
     private static readonly Random _random = new();
