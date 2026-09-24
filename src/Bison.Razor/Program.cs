@@ -15,6 +15,12 @@ var taxonomy = new Taxonomy();
 
 
 var builder = WebApplication.CreateBuilder(args);
+//Tilføjer understøttelse af Razor Pages.
+builder.Services.AddRazorPages();
+
+//gør ObservationService tilgængelig for sidernes konstruktører.
+builder.Services.AddScoped<IObservationService,ObservationService>();
+
 var app = builder.Build(); //building the webapplication itself (metadata)
 
 string obsFile = "../../bison_observe_cli_db.csv";
@@ -87,5 +93,7 @@ app.MapPost("/proposal", (Prop proposal) => {//Her oversætter ASP.NET automatis
     // Returnerer HTTP 200 sammen med det gemte forslag.
     return Results.Ok(proposal);
 });
+// Gør Razor-siderne tilgængelige via deres URL'er.
+app.MapRazorPages();
 
 app.Run();
