@@ -27,7 +27,7 @@ public class ObservationService : IObservationService {
     //take(32) vælger højest 32 observationer
     public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page =1){
         // filter by the provided author name
-        page = Math.Max(2,page);
+        page = Math.Max(1,page);
         int offset = (page -1) * 32;
         
         //filterer efter forfatter, skipper tidligere siders observationer
