@@ -1,8 +1,10 @@
 public record ObservationViewModel(string Author, string Message, string Timestamp);
 
 public interface IObservationService{
+    //skip(offset) springer tidligere siders observationer over
+    //take(32) vælger højest 32 observationer
     public List<ObservationViewModel> GetObservations(int page = 1){
-        page = Math.Max();
+        page = Math.Max(1,page); // sidetallet er mindst 1
         int offset = (page -1) * 32;
         return _obs.Skip(offset).Take(32).ToList();
     }
