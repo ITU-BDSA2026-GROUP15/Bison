@@ -15,7 +15,7 @@ public class UserTimelineModel : PageModel
     //[FromQuery] læser page fra URL’en, fra starten på 1.
     public ActionResult OnGet(string author, [FromQuery]int page = 1)
     {
-        Observations = _service.GetObservationsFromAuthor(author);
+        Observations = _service.GetObservationsFromAuthor(author, page);
         return Page();
     }
 }
