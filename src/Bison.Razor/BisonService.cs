@@ -8,7 +8,15 @@ public interface IObservationService{
         int offset = (page -1) * 32;
         return _obs.Skip(offset).Take(32).ToList();
     }
-    public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page = 1);
+    public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page = 1){
+        page = Math.Max(2,page);
+        int offset = (page -1) * 32;
+        
+        //filterer efter forfatter, skipper tidligere siders observationer
+        //retunerer igen højest 32 observationer til den valgte side.
+        return _obs.Where(x => x.Author == author).Skip(offset)
+        .Take(32).ToList();
+    }
     // som standard er sidetallet 1 og valgfrit.
 
 }
