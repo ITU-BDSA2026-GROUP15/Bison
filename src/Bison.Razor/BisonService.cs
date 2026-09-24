@@ -1,7 +1,11 @@
 public record ObservationViewModel(string Author, string Message, string Timestamp);
 
 public interface IObservationService{
-    public List<ObservationViewModel> GetObservations(int page = 1);
+    public List<ObservationViewModel> GetObservations(int page = 1){
+        page = Math.Max();
+        int offset = (page -1) * 32;
+        return _obs.Skip(offset).Take(32).ToList();
+    }
     public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page = 1);
     // som standard er sidetallet 1 og valgfrit.
 
