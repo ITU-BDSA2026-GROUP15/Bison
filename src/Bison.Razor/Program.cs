@@ -16,8 +16,12 @@ var taxonomy = new Taxonomy();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages(); // tilføjede razor pages til programmet
+builder.Services.AddSingleton<IObservationService, ObservationService>(); // hvis man kalder en dette interface giver den en instance as observationservice.
 
 var app = builder.Build(); //building the webapplication itself (metadata)
+
+app.MapRazorPages(); // kobler URL til razor pages
+app.UseStaticFiles(); // kobler browseren til filerne i wwwroot -> altså css styling osv så det ikke bare er tekst
 
 string obsFile = "../../bison_observe_cli_db.csv";
 string comFile = "../../bison_comment_cli_db.csv";
