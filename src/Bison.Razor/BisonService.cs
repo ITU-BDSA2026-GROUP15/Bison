@@ -1,22 +1,11 @@
 public record ObservationViewModel(string Author, string Message, string Timestamp);
 
 public interface IObservationService{
-    //skip(offset) springer tidligere siders observationer over
-    //take(32) vælger højest 32 observationer
-    public List<ObservationViewModel> GetObservations(int page = 1){
-        page = Math.Max(1,page); // sidetallet er mindst 1
-        int offset = (page -1) * 32;
-        return _obs.Skip(offset).Take(32).ToList();
-    }
-    public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page = 1){
-        page = Math.Max(2,page);
-        int offset = (page -1) * 32;
-        
-        //filterer efter forfatter, skipper tidligere siders observationer
-        //retunerer igen højest 32 observationer til den valgte side.
-        return _obs.Where(x => x.Author == author).Skip(offset)
-        .Take(32).ToList();
-    }
+   
+    public List<ObservationViewModel> GetObservations(int page = 1);
+    public List<ObservationViewModel> GetObservationsFromAuthor(
+        string author, int page = 1);
+
     // som standard er sidetallet 1 og valgfrit.
 
 }
@@ -29,14 +18,25 @@ public class ObservationService : IObservationService {
             new ObservationViewModel("Paul", "There is a bison on Amager", UnixTimeStampToDateTimeString(1690895308)),
     };
 
-    public List<ObservationViewModel> GetObservations(int page =1){
-        return _obs;
-    }
-
+   public List<ObservationViewModel> GetObservations(int page = 1){
+        page = Math.Max(1,page); // sidetallet er mindst 1
+        int offset = (page -1) * 32;
+        return _obs.Skip(offset).Take(32).ToList();
+   }
+ //skip(offset) springer tidligere siders observationer over
+    //take(32) vælger højest 32 observationer
     public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page =1){
         // filter by the provided author name
-        return _obs.Where(x => x.Author == author).ToList();
+        page = Math.Max(2,page);
+        int offset = (page -1) * 32;
+        
+        //filterer efter forfatter, skipper tidligere siders observationer
+        //retunerer igen højest 32 observationer til den valgte side.
+        return _obs.Where(x => x.Author == author).Skip(offset)
+        .Take(32).ToList();
     }
+    // som standard er sidetallet 1 og valgfrit.
+    
 
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp) {
         // Unix timestamp is seconds past epoch
