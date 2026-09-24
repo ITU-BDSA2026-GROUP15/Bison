@@ -11,16 +11,9 @@
     <ProjectReference Include="..\Bison.Taxonomy\Bison.Taxonomy.csproj" />
     <Compile Include="../Bison.CLI/Prop.cs" Link="Prop.cs" />
   </ItemGroup>
-
-
-
-  <!-- Uafklaret Razor Pages (Public/UserTimeline/BisonService). Filerne er bevidst
-       IKKE slettet, da jeg ikke vil slette noget uden jeres tilladelse, men de er udelukket fra build
-       her, så de ikke fejler eller crasher ved runtime. -->
+    
   <ItemGroup>
-    <Compile Remove="Pages/**/*.cs" />
-    <Content Remove="Pages/**/*.cshtml" />
-    <Compile Remove="BisonService.cs" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

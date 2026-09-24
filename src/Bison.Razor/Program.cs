@@ -13,8 +13,10 @@ using System.Xml.XPath;
 
 var taxonomy = new Taxonomy();
 
-
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddRazorPages(); // tilføjede razor pages til programmet
+
 var app = builder.Build(); //building the webapplication itself (metadata)
 
 string obsFile = "../../bison_observe_cli_db.csv";
