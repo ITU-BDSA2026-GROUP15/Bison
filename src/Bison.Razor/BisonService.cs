@@ -4,6 +4,10 @@ public interface IObservationService
 {
     public List<ObservationViewModel> GetObservations();
     public List<ObservationViewModel> GetObservationsFromAuthor(string author);
+    // som standard er sidetallet 1.
+    GetObservations(int page = 1);
+    GetObservationsFromAuthor(string author, int page);
+
 }
 
 public class ObservationService : IObservationService
