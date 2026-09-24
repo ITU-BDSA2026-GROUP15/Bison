@@ -1,33 +1,44 @@
 public record ObservationViewModel(string Author, string Message, string Timestamp);
 
-public interface IObservationService
-{
-    public List<ObservationViewModel> GetObservations();
-    public List<ObservationViewModel> GetObservationsFromAuthor(string author);
+public interface IObservationService{
+   
+    public List<ObservationViewModel> GetObservations(int page = 1);
+    public List<ObservationViewModel> GetObservationsFromAuthor(
+        string author, int page = 1);
+
+    // som standard er sidetallet 1 og valgfrit.
+
 }
 
-public class ObservationService : IObservationService
-{
+public class ObservationService : IObservationService {
     // These would normally be loaded from a database for example
-    private static readonly List<ObservationViewModel> _obs = new()
-        {
+    private static readonly List<ObservationViewModel> _obs = new(){
+            
             new ObservationViewModel("Peter", "I saw a heron", UnixTimeStampToDateTimeString(1690892208)),
             new ObservationViewModel("Paul", "There is a bison on Amager", UnixTimeStampToDateTimeString(1690895308)),
-        };
+    };
 
-    public List<ObservationViewModel> GetObservations()
-    {
-        return _obs;
-    }
-
-    public List<ObservationViewModel> GetObservationsFromAuthor(string author)
-    {
+   public List<ObservationViewModel> GetObservations(int page = 1){
+        page = Math.Max(1,page); // sidetallet er mindst 1
+        int offset = (page -1) * 32;
+        return _obs.Skip(offset).Take(32).ToList();
+   }
+ //skip(offset) springer tidligere siders observationer over
+    //take(32) vælger højest 32 observationer
+    public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page =1){
         // filter by the provided author name
-        return _obs.Where(x => x.Author == author).ToList();
+        page = Math.Max(1,page);
+        int offset = (page -1) * 32;
+        
+        //filterer efter forfatter, skipper tidligere siders observationer
+        //retunerer igen højest 32 observationer til den valgte side.
+        return _obs.Where(x => x.Author == author).Skip(offset)
+        .Take(32).ToList();
     }
+    // som standard er sidetallet 1 og valgfrit.
+    
 
-    private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
-    {
+    private static string UnixTimeStampToDateTimeString(double unixTimeStamp) {
         // Unix timestamp is seconds past epoch
         DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         dateTime = dateTime.AddSeconds(unixTimeStamp);

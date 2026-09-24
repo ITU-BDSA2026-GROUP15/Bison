@@ -13,9 +13,10 @@ public class PublicModel : PageModel
         _service = service;
     }
 
-    public ActionResult OnGet()
-    {
-        Observations = _service.GetObservations();
+//Razor-siden til at læse sidetallet fra URL’en og sende det videre.
+    //[FromQuery] læser page fra URL’en,
+    public ActionResult OnGet([FromQuery] int page=1){
+        Observations = _service.GetObservations(page);
         return Page();
     }
 }

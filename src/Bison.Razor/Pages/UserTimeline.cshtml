@@ -1,4 +1,4 @@
-﻿@page "/{author}"
+﻿@page "/obs/{author}"
 @model Bison.Razor.Pages.UserTimelineModel
 @{
     ViewData["Title"] = "Bison";
@@ -17,7 +17,7 @@
                 <li>
                     <p>
                         <strong>
-                            <a href="/@ob.Author">@ob.Author</a>
+                            <a href="/obs/@ob.Author">@ob.Author</a>
                         </strong>
                         @ob.Message
                         <small>&mdash; @ob.Timestamp</small>
