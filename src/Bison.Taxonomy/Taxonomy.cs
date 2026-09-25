@@ -5,6 +5,16 @@ using CsvHelper;
 namespace Bison.Taxonomy;
 
 // i denne klasse læser vi fra csv filen vi fik på learnit, men den er embedded så den skal lige læses ekstra grundigt så at sige
+
+
+/*
+In this Taxonomy class the file joined.csv is loaded, which is embedded (maybe for a better running time).
+The ReadTaxonsFromResource() we return a objects with the taxonID.
+The GetById(string taxonId) returns the first element of the sequence that satisfies a condition or a default value if no such element is found.
+The GetByVernacularName(string name) returns the taxon object.
+The GetSupertaxon(Taxon taxon) returns a taxon object from the parentID
+The GetSubtaxa(Taxon taxon) returns the parentID that is the superID
+*/
 public class Taxonomy
 {
     private readonly List<Taxon> _taxons;
