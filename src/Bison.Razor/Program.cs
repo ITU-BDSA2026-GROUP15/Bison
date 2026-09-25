@@ -16,7 +16,13 @@ var taxonomy = new Taxonomy();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages(); // tilføjede razor pages til programmet
-builder.Services.AddSingleton<IObservationService, ObservationService>(); // hvis man kalder en dette interface giver den en instance as observationservice.
+
+var envPath  = Environment.GetEnvironmentVariable("BISONDBPATH");   // kan måske være null
+var tempPath = Path.Combine(Path.GetTempPath(), "bison.db");        // fallback
+var dbPath   = envPath ?? tempPath;
+
+builder.Services.AddSingleton<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
+builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade
 
 var app = builder.Build(); //building the webapplication itself (metadata)
 
