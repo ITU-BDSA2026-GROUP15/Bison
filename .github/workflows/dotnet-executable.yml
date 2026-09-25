@@ -1,10 +1,10 @@
 # This workflow will create a github release
-name: github release  
+name: github release
 
 on:
   push:
     tags:
-      -'v*' #only runs for commands starting with v, when pushed
+      - 'v*' #only runs for commands starting with v, when pushed
 
 jobs:
   release:
@@ -31,21 +31,20 @@ jobs:
     - name: Publish linux
       # '>' is a folded block that will join the lines with a space instead of new lines
       run: >
-        dotnet publish Bison.CLI/Bison.CLI.csproj
+        dotnet publish src/Bison.Razor/Bison.Razor.csproj
         -c Release
         -r linux-x64
         -p:PublishSingleFile=true --self-contained false
         -o publish/linux-x64
       # r -> runtime identifyer, what makes the cross compilation possible
       # --selfcontained false gives us a framework dependent single-file
-      # be aware of the path where we publish the Bison.CLI -> might need refactoring
 
       #windows
     - name: Publish windows
       run: >
-        dotnet publish Bison.CLI/Bison.CLI.csproj
+        dotnet publish src/Bison.Razor/Bison.Razor.csproj
         -c Release
-        -r win-x64 
+        -r win-x64
         -p:PublishSingleFile=true --self-contained false
         -p:IncludeNativeLibrariesForSelfExtract=true
         -o publish/win-x64
@@ -54,13 +53,13 @@ jobs:
     - name: Publish  macOS
       # dotnet publish will produce folders of files and not zips
       run: >
-        dotnet publish Bison.CLI/Bison.CLI.csproj
+        dotnet publish src/Bison.Razor/Bison.Razor.csproj
         -c Release
         -r osx-x64
         -p:PublishSingleFile=true --self-contained false
         -p:IncludeNativeLibrariesForSelfExtract=true
         -o publish/osx-x64
-    
+
     # here compressing the folder of files to a zip
     - name: Zip files
       # the '|' indicates that everything after is treated as a single-line, but keeps format
@@ -81,7 +80,7 @@ jobs:
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2 # this is the release action itself
       with:
-        files: | 
+        files: |
           bison-win-x64.zip
           bison-osx-x64.zip
           bison-linux-x64.zip
