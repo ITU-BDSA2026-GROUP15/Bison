@@ -32,6 +32,6 @@ public class DBFacade
     {
         // forespørgsel B
 
-        return 
+        return
     }
 }
