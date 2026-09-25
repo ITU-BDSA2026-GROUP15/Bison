@@ -26,11 +26,14 @@ public class DBFacade
         using var reader = command.ExecuteReader();
         while (reader.Read())
         {
-            var author = reader.GetString(...);
-            var message = reader.GetString(...);
-            var timestamp = reader.GetInt64(...);
+            var author = reader.GetString(0);
+            var message = reader.GetString(1);
+            var timestamp = reader.GetInt64(2);
 
-            result.Add(ObservationViewModel(author, message, timestamp));
+            var timestampString = UnixTimeStampToDateTimeString(timestamp);
+
+            result.Add(new ObservationViewModel(author, message, timestampString));
+        }
 
         return result;
     }
@@ -55,7 +58,13 @@ public class DBFacade
         using var reader = command.ExecuteReader();
         while (reader.Read())
         {
-            //her skal der læses de tre kolloner
+            var username = reader.GetString(0);
+            var message = reader.GetString(1);
+            var timestamp = reader.GetInt64(2);
+
+            var timestampString = UnixTimeStampToDateTimeString(timestamp);
+
+            result.Add(new ObservationViewModel(username, message, timestampString));
         }
 
         return result;
