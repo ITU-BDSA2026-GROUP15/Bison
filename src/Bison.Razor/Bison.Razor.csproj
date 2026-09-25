@@ -9,7 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="../SimpleDB/SimpleDB.csproj" />
     <ProjectReference Include="..\Bison.Taxonomy\Bison.Taxonomy.csproj" />
-    <Compile Include="../Bison.CLI/Prop.cs" Link="Prop.cs" />
   </ItemGroup>
     
   <ItemGroup>
