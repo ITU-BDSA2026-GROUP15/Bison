@@ -6,7 +6,7 @@ public class DBFacade
 
     public DBFacade(string dbPath)
     {
-        //her skal stien gemmes i feltet
+        _dbPath = dbPath;
     }
 
     public List<ObservationViewModel> GetObservations()
@@ -16,8 +16,12 @@ public class DBFacade
         using var connection = new SqliteConnection($"Data Source={_dbPath}");
         connection.Open();
 
-        var command = connection.CreateCommand();
-        command.CommandText = @"TODO: din forespørgsel A";
+        var command = connection.CreateCommand(); // det her viser bare alle observationer så at sige
+        command.CommandText = @"
+            select user.username, observation.text, observation.pub_date
+            from observation
+            join user on observation.author_id = user.user_id
+            order by pub_date desc;";
 
         using var reader = command.ExecuteReader();
         while (reader.Read())
@@ -30,8 +34,27 @@ public class DBFacade
 
     public List<ObservationViewModel> GetObservationsFromAuthor(string author)
     {
-        // forespørgsel B
+        var result = new List<ObservationViewModel>();
 
-        return
+        using var connection = new SqliteConnection($"Data Source={_dbPath}");
+        connection.Open();
+
+        var command = connection.CreateCommand(); // det her viser alle observationer fra den bestemte author
+        command.CommandText = @"
+            select user.username, observation.text, observation.pub_date
+            from observation
+            join user on observation.author_id = user.user_id
+            where user.username = @author
+            order by observation.pub_date desc;";
+
+        command.Parameters.AddWithValue("@author", author);
+
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            //her skal der læses de tre kolloner
+        }
+
+        return result;
     }
 }
