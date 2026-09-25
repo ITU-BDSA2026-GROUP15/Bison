@@ -1,6 +1,6 @@
 using SimpleDB;
 
-namespace Bison.CLI.Tests;
+namespace SimpleDB.Tests;
 
 public class IntegrationTest
 {
