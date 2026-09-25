@@ -2,11 +2,6 @@
 # the action checks WHAT changed and then the correct label is added
 # only existing labels can be apllied, it cannot create new ones (do that in github)
 
-"cli":
-  - changed-files:
-      - any-glob-to-any-file: 'src/Bison.CLI/**'
-      # src doesnt exist yet
-
 "database":
   - changed-files:
       - any-glob-to-any-file: 'src/SimpleDB/**'
