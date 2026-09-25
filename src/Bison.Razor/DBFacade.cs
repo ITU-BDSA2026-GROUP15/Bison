@@ -61,7 +61,6 @@ public class DBFacade
             var username = reader.GetString(0);
             var message = reader.GetString(1);
             var timestamp = reader.GetInt64(2);
-
             var timestampString = UnixTimeStampToDateTimeString(timestamp);
 
             result.Add(new ObservationViewModel(username, message, timestampString));
