@@ -14,6 +14,8 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
     private readonly List<Cheep> _sentObservations = new();
     private readonly List<Cheep> _sentComments = new();
 
+    private readonly List<Cheep> _sentProposals = new();
+
 
 
     public FuzzTests(WebApplicationFactory<Program> factory)
@@ -29,6 +31,11 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 
     private static readonly string[] sampleLocations = { "DR-Byen", "Nicklas' crib", "genbrugspladsen", "Istedgade" };
 
+
+    // Builds one random observation to POST to /observation.
+    // ID is set to 0 here because /observation ignores whatever ID the client sends
+    // and assigns its own (see Bison.Razor/Program.cs), so this is used as a placeholder
+
     private Cheep GenerateRandomObservation()
     {
         String author = sampleAuthors[_random.Next(sampleAuthors.Length)];
@@ -38,6 +45,10 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 
         return new Cheep(author, 0, message, timestamp, location);
     }
+    // Builds one random comment to POST to /comment.
+    // Returns a tuple: the comment itself, plus a flag telling the caller whether
+    // we deliberately gave it a REAL observation ID or a fake/invalid one - useful
+    // once /comment starts validating IDs and we need to assert different outcomes.
 
     private (Cheep comment, bool referenceRealObservation) GenerateRandomComment()
     {
@@ -55,6 +66,28 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 
     }
 
+    private (Prop proposal, bool referenceRealObservation, bool referenceRealProposal) GenerateRandomProposal()
+    {
+        string author = SampleAuthors[_random.Next(sampleAuthors.Length)];
+        bool useValidID = _random.NextDouble() < 0.9 && _sentObservations.Count > 0;
+
+        int id = useValidID
+            ? _sentObservations[_random.Next(_sentObservations.Count)].ID
+            : _random.Next(100_000, 999_999);
+
+        int counter = ReadTaxonsFromResource().Count;
+
+        bool useRealTaxonID = counter > 0;
+
+
+
+
+        return (new Prop(author, id, taxonID), useValidID, useRealTaxonID);
+    }
+
+    // Generates a random point in time, roughly between Jan 2000 and right now,
+    // expressed as Unix seconds (matching how Cheep.Timestamp is stored/used elsewhere).
+
     private static long RandomTimeStamp()
     {
         long minUnix = 946684800;
@@ -71,6 +104,11 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 
         for (int i = 0; i < iterations; i++)
         {
+            // Bias slightly toward posting observations first (or always, if we have
+            // none yet), so there's actually a pool of real IDs for comments to
+            // reference - otherwise the first several rounds would have nothing
+            // valid to pick from in GenerateRandomComment().
+
             bool postObservations = _random.NextDouble() < 0.5 || _sentObservations.Count == 0;
 
             if (postObservations)
@@ -80,6 +118,9 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
                 var response = await _client.PostAsJsonAsync("/observation", observation);
                 response.EnsureSuccessStatusCode();
 
+                // We record the SERVER's returned version (with its own assigned ID),
+                // not our local placeholder one - the server's ID is what matters
+                // when we check GET /observations later.
 
                 var stored = await response.Content.ReadFromJsonAsync<Cheep>();
                 Assert.NotNull(stored);
@@ -104,6 +145,8 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 
 
 
+        // Ask the server for everything it currently has, and confirm every
+        // observation we successfully posted is actually present, unmodified.
 
         var actualObservations = await _client.GetFromJsonAsync<List<Cheep>>("/observations");
         // Alternative to:
