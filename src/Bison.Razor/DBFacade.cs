@@ -26,8 +26,11 @@ public class DBFacade
         using var reader = command.ExecuteReader();
         while (reader.Read())
         {
-            //her skal der læses de tre kolloner
-        }
+            var author = reader.GetString(...);
+            var message = reader.GetString(...);
+            var timestamp = reader.GetInt64(...);
+
+            result.Add(ObservationViewModel(author, message, timestamp));
 
         return result;
     }
