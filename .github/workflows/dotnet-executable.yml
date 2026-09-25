@@ -31,19 +31,18 @@ jobs:
     - name: Publish linux
       # '>' is a folded block that will join the lines with a space instead of new lines
       run: >
-        dotnet publish Bison.Razor/Bison.Razor.csproj
+        dotnet publish src/Bison.Razor/Bison.Razor.csproj
         -c Release
         -r linux-x64
         -p:PublishSingleFile=true --self-contained false
         -o publish/linux-x64
       # r -> runtime identifyer, what makes the cross compilation possible
       # --selfcontained false gives us a framework dependent single-file
-      # be aware of the path where we publish the Bison.CLI -> might need refactoring
 
       #windows
     - name: Publish windows
       run: >
-        dotnet publish Bison.Razor/Bison.Razor.csproj
+        dotnet publish src/Bison.Razor/Bison.Razor.csproj
         -c Release
         -r win-x64
         -p:PublishSingleFile=true --self-contained false
@@ -54,7 +53,7 @@ jobs:
     - name: Publish  macOS
       # dotnet publish will produce folders of files and not zips
       run: >
-        dotnet publish Bison.Razor/Bison.Razor.csproj
+        dotnet publish src/Bison.Razor/Bison.Razor.csproj
         -c Release
         -r osx-x64
         -p:PublishSingleFile=true --self-contained false
