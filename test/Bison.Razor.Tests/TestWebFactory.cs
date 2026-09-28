@@ -14,6 +14,12 @@ public class TestWebFactory : WebApplicationFactory<Program>
     // Bygger testdatabasen, før appen startes.
     public TestWebFactory()
     {
+        // Path.GetTempPath() = brugerens temp-mappe (fx C:\Users\<navn>\AppData\Local\Temp\ eller /tmp/).
+        // Guid.NewGuid() giver et unikt ID, så to testklasser, der kører samtidig, aldrig
+        // deler (eller overskriver) samme databasefil.
+        _testDbPath = Path.Combine(Path.GetTempPath(), $"bison_test_{Guid.NewGuid()}.db");
+
+        CreateTestDatabase();
     }
 
     // Erstatter den DBFacade, Program.cs registrerer, med én der peger på testdatabasen.
@@ -33,8 +39,7 @@ public class TestWebFactory : WebApplicationFactory<Program>
         using var connection = new SqliteConnection($"Data Source={_testDbPath}");
         connection.Open();
 
-        // Rækkefølgen er vigtig: schema.sql opretter tabellerne (user, observation),
-        // og dump.sql indsætter rækker i dem. Omvendt ville INSERT fejle, fordi tabellerne ikke findes.
+        // Schema.sql opretter tabellerne (user, observation) og dump.sql indsætter rækker i dem.
         foreach (var sqlFile in new[] { "schema.sql", "dump.sql" })
         {
             using var command = connection.CreateCommand();
