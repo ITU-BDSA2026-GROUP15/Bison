@@ -3,7 +3,7 @@ namespace Bison.Razor.Tests;
 public class UnitTests
 {
     [Fact]
-    public void UnixTimestamp_IsConvertedToCorrectDateString()
+    public void TimestampIsConvertedToCorrectDateString()
     {
         // ARRANGE
         double knownUnixTimestamp = 1690891760;
