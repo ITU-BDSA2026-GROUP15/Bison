@@ -9,20 +9,34 @@ public class DBFacade
         _dbPath = dbPath;
     }
 
-    public List<ObservationViewModel> GetObservations()
+    public List<ObservationViewModel> GetObservations(int page = 1)
     {
+        
+        // Sidetallet er mindst 1. Hver side indeholder højst 32 observationer.
+        page = Math.Max(1, page);
+        long offset = ((long)page - 1) * 32;
+
         var result = new List<ObservationViewModel>();
 
         using var connection = new SqliteConnection($"Data Source={_dbPath}");
         connection.Open();
 
         var command = connection.CreateCommand(); // det her viser bare alle observationer så at sige
-        command.CommandText = @"
+       
+       // Før hentede SQL'en alle observationer sorteret efter dato.
+        // Nu henter den højst 32 og springer tidligere sider over med OFFSET.
+        // Id bruges som ekstra sortering, når observationer har samme dato.
+
+       command.CommandText = @"
             select user.username, observation.text, observation.pub_date
             from observation
             join user on observation.author_id = user.user_id
-            order by pub_date desc;";
+            order by observation.pub_date desc, observation.observation_id desc
+            limit 32 offset @offset;";
 
+        // Springer observationer fra tidligere sider over direkte i databasen.
+        command.Parameters.AddWithValue("@offset", offset);
+        
         using var reader = command.ExecuteReader();
         while (reader.Read())
         {
@@ -38,22 +52,38 @@ public class DBFacade
         return result;
     }
 
-    public List<ObservationViewModel> GetObservationsFromAuthor(string author)
+    public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page = 1)
     {
+        // Samme tilføjelse.
+        page = Math.Max(1, page);
+        long offset = ((long)page - 1) * 32;
+        
+        
         var result = new List<ObservationViewModel>();
 
         using var connection = new SqliteConnection($"Data Source={_dbPath}");
         connection.Open();
 
         var command = connection.CreateCommand(); // det her viser alle observationer fra den bestemte author
+        
+        // Før hentede SQL'en alle observationer fra den valgte forfatter.
+        // Nu filtrerer den stadig efter forfatter, men henter kun den ønskede
+        // side med højst 32 observationer ved hjælp af LIMIT og OFFSET.
+        // Id sikrer en fast rækkefølge, når observationer har samme dato.
+        
+
         command.CommandText = @"
             select user.username, observation.text, observation.pub_date
             from observation
             join user on observation.author_id = user.user_id
             where user.username = @author
-            order by observation.pub_date desc;";
+            order by observation.pub_date desc, observation.observation_id desc
+            limit 32 offset @offset;";
 
         command.Parameters.AddWithValue("@author", author);
+
+        // Springer observationer fra tidligere sider over direkte i databasen.
+        command.Parameters.AddWithValue("@offset", offset);
 
         using var reader = command.ExecuteReader();
         while (reader.Read())
