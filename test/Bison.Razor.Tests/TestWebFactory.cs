@@ -97,5 +97,14 @@ public class TestWebFactory : WebApplicationFactory<Program>
     // Stopper appen og sletter testdatabasen, når testene er færdige.
     protected override void Dispose(bool disposing)
     {
+        base.Dispose(disposing);
+
+        SqliteConnection.ClearAllPools();
+
+        // Slet testdatabasen, så der ikke hober sig bison_test_<guid>.db-filer op i temp-mappen.
+        if (File.Exists(_testDbPath))
+        {
+            File.Delete(_testDbPath);
+        }
     }
 }
