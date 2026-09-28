@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.Sqlite;
 
 namespace Bison.Razor.Tests;
 
@@ -20,9 +21,32 @@ public class TestWebFactory : WebApplicationFactory<Program>
     {
     }
 
-    // Kører schema.sql og dump.sql mod testdatabasen (svarer til scripts/initDB.sh).
+    // Kører schema.sql og dump.sql mod testdatabasen.
     private void CreateTestDatabase()
     {
+        // FindDataRoot() returnerer mappen, der INDEHOLDER data/ - derfor lægger vi "data" på selv.
+        string dataDir = Path.Combine(FindDataRoot(), "data");
+
+        // "Data Source=<sti>" fortæller SQLite hvilken fil der skal bruges.
+        // Findes filen ikke, opretter SQLite den automatisk, når forbindelsen åbnes.
+        // 'using' sørger for, at forbindelsen lukkes igen, når metoden er færdig.
+        using var connection = new SqliteConnection($"Data Source={_testDbPath}");
+        connection.Open();
+
+        // Rækkefølgen er vigtig: schema.sql opretter tabellerne (user, observation),
+        // og dump.sql indsætter rækker i dem. Omvendt ville INSERT fejle, fordi tabellerne ikke findes.
+        foreach (var sqlFile in new[] { "schema.sql", "dump.sql" })
+        {
+            using var command = connection.CreateCommand();
+
+            // Hele filens indhold sendes som én kommando. Microsoft.Data.Sqlite kører selv
+            // alle SQL-sætningerne efter hinanden (de er adskilt af ;).
+            command.CommandText = File.ReadAllText(Path.Combine(dataDir, sqlFile));
+
+            // "NonQuery" = en kommando, der ikke returnerer rækker (CREATE, INSERT, DROP ...),
+            // i modsætning til ExecuteReader(), som DBFacade bruger til SELECT.
+            command.ExecuteNonQuery();
+        }
     }
 
     // Finder den mappe der indeholder data/schema.sql.
