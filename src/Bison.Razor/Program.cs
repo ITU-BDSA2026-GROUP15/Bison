@@ -13,9 +13,21 @@ using System.Xml.XPath;
 
 var taxonomy = new Taxonomy();
 
-
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddRazorPages(); // tilføjede razor pages til programmet
+
+var envPath  = Environment.GetEnvironmentVariable("BISONDBPATH");   // kan måske være null
+var tempPath = Path.Combine(Path.GetTempPath(), "bison.db");        // fallback
+var dbPath   = envPath ?? tempPath;
+
+builder.Services.AddSingleton<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
+builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade
+
 var app = builder.Build(); //building the webapplication itself (metadata)
+
+app.MapRazorPages(); // kobler URL til razor pages
+app.UseStaticFiles(); // kobler browseren til filerne i wwwroot -> altså css styling osv så det ikke bare er tekst
 
 string obsFile = "../../bison_observe_cli_db.csv";
 string comFile = "../../bison_comment_cli_db.csv";
