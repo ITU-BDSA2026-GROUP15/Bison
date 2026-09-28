@@ -1,5 +1,6 @@
 namespace Bison.Razor.Tests;
 
+// Dump og schema stemmer ikke overens med project description. Jeg kan ikke lave testene som de står beskrevet.
 public class ApiTests : IClassFixture<TestWebFactory>
 {
     // En HttpClient, der taler direkte med den in-memory app.
