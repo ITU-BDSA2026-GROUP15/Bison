@@ -1,8 +1,25 @@
 namespace Bison.Razor.Tests;
 
-// API-TESTS – tester hele appen udefra: sender GET-requests til siderne (/obs, /obs/<username>)
-// og tjekker, at HTML'en i svaret indeholder de forventede observationer.
-// Bruger TestWebFactory, så appen kører in-memory med den kendte testdatabase.
-public class ApiTests
+public class ApiTests : IClassFixture<TestWebFactory>
 {
+    // En HttpClient, der taler direkte med den in-memory app.
+    private readonly HttpClient _client;
+
+    public ApiTests(TestWebFactory factory)
+    {
+        // CreateClient() starter appen.
+        _client = factory.CreateClient();
+    }
+
+    // GET /obs skal indeholde Peters "A big gray bird in a pond at DR byen".
+    [Fact(Skip = "Ikke skrevet endnu")]
+    public async Task PublicTimeline_ContainsPetersObservation()
+    {
+    }
+
+    // GET /obs/Petra skal indeholde Petras "A heron".
+    [Fact(Skip = "Ikke skrevet endnu")]
+    public async Task PrivateTimeline_Petra_ContainsHeron()
+    {
+    }
 }
