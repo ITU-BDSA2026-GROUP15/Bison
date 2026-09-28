@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bison.Razor.Tests;
 
@@ -25,6 +27,22 @@ public class TestWebFactory : WebApplicationFactory<Program>
     // Erstatter den DBFacade, Program.cs registrerer, med én der peger på testdatabasen.
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.ConfigureTestServices(services =>
+        {
+            // 'services' er listen over alt, der er registreret i DI-containeren. Hver registrering
+            // er en ServiceDescriptor. Vi finder dem, der gælder typen DBFacade
+            // (.ToList() laver en kopi, så vi ikke ændrer i listen, mens vi løber igennem den).
+            var existing = services.Where(d => d.ServiceType == typeof(DBFacade)).ToList();
+
+            // Fjern den, så appen ikke længere har en DBFacade, der peger på den rigtige bison.db.
+            foreach (var descriptor in existing)
+            {
+                services.Remove(descriptor);
+            }
+
+            // Registrér en ny DBFacade, der peger på testdatabasen.
+            services.AddSingleton(new DBFacade(_testDbPath));
+        });
     }
 
     // Kører schema.sql og dump.sql mod testdatabasen.
@@ -48,8 +66,7 @@ public class TestWebFactory : WebApplicationFactory<Program>
             // alle SQL-sætningerne efter hinanden (de er adskilt af ;).
             command.CommandText = File.ReadAllText(Path.Combine(dataDir, sqlFile));
 
-            // "NonQuery" = en kommando, der ikke returnerer rækker (CREATE, INSERT, DROP ...),
-            // i modsætning til ExecuteReader(), som DBFacade bruger til SELECT.
+            // "NonQuery" = en kommando, der ikke returnerer rækker (CREATE, INSERT, DROP ...)
             command.ExecuteNonQuery();
         }
     }
