@@ -1,7 +1,18 @@
 namespace Bison.Razor.Tests;
 
-// UNIT TESTS – tester én metode ad gangen med ren logik.
-// Ingen database, ingen HTTP og ingen fixture: testen kalder bare metoden og tjekker resultatet.
 public class UnitTests
 {
+    [Fact]
+    public void UnixTimestamp_IsConvertedToCorrectDateString()
+    {
+        // ARRANGE
+        double knownUnixTimestamp = 1690891760;
+        string expected = "08/01/23 12:09:20";
+
+        // ACT
+        string actual = DBFacade.UnixTimeStampToDateTimeString(knownUnixTimestamp);
+
+        // ASSERT
+        Assert.Equal(expected, actual);
+    }
 }
