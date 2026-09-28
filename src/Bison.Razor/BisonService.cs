@@ -1,3 +1,4 @@
+//the data model for an ObservationsViewModel
 public record ObservationViewModel(string Author, string Message, string Timestamp);
 
 public interface IObservationService
