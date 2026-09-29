@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../../src/Bison.Razor/Bison.Razor.csproj" />
+    <ProjectReference Include="..\..\src\Bison.Taxonomy\Bison.Taxonomy.csproj" />
    <!-- <ProjectReference Include="..\..\src\Bison.Razor\Bison.Razor.csproj" /> -->
   </ItemGroup>
 </Project>

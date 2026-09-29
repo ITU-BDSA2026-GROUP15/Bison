@@ -70,14 +70,14 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 
     private (Prop proposal, bool referenceRealObservation, bool referenceRealProposal) GenerateRandomProposal()
     {
-        string author = SampleAuthors[_random.Next(SampleAuthors.Length)];
+        string author = sampleAuthors[_random.Next(sampleAuthors.Length)];
         bool useValidID = _random.NextDouble() < 0.9 && _sentObservations.Count > 0;
 
         int id = useValidID
             ? _sentObservations[_random.Next(_sentObservations.Count)].ID
             : _random.Next(100_000, 999_999);
 
-        int counter = ReadTaxonsFromResource().Count;
+        int counter = Bison.Taxonomy.Taxonomy.ReadTaxonsFromResource().Count;
 
         bool useRealTaxonID = counter > 0;
 
