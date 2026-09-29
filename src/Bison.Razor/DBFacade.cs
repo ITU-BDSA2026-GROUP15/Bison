@@ -109,7 +109,7 @@ public class DBFacade
         using var connection = new SqliteConnection($"Data Source={_dbPath}");
         connection.Open();
 
-        var command = connection.CreateCommand(); // det her viser alle detaljerne ud fra et ID 
+        var command = connection.CreateCommand();
         
         // Nu sortere vi efter efter id
     
@@ -121,10 +121,8 @@ public class DBFacade
             order by observation.pub_date desc, observation.observation_id desc
             limit 32 offset @offset;";
 
-        command.Parameters.AddWithValue("@author", author);
 
-        // Springer observationer fra tidligere sider over direkte i databasen.
-        command.Parameters.AddWithValue("@offset", offset);
+        command.Parameters.AddWithValue("@id", id);
 
         using var reader = command.ExecuteReader();
         while (reader.Read())
@@ -140,7 +138,19 @@ public class DBFacade
         return result;
     }
 
+    public List<ObservationViewModel> GetProposals (int id, int page = 1)
+    {
+        var result = new List<ObservationViewModel>();
 
+        return result;
+    }
+
+    public List<ObservationViewModel> GetComments (int id, int page = 1)
+    {
+        var result = new List<ObservationViewModel>();
+
+        return result;
+    }
     
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp) // copied from BisonService.cs
     {

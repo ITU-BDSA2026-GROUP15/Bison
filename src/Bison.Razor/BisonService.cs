@@ -14,6 +14,10 @@ public interface IObservationService
     public List<ObservationViewModel> GetObservationDetails (
         int id, int page = 1);
 
+    public List<ObservationViewModel> GetProposals (int id, int page =1);
+
+    public List<ObservationViewModel> GetComments (int id, int page =1);
+
 }
 
 public class ObservationService : IObservationService
@@ -41,6 +45,18 @@ public class ObservationService : IObservationService
     }
 
     public List<ObservationViewModel> GetObservationDetails (
+        int id, int page = 1)
+    {
+        return _db.GetObservationDetails(id, page);
+    }
+
+     public List<ObservationViewModel> GetProposals (
+        int id, int page = 1)
+    {
+        return _db.GetProposals(id, page);
+    }
+
+     public List<ObservationViewModel> GetComments (
         int id, int page = 1)
     {
         return _db.GetObservationDetails(id, page);
