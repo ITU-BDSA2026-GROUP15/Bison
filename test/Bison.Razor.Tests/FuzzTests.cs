@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net.Http.Json;
 using SimpleDB;
+using Bison.Taxonomy;
 
 namespace Bison.Razor.Tests;
-¨
+
 //Theory and Inlign data needs to be used here
 
 public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
@@ -69,7 +70,7 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 
     private (Prop proposal, bool referenceRealObservation, bool referenceRealProposal) GenerateRandomProposal()
     {
-        string author = SampleAuthors[_random.Next(sampleAuthors.Length)];
+        string author = SampleAuthors[_random.Next(SampleAuthors.Length)];
         bool useValidID = _random.NextDouble() < 0.9 && _sentObservations.Count > 0;
 
         int id = useValidID
@@ -105,7 +106,7 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
     
     public async Task FuzzObservationsAndComments_ServerStateMatchesOracle(int seed)
     {
-        _random = new Random(seed)
+        _random = new Random(seed);
             
         const int iterations = 50;
 
