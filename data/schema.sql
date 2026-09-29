@@ -12,3 +12,20 @@ create table observation (
   text string not null,
   pub_date integer
 );
+
+drop table if exists proposal;
+create table proposal (
+  proposal_id integer, 
+  author_id integer not null, 
+  pub_date integer,
+  primary key (proposal_id, pub_date)
+);
+
+drop table if exists comment;
+create table comment (
+  comment_id integer, 
+  author_id integer not null,
+  text string not null,
+  pub_date integer,
+  primary key (comment_id, pub_date)
+);

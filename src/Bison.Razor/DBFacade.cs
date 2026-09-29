@@ -99,7 +99,7 @@ public class DBFacade
         return result;
     }
 
-     public List<ObservationViewModel> GetObservationDetails(int id, int page = 1)
+    public List<ObservationViewModel> GetObservationDetails(int id, int page = 1)
     {
         // Samme tilføjelse.
         page = Math.Max(1, page);
@@ -112,14 +112,10 @@ public class DBFacade
         var command = connection.CreateCommand();
         
         // Nu sortere vi efter efter id
-    
         command.CommandText = @"
             select user.username, observation.text, observation.pub_date
             from observation
-            join user on observation.author_id = user.user_id
-            where user.username = @author
-            order by observation.pub_date desc, observation.observation_id desc
-            limit 32 offset @offset;";
+            where observation.observation_id = @id;";
 
 
         command.Parameters.AddWithValue("@id", id);

@@ -59,6 +59,6 @@ public class ObservationService : IObservationService
      public List<ObservationViewModel> GetComments (
         int id, int page = 1)
     {
-        return _db.GetObservationDetails(id, page);
+        return _db.GetComments(id, page);
     }
 }
