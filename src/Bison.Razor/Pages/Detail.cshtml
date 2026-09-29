@@ -11,7 +11,7 @@
 
 <div>
     @*Finds observation for the a certain author per request*@
-    <h2> @routeName's ObservationDetails </h2>
+    <h2> Details for observation #@routeName</h2>
 
     @*show all observations and list them for the author*@
     @if (Model.ObservationDetails.Any())
@@ -75,7 +75,7 @@
                 <em>There are no proposals for this observation yet.</em>
             }
         </div>
-        }
+    
     }
     else
     {
