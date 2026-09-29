@@ -3,19 +3,20 @@ using System.Net.Http.Json;
 using SimpleDB;
 
 namespace Bison.Razor.Tests;
+¨
+//Theory and Inlign data needs to be used here
 
 public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
     // IClassFixture<WebApplicationFactory<Program>> Tells the Xunit to boot Razor once, in-memory and share the same instance
     // instead of starting a fresh app per test,
 {
     private readonly HttpClient _client;
-    private static readonly Random _random = new();
+    private Random _random = new();
 
     private readonly List<Cheep> _sentObservations = new();
     private readonly List<Cheep> _sentComments = new();
 
     private readonly List<Cheep> _sentProposals = new();
-
 
 
     public FuzzTests(WebApplicationFactory<Program> factory)
@@ -88,7 +89,7 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
     // Generates a random point in time, roughly between Jan 2000 and right now,
     // expressed as Unix seconds (matching how Cheep.Timestamp is stored/used elsewhere).
 
-    private static long RandomTimeStamp()
+    private long RandomTimeStamp()
     {
         long minUnix = 946684800;
         long maxUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -97,9 +98,15 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     //What the fuzztest going on here
-    [Fact]
-    public async Task FuzzObservationsAndComments_ServerStateMatchesOracle()
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    
+    public async Task FuzzObservationsAndComments_ServerStateMatchesOracle(int seed)
     {
+        _random = new Random(seed)
+            
         const int iterations = 50;
 
         for (int i = 0; i < iterations; i++)
