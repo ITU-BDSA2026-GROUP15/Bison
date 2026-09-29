@@ -115,6 +115,8 @@ public class DBFacade
         command.CommandText = @"
             select user.username, observation.text, observation.pub_date
             from observation
+            join user 
+                on user.user_id = observation.author_id
             where observation.observation_id = @id;";
 
 
@@ -151,7 +153,7 @@ public class DBFacade
             select user.username, proposal.taxon_id, proposal.pub_date
             from proposal
             join observation
-                on observation.observation_id = proposal.observation_id
+                on observation.observation_id = proposal.proposal_id
             join user
                 on user.user_id = observation.author_id
             where proposal.proposal_id = @id;";
@@ -189,7 +191,7 @@ public class DBFacade
             select user.username, comment.text, comment.pub_date
             from comment
             join observation
-                on observation.observation_id = proposal.observation_id
+                on observation.observation_id = proposal.proposal_id
             join user
                 on user.user_id = observation.author_id
             where comment.comment_id = @id;";

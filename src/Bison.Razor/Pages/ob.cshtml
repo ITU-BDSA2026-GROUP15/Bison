@@ -1,0 +1,45 @@
+@page "/ob" 
+<!-- associated with the obs URL, must be the very first in the code -->
+
+<!-- The path to the c# code that the html file uses, here Public.cshtml.cs -->
+<!-- This means we can access the properties from the class -->
+@model Bison.Razor.Pages.OBModel
+@{
+    // ViewData is used to pass information from Razor page to layout, meaning the title of the browser is now Bison
+    ViewData["Title"] = "Bison";
+
+    // basic template for layout of a website
+    Layout = "Shared/_Layout";
+}
+
+<div>
+    <h2> Public Timeline </h2>
+
+    <!-- the if-condition checks if there are any observations to run -->
+    @if (Model.Observations.Any())
+    {
+        // if true, then create a list of the observations
+        <ul id="messagelist" class="observations">
+
+            @* now we run through eah observation 1 at a time *@
+            @foreach (var obs in Model.Observations)
+            {
+                <li>
+                    <p>
+                        @* now we display the observations and generates a page /obs/author *@
+                        <strong>
+                            <a href="/obs/@obs.Author">@obs.Author</a>
+                        </strong>
+                        @*  display the message belonging to the current observation *@
+                        @obs.Message
+                        <small>&mdash; @obs.Timestamp</small>
+                    </p>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <em>There are no observations so far.</em>
+    }
+</div>
