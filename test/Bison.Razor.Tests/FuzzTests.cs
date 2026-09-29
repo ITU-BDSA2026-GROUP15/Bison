@@ -76,15 +76,17 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
         int id = useValidID
             ? _sentObservations[_random.Next(_sentObservations.Count)].ID
             : _random.Next(100_000, 999_999);
+        
+        List<Taxon> taxons = Bison.Taxonomy.Taxonomy.ReadTaxonsFromResource();
+        bool useRealTaxonId = taxons.Count > 0;
 
-        int counter = Bison.Taxonomy.Taxonomy.ReadTaxonsFromResource().Count;
-
-        bool useRealTaxonID = counter > 0;
-
-
+        string TaxonId = useRealTaxonId
+            ? taxons[_random.Next(taxons.Count)].TaxonId
+            : "does-not-exist";
 
 
-        return (new Prop(author, id, taxonID), useValidID, useRealTaxonID);
+
+        return (new Prop(author, id, TaxonId), useValidID, useRealTaxonId);
     }
 
     // Generates a random point in time, roughly between Jan 2000 and right now,
