@@ -21,20 +21,19 @@ public class IntegrationTests : IClassFixture<TestDatabase>
         var observations = _db.GetObservations();
 
         // ASSERT
-        Assert.NotEmpty(observations);
-        Assert.Contains(observations, o => o.Author == "Eduard" && o.Message == "A heron");
+        Assert.Contains(observations, o => o.Author == "Yuki" &&
+            o.Message == "A Least Bittern resting on a sandbank. Stays within cover almost all the time.");
     }
 
     [Fact]
     public void GetObservationsFromAuthor_ReturnsOnlyThatAuthor()
     {
         // ACT
-        var observations = _db.GetObservationsFromAuthor("Eduard");
+        var observations = _db.GetObservationsFromAuthor("Yuki");
 
         // ASSERT
+        // Alle observationer skal være Yukis.
         Assert.NotEmpty(observations);
-
-        // Alle observationer skal være Eduards.
-        Assert.All(observations, o => Assert.Equal("Eduard", o.Author));
+        Assert.All(observations, o => Assert.Equal("Yuki", o.Author));
     }
 }
