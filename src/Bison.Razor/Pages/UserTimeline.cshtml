@@ -3,12 +3,17 @@
 @{
     ViewData["Title"] = "Bison";
     Layout = "Shared/_Layout";
+    // getting the value of the URL author and store it locally
+    // HTTP context -> current HTTP request
+    // /obs/author
     var routeName = HttpContext.GetRouteValue("author");
 }
 
 <div>
+    @*Finds observation for the a certain author per request*@
     <h2> @routeName's Observations </h2>
 
+    @*show all observations and list them for the author*@
     @if (Model.Observations.Any())
     {
         <ul id="messagelist" class="observations">
