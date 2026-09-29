@@ -18,45 +18,68 @@
     {
         var ob = Model.ObservationDetails[0];
 
-        // THE OBSERVATION
+        @*THE OBSERVATION*@
         <div class ="observation">
             <p>
-                <strong>/@ob.Author</strong>
+                <strong>
+                    <a href="/obs/@ob.Author">@ob.Author</a>
+                </strong>
                 @ob.Message
                 <small>&mdash; @ob.Timestamp</small>
             </p>
         </div>
 
-        // COMMENTS
+        @*COMMENTS*@
         <div class="comments">
             <h3>Comments for this observation</h3>
-
-            @foreach (var comment in Model.Comments)
+            
+            @if (Model.Comments.Any())
             {
-            <p>
-                <strong>@comment.Author</strong>
-                @comment.Message
-                <small>&mdash; @comment.Timestamp</small>
-            </p>
+                <ul>
+                @foreach (var comment in Model.Comments)
+                {
+                    <li>
+                        <strong>@comment.Author</strong>
+                        @comment.Message
+                        <small>&mdash; @comment.Timestamp</small>
+                    </li>
+                }
+                </ul>  
+            }
+            else
+            {
+                <em>There are no comments for this observation yet.</em>
             }
         </div>
+        
 
-        // PROPOSALS
+        @*PROPOSALS*@
         <div class="proposals">
             <h3>Proposals for this observation</h3>
 
-        @foreach (var proposal in Model.Proposals)
-        {
-            <p>
-                <strong>@proposal.Author</strong>
-                @proposal.Message
-                <small>&mdash; @proposal.Timestamp</small>
-            </p>
-        }
+            @if (Model.Proposals.Any())
+            {
+                <ul>
+                @foreach (var proposal in Model.Proposals)
+                {
+                    <li>
+                        <strong>@proposal.Author</strong>
+                        @proposal.Message
+                        <small>&mdash; @proposal.Timestamp</small>
+                    </li>
+                }
+                </ul>
+            }
+            else
+            {
+                <em>There are no proposals for this observation yet.</em>
+            }
         </div>
+        }
     }
     else
     {
-        <em>There are no Observations so far.</em>
+        <em>There are no observations with this ID.</em>
     }
 </div>
+
