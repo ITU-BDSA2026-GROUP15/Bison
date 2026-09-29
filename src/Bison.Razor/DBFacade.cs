@@ -98,6 +98,50 @@ public class DBFacade
 
         return result;
     }
+
+     public List<ObservationViewModel> GetObservationDetails(int id, int page = 1)
+    {
+        // Samme tilføjelse.
+        page = Math.Max(1, page);
+             
+        var result = new List<ObservationViewModel>();
+
+        using var connection = new SqliteConnection($"Data Source={_dbPath}");
+        connection.Open();
+
+        var command = connection.CreateCommand(); // det her viser alle detaljerne ud fra et ID 
+        
+        // Nu sortere vi efter efter id
+    
+        command.CommandText = @"
+            select user.username, observation.text, observation.pub_date
+            from observation
+            join user on observation.author_id = user.user_id
+            where user.username = @author
+            order by observation.pub_date desc, observation.observation_id desc
+            limit 32 offset @offset;";
+
+        command.Parameters.AddWithValue("@author", author);
+
+        // Springer observationer fra tidligere sider over direkte i databasen.
+        command.Parameters.AddWithValue("@offset", offset);
+
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            var username = reader.GetString(0);
+            var message = reader.GetString(1);
+            var timestamp = reader.GetInt64(2);
+            var timestampString = UnixTimeStampToDateTimeString(timestamp);
+
+            result.Add(new ObservationViewModel(username, message, timestampString));
+        }
+
+        return result;
+    }
+
+
+    
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp) // copied from BisonService.cs
     {
         // Unix timestamp is seconds past epoch
