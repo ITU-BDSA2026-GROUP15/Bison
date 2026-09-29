@@ -191,7 +191,7 @@ public class DBFacade
             select user.username, comment.text, comment.pub_date
             from comment
             join observation
-                on observation.observation_id = proposal.proposal_id
+                on observation.observation_id = comment.comment_id
             join user
                 on user.user_id = observation.author_id
             where comment.comment_id = @id;";
