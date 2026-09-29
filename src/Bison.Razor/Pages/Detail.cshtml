@@ -14,22 +14,46 @@
     <h2> @routeName's ObservationDetails </h2>
 
     @*show all observations and list them for the author*@
-    @if (Model.Observations.Any())
+    @if (Model.ObservationDetails.Any())
     {
-        <ul id="messagelist" class="observations">
-            @foreach (var ob in Model.Observations)
+        var ob = Model.ObservationDetails[0];
+
+        // THE OBSERVATION
+        <div class ="observation">
+            <p>
+                <strong>/@ob.Author</strong>
+                @ob.Message
+                <small>&mdash; @ob.Timestamp</small>
+            </p>
+        </div>
+
+        // COMMENTS
+        <div class="comments">
+            <h3>Comments for this observation</h3>
+
+            @foreach (var comment in Model.Comments)
             {
-                <li>
-                    <p>
-                        <strong>
-                            <a href="/obs/@ob.Author">@ob.Author</a>
-                        </strong>
-                        @ob.Message
-                        <small>&mdash; @ob.Timestamp</small>
-                    </p>
-                </li>
+            <p>
+                <strong>@comment.Author</strong>
+                @comment.Message
+                <small>&mdash; @comment.Timestamp</small>
+            </p>
             }
-        </ul>
+        </div>
+
+        // PROPOSALS
+        <div class="proposals">
+            <h3>Proposals for this observation</h3>
+
+        @foreach (var proposal in Model.Proposals)
+        {
+            <p>
+                <strong>@proposal.Author</strong>
+                @proposal.Message
+                <small>&mdash; @proposal.Timestamp</small>
+            </p>
+        }
+        </div>
     }
     else
     {

@@ -7,6 +7,9 @@ public class DetailModel : PageModel
 {
     private readonly IObservationService _service;
     public List<ObservationViewModel> ObservationDetails { get; set; }
+    public List<ObservationViewModel> Comments { get; set; }
+    public List<ObservationViewModel> Proposals { get; set; }
+
 
     public DetailModel(IObservationService service)
     {
@@ -22,6 +25,8 @@ public class DetailModel : PageModel
         } else 
         {
             ObservationDetails = _service.GetObservationDetails(id, page);
+            Comments = _service.GetComments(id.Value, page);
+            Proposals = _service.GetProposals(id.Value, page);
         }
         return Page();
     }
