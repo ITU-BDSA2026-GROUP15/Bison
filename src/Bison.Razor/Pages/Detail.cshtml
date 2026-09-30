@@ -1,0 +1,85 @@
+@page "/ob/{id}"
+@model Bison.Razor.Pages.DetailModel
+@{
+    ViewData["Title"] = "Observation details";
+    Layout = "Shared/_Layout";
+    // getting the value of the URL author and store it locally
+    // HTTP context -> current HTTP request
+    // /obs/author
+    var routeName = HttpContext.GetRouteValue("id");
+}
+
+<div>
+    @*Finds observation for the a certain author per request*@
+    <h2> Details for observation #@routeName</h2>
+
+    @*show all observations and list them for the author*@
+    @if (Model.ObservationDetails.Any())
+    {
+        var ob = Model.ObservationDetails[0];
+
+        @*THE OBSERVATION*@
+        <div class ="observation">
+            <p>
+                <strong>
+                    <a href="/obs/@ob.Author">@ob.Author</a>
+                </strong>
+                @ob.Message
+                <small>&mdash; @ob.Timestamp</small>
+            </p>
+        </div>
+
+        @*COMMENTS*@
+        <div class="comments">
+            <h3>Comments for this observation</h3>
+            
+            @if (Model.Comments.Any())
+            {
+                <ul>
+                @foreach (var comment in Model.Comments)
+                {
+                    <li>
+                        <strong>@comment.Author</strong>
+                        @comment.Message
+                        <small>&mdash; @comment.Timestamp</small>
+                    </li>
+                }
+                </ul>  
+            }
+            else
+            {
+                <em>There are no comments for this observation yet.</em>
+            }
+        </div>
+        
+
+        @*PROPOSALS*@
+        <div class="proposals">
+            <h3>Proposals for this observation</h3>
+
+            @if (Model.Proposals.Any())
+            {
+                <ul>
+                @foreach (var proposal in Model.Proposals)
+                {
+                    <li>
+                        <strong>@proposal.Author</strong>
+                        @proposal.Message
+                        <small>&mdash; @proposal.Timestamp</small>
+                    </li>
+                }
+                </ul>
+            }
+            else
+            {
+                <em>There are no proposals for this observation yet.</em>
+            }
+        </div>
+    
+    }
+    else
+    {
+        <em>There are no observations with this ID.</em>
+    }
+</div>
+

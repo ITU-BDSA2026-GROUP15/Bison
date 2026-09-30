@@ -98,6 +98,120 @@ public class DBFacade
 
         return result;
     }
+
+    public List<ObservationViewModel> GetObservationDetails(int id, int page = 1)
+    {
+        // Samme tilføjelse.
+        page = Math.Max(1, page);
+             
+        var result = new List<ObservationViewModel>();
+
+        using var connection = new SqliteConnection($"Data Source={_dbPath}");
+        connection.Open();
+
+        var command = connection.CreateCommand();
+        
+        // Nu sortere vi efter efter id
+        command.CommandText = @"
+            select user.username, observation.text, observation.pub_date
+            from observation
+            join user 
+                on user.user_id = observation.author_id
+            where observation.observation_id = @id;";
+
+
+        command.Parameters.AddWithValue("@id", id);
+
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            var username = reader.GetString(0);
+            var message = reader.GetString(1);
+            var timestamp = reader.GetInt64(2);
+            var timestampString = UnixTimeStampToDateTimeString(timestamp);
+
+            result.Add(new ObservationViewModel(username, message, timestampString));
+        }
+
+        return result;
+    }
+
+    public List<ObservationViewModel> GetProposals (int id, int page = 1)
+    {
+        // Samme tilføjelse.
+        page = Math.Max(1, page);
+             
+        var result = new List<ObservationViewModel>();
+
+        using var connection = new SqliteConnection($"Data Source={_dbPath}");
+        connection.Open();
+
+        var command = connection.CreateCommand();
+        
+        // Nu sortere vi efter efter id
+        command.CommandText = @"
+            select user.username, proposal.taxon_id, proposal.pub_date
+            from proposal
+            join observation
+                on observation.observation_id = proposal.proposal_id
+            join user
+                on user.user_id = observation.author_id
+            where proposal.proposal_id = @id;";
+
+        command.Parameters.AddWithValue("@id", id);
+
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            var author = reader.GetString(0);
+            var taxon_id = reader.GetString(1);
+            var timestamp = reader.GetInt64(2);
+            var timestampString = UnixTimeStampToDateTimeString(timestamp);
+
+            result.Add(new ObservationViewModel(author, taxon_id, timestampString));
+        }
+
+        return result;
+    }
+
+    public List<ObservationViewModel> GetComments (int id, int page = 1)
+    {
+        // Samme tilføjelse.
+        page = Math.Max(1, page);
+             
+        var result = new List<ObservationViewModel>();
+
+        using var connection = new SqliteConnection($"Data Source={_dbPath}");
+        connection.Open();
+
+        var command = connection.CreateCommand();
+        
+        // Nu sortere vi efter efter id
+        command.CommandText = @"
+            select user.username, comment.text, comment.pub_date
+            from comment
+            join observation
+                on observation.observation_id = comment.comment_id
+            join user
+                on user.user_id = observation.author_id
+            where comment.comment_id = @id;";
+
+        command.Parameters.AddWithValue("@id", id);
+
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            var author = reader.GetString(0);
+            var comment = reader.GetString(1);
+            var timestamp = reader.GetInt64(2);
+            var timestampString = UnixTimeStampToDateTimeString(timestamp);
+
+            result.Add(new ObservationViewModel(author, comment, timestampString));
+        }
+
+        return result;
+    }
+    
     private static string UnixTimeStampToDateTimeString(double unixTimeStamp) // copied from BisonService.cs
     {
         // Unix timestamp is seconds past epoch

@@ -21,6 +21,7 @@ var envPath  = Environment.GetEnvironmentVariable("BISONDBPATH");   // kan måsk
 var tempPath = Path.Combine(Path.GetTempPath(), "bison.db");        // fallback
 var dbPath   = envPath ?? tempPath;
 
+
 builder.Services.AddSingleton<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
 builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade
 
