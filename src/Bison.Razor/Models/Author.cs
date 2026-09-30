@@ -10,6 +10,6 @@ public class Author {
 
    
     // Contains the author's observations, comments, and proposals.
-    public ICollection<Post> posts{ get; set;} =string.Empty;
+    public ICollection<Post> posts{ get; set;} = new List<Post>();
 
 }
