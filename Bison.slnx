@@ -9,6 +9,5 @@
     <Project Path="test/Bison.CLI.Tests/Bison.CLI.Tests.csproj" />
     <Project Path="test/Bison.Razor.Tests/Bison.Razor.Tests.csproj" />
     <Project Path="test/SimpleDB.Tests/SimpleDB.Tests.csproj" />
-    <Project Path="test/Bison.Razor.Tests/Bison.Razor.Tests.csproj" />
   </Folder>
 </Solution>
