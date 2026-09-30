@@ -3,7 +3,7 @@ namespace Bison.Razor.Models;
 
 // Represents an author and the posts they have written.
 public class Author {
-    
+    //maybe should be small ID??!
     public int ID{ get; set;}
     public string name{ get;  set; } = string.Empty;
     public string email{ get;  set; } = string.Empty;
