@@ -64,7 +64,7 @@ public class EndToEnd
         // ARRANGE
         // Guid i observationsteksten sikrer, at vi kan finde netop vores egen observation i
         // read()-outputtet, uanset hvad der ellers allerede ligger i den delte service-instans.
-        string uniqueObservation = "A bird at DR Byen " + Guid.NewGuid();
+        string uniqueObservation = "A bird at DR Byen " + Guid.NewGuid(); //bliver brugt så vi undgår duplicates
         string location = "DR Byen";
 
         int observeExitCode = RunCli("observe", uniqueObservation, location);

@@ -1,45 +1,39 @@
-using System.Net;
-using System.Net.Http.Json;
-using Microsoft.AspNetCore.Mvc.Testing;
-using SimpleDB;
-
 namespace Bison.Razor.Tests;
 
-// WebApplicationFactory<Program> kører Bison.Razor in-memory i testprocessen, uden en rigtig
-// port - i modsætning til Bison.CLI.Tests, som skal starte en rigtig proces for at teste den
-// fulde kæde CLI -> HTTP -> service. Her tester vi kun servicen isoleret.
-public class IntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+// ARRANGE sker i TestDatabase.cs. den er bygget af fixturen ud fra schema.sql + dump.sql.
+// Derfor behøver vi ikke at ARRANGE for hver test. Vi kan ACT og ASSERT ud fra den eksisterende test-database. 
+// Ændrer eller tilføjer vi i schema og/eller dump, skal disse tests også rettes.
+public class IntegrationTests : IClassFixture<TestDatabase>
 {
-    private readonly HttpClient client;
+    // Den DBFacade, testene kalder - peger på testdatabasen i stedet for bison.db.
+    private readonly DBFacade _db;
 
-    public IntegrationTests(WebApplicationFactory<Program> factory)
+    public IntegrationTests(TestDatabase testDb)
     {
-        client = factory.CreateClient();
+        // Ingen DI-container her: vi laver selv DBFacade og giver den testdatabasens sti.
+        _db = new DBFacade(testDb.DbPath);
     }
 
     [Fact]
-    public async Task GetObservations_Returns200AndJsonList()
+    public void GetObservations_ReturnsObservationsFromDatabase()
     {
         // ACT
-        var response = await client.GetAsync("/observations");
+        var observations = _db.GetObservations();
 
         // ASSERT
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-        var observations = await response.Content.ReadFromJsonAsync<List<Cheep>>();
-        Assert.NotNull(observations);
+        Assert.Contains(observations, o => o.Author == "Yuki" &&
+            o.Message == "A Least Bittern resting on a sandbank. Stays within cover almost all the time.");
     }
 
     [Fact]
-    public async Task PostObservation_Returns200()
+    public void GetObservationsFromAuthor_ReturnsOnlyThatAuthor()
     {
-        // ARRANGE
-        var newObservation = new Cheep("Tester", 0, "Test observation " + Guid.NewGuid(), 1690891760, "ITU");
-
         // ACT
-        var response = await client.PostAsJsonAsync("/observation", newObservation);
+        var observations = _db.GetObservationsFromAuthor("Yuki");
 
         // ASSERT
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        // Alle observationer skal være Yukis.
+        Assert.NotEmpty(observations);
+        Assert.All(observations, o => Assert.Equal("Yuki", o.Author));
     }
 }

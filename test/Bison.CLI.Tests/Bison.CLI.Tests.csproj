@@ -18,10 +18,6 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Bison.CLI\Bison.CLI.csproj" />
-  </ItemGroup>
-
     <ItemGroup>
         <None Update="E2ETest.csv">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

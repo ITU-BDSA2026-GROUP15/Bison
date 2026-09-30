@@ -1,37 +1,64 @@
-public record ObservationViewModel(string Author, string Message, string Timestamp);
+// Indeholder de oplysninger om en observation, som vises på siden.
+public record ObservationViewModel(
+    string Author, string Message, string Timestamp);
 
 public interface IObservationService
 {
-    public List<ObservationViewModel> GetObservations();
-    public List<ObservationViewModel> GetObservationsFromAuthor(string author);
+    // Henter en side med observationer. Standard er side 1.
+    public List<ObservationViewModel> GetObservations(int page = 1);
+
+    // Henter en side med observationer fra en bestemt forfatter.
+    public List<ObservationViewModel> GetObservationsFromAuthor(
+        string author, int page = 1);
+
+    public List<ObservationViewModel> GetObservationDetails (
+        int id, int page = 1);
+
+    public List<ObservationViewModel> GetProposals (int id, int page =1);
+
+    public List<ObservationViewModel> GetComments (int id, int page =1);
+
 }
 
 public class ObservationService : IObservationService
 {
-    // These would normally be loaded from a database for example
-    private static readonly List<ObservationViewModel> _obs = new()
-        {
-            new ObservationViewModel("Peter", "I saw a heron", UnixTimeStampToDateTimeString(1690892208)),
-            new ObservationViewModel("Paul", "There is a bison on Amager", UnixTimeStampToDateTimeString(1690895308)),
-        };
+    // DBFacade håndterer adgangen til SQLite-databasen.
+    private readonly DBFacade _db;
 
-    public List<ObservationViewModel> GetObservations()
+    // Modtager DBFacade gennem dependency injection.
+    public ObservationService(DBFacade db)
     {
-        return _obs;
+        _db = db;
     }
 
-    public List<ObservationViewModel> GetObservationsFromAuthor(string author)
+    public List<ObservationViewModel> GetObservations(int page = 1)
     {
-        // filter by the provided author name
-        return _obs.Where(x => x.Author == author).ToList();
+        // Sender sidetallet videre til databasekoden.
+        return _db.GetObservations(page);
     }
 
-    private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
+    public List<ObservationViewModel> GetObservationsFromAuthor(
+        string author, int page = 1)
     {
-        // Unix timestamp is seconds past epoch
-        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(unixTimeStamp);
-        return dateTime.ToString("MM/dd/yy H:mm:ss");
+        // Sender både forfatter og sidetal videre til databasekoden.
+        return _db.GetObservationsFromAuthor(author, page);
     }
 
+    public List<ObservationViewModel> GetObservationDetails (
+        int id, int page = 1)
+    {
+        return _db.GetObservationDetails(id, page);
+    }
+
+     public List<ObservationViewModel> GetProposals (
+        int id, int page = 1)
+    {
+        return _db.GetProposals(id, page);
+    }
+
+     public List<ObservationViewModel> GetComments (
+        int id, int page = 1)
+    {
+        return _db.GetComments(id, page);
+    }
 }
