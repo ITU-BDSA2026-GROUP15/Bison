@@ -15,4 +15,9 @@
     <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+  <None Include="..\..\data\schema.sql" Link="data\schema.sql" CopyToOutputDirectory="PreserveNewest" />
+  <None Include="..\..\data\dump.sql" Link="data\dump.sql" CopyToOutputDirectory="PreserveNewest" />
+</ItemGroup>
+
 </Project>

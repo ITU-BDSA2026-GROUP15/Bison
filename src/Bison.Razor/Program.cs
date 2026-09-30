@@ -21,9 +21,18 @@ var envPath  = Environment.GetEnvironmentVariable("BISONDBPATH");   // kan måsk
 var tempPath = Path.Combine(Path.GetTempPath(), "bison.db");        // fallback
 var dbPath   = envPath ?? tempPath;
 
-Console.WriteLine($"[DB] dbPath = {dbPath}");
-Console.WriteLine($"[DB] BaseDirectory = {AppContext.BaseDirectory}");
-Console.WriteLine($"[DB] schema exists = {File.Exists(Path.Combine(AppContext.BaseDirectory, "data", "schema.sql"))}");
+    if (!File.Exists(dbPath))
+    {
+        using var conn = new Microsoft.Data.Sqlite.SqliteConnection($"Data Source={dbPath}");
+        conn.Open();
+
+        foreach (var file in new[] { "schema.sql", "dump.sql" })
+        {
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "data", file));
+            cmd.ExecuteNonQuery();
+        }
+    }
 
 builder.Services.AddSingleton<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
 builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade
