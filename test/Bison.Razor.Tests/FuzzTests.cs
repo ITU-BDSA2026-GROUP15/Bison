@@ -101,6 +101,10 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     //What the fuzztest going on here
+    //Implementing Theory and InlineData 
+    //The inLineData is used with attached seeds instead of a clean string or int, this makes it possible
+    //to add the randomization to the process instead of just testing a specific string or int
+    
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
@@ -145,7 +149,8 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
                 //Work is needed before we can continue here - since /comments does not validate ID.
                 //The CLI method comment() does, but we need to make this a possibility for /comments
 
-                response.EnsureSuccessStatusCode();
+                response.EnsureSuccessStatusCode(); //This needs to be changed now that comments validate id's correctly
+
                 _sentComments.Add(comment);
             }
             //ORACLE Check - with get function
