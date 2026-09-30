@@ -13,3 +13,19 @@ create table observation (
   text string not null,
   pub_date integer
 );
+
+drop table if exists proposal;
+create table proposal (
+  proposal_id integer, 
+  taxon_id interger not null,
+  pub_date integer,
+  primary key (proposal_id, pub_date)
+);
+
+drop table if exists comment;
+create table comment (
+  comment_id integer, 
+  text string not null,
+  pub_date integer,
+  primary key (comment_id, pub_date)
+);

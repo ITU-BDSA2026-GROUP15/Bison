@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Bison.Razor.Pages;
@@ -11,12 +11,12 @@ the class Public has
 all of this is made for the pagemodel, how it should look
 */
 
-public class PublicModel : PageModel
+public class OBModel : PageModel
 {
     private readonly IObservationService _service;
     public List<ObservationViewModel> Observations { get; set; }
 
-    public PublicModel(IObservationService service)
+    public OBModel(IObservationService service)
     {
         _service = service;
     }
