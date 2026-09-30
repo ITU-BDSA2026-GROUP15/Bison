@@ -8,7 +8,9 @@ public class Taxon {
     public string dwc_TaxonID { get; set; } = string.Empty;
     public string DanishVernacularName { get; set; } = string.Empty;
 
-    
+    // Roden i taxon-træet har ingen forælder. 
+    // måske rettet på et tidspunkt?!
+    //Hvis alle taxoner i  joined.csv har et parent-ID, må den øverste forælder ligge uden for datasættet.
     public int? ParentId { get; set; }
     
     public Taxon? Parent { get; set; }
