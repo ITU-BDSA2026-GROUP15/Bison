@@ -1,0 +1,27 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push: #no branch specefication means it will happen on every push/pull
+  pull_request:
+
+jobs:
+  build-and-test: #name of the job, pick smething suitable
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1 #applies to every step of this job (1=not sending data)
+
+    steps: #the actual commands we want to trigger
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore #already called restore, no need to do it again
+    - name: Test
+      run: dotnet test --no-build --verbosity normal #see reasoning above
