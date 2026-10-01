@@ -25,7 +25,7 @@ public class ObservationDetailsModel : PageModel
             return RedirectToPage("/Public");
         } else {
         
-            ObservationDetails = _service.GetObservationDetails(id, page);
+            ObservationDetails = _service.GetObservationDetails(id.Value, page);
             Comments = _service.GetComments(id.Value, page);
             Proposals = _service.GetProposals(id.Value, page);
         
