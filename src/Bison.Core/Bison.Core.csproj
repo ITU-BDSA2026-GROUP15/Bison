@@ -6,9 +6,6 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="CsvHelper" Version="33.1.0" />
-    </ItemGroup>
 
     <ItemGroup>
       <None Remove="joined.csv" />

@@ -1,6 +1,5 @@
 using System.Globalization;
 using System.Reflection;
-using CsvHelper;
 
 namespace Bison.Core;
 
@@ -27,7 +26,7 @@ public class Taxonomy
     public static List<Taxon> ReadTaxonsFromResource() // returnerer en liste med en taxon record for hver række i joined.csv
     {
         var assembly = Assembly.GetExecutingAssembly(); // dette skal bruges fordi det er en embedded ressource (i bytes i stedet for bogstaver). det skal vi bruge for at vi ikke kommer til at ændre i filen ved et uheld
-        using var stream = assembly.GetManifestResourceStream("Bison.Taxonomy.joined.csv")
+        using var stream = assembly.GetManifestResourceStream("Bison.Core.joined.csv")
                            ?? throw new InvalidOperationException("Resource not found");  // findes den ikke (forkert navn), får vi null, og så kaster vi en fejl
 
         using var reader = new StreamReader(stream);// her begynder vi faktisk at læse filen

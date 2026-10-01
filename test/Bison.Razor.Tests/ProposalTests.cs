@@ -1,5 +1,4 @@
-using Bison.Taxonomy;
-using SimpleDB;
+using Bison.Core;
 
 public class ProposalTests
 {

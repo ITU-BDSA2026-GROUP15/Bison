@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net.Http.Json;
-using SimpleDB;
-using Bison.Taxonomy;
+using Bison.Core;
 
 namespace Bison.Razor.Tests;
 
@@ -14,10 +13,10 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
     private readonly HttpClient _client;
     private Random _random = new();
 
-    private readonly List<Cheep> _sentObservations = new();
-    private readonly List<Cheep> _sentComments = new();
+    private readonly List<ObservationViewModel> _sentObservations = new();
+    private readonly List<ObservationViewModel> _sentComments = new();
 
-    private readonly List<Cheep> _sentProposals = new();
+    private readonly List<ObservationViewModel> _sentProposals = new();
 
 
     public FuzzTests(WebApplicationFactory<Program> factory)
