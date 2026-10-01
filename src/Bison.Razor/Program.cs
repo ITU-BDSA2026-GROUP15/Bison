@@ -1,8 +1,8 @@
 using System.ComponentModel.Design;
 using Microsoft.VisualBasic;
-using SimpleDB;
-using Bison.Taxonomy;
 using System.Xml.XPath;
+using System.Linq.Expressions;
+using Bison.Core;
 
 //string propFile = "joined.csv";
 
