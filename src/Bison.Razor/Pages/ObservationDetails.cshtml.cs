@@ -26,8 +26,8 @@ public class ObservationDetailsModel : PageModel
         } else {
         
             ObservationDetails = _service.GetObservationDetails(id, page);
-            Comments = _service.GetComments(id, page);
-            Proposals = _service.GetProposals(id, page);
+            Comments = _service.GetComments(id.Value, page);
+            Proposals = _service.GetProposals(id.Value, page);
         
         return Page();
         }
