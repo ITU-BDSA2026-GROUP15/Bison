@@ -6,17 +6,17 @@ namespace Bison.DAL
 {
     public interface IPostRepository : IDisposable
     {
-        IEnumerable<Post> GetPost();
-
-        Post GetPost(int id);
 
         //implements methods using CRUD
 
         //create
         void InsertPost(Post post);
 
-        // read??
+        //read -> returns all posts
+        IEnumerable<Post> GetPost();
 
+        //read -> retuans a single post
+        Post GetPost(int id);
         
         //update
         void UpdatePost(Post post);
