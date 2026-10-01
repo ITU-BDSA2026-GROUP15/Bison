@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Reflection;
 using CsvHelper;
 
-namespace Bison.Taxonomy;
+namespace Bison.Core;
 
 // i denne klasse læser vi fra csv filen vi fik på learnit, men den er embedded så den skal lige læses ekstra grundigt så at sige
 

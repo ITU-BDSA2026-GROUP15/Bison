@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Bison.Razor.Pages;
 
-public class DetailModel : PageModel
+public class ObservationDetailsModel : PageModel
 {
     private readonly IObservationService _service;
 
@@ -13,12 +13,12 @@ public class DetailModel : PageModel
     public List<ObservationViewModel> Proposals { get; set; }
 
 
-    public DetailModel(IObservationService service)
+    public ObservationDetailsModel(IObservationService service)
     {
         _service = service;
     }
     //[FromQuery] læser page fra URL’en, fra starten på 1.
-    public ActionResult OnGet(int id?, [FromQuery]int page = 1)
+    public ActionResult OnGet(int? id, [FromQuery]int page = 1)
     {
             if (id is null)
         {

@@ -1,5 +1,5 @@
-using Bison.Taxonomy;
-using SimpleDB;
+using Bison.Core;
+
 
 public static class ProposalValidator
 {
