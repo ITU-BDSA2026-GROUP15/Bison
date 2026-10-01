@@ -18,13 +18,18 @@ public class DetailModel : PageModel
         _service = service;
     }
     //[FromQuery] læser page fra URL’en, fra starten på 1.
-    public ActionResult OnGet(int id, [FromQuery]int page = 1)
+    public ActionResult OnGet(int id?, [FromQuery]int page = 1)
     {
-    
+            if (id is null)
+        {
+            return RedirectToPage("/Public");
+        } else {
+        
             ObservationDetails = _service.GetObservationDetails(id, page);
             Comments = _service.GetComments(id, page);
             Proposals = _service.GetProposals(id, page);
         
         return Page();
+        }
     }
 }
