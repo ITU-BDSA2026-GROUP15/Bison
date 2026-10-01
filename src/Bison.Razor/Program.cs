@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Bison.Razor.DAL;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Sqlite;
 
 var builder = WebApplication.CreateBuilder(args);
 

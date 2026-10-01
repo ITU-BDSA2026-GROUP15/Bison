@@ -13,10 +13,10 @@ namespace Bison.Razor.DAL
         void InsertPost(Post post);
 
         //read -> returns all posts
-       IEnumerable<T> GetPosts<T>(int page = 1) where T : Post;
+       IEnumerable<T> GetPosts<T>(int page) where T : Post;
 
        //read -> returns posts by a certain author
-IEnumerable<T> GetPostsByAuthor<T>(string author, int page = 1) where T : Post;
+IEnumerable<T> GetPostsByAuthor<T>(string author, int page) where T : Post;
         //read -> retuans a single post
         Post GetPost(int id);
         

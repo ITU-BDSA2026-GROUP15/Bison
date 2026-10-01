@@ -40,12 +40,12 @@ public class ObservationService : IObservationService
     public List<ObservationViewModel> GetObservations(int page = 1)
     {
         // Sender sidetallet videre til databasekoden.
-        return _repo.GetPosts<Observation>(author, page).Select(ToViewModel).ToList();
+        return _repo.GetPosts<Observation>(page).Select(ToViewModel).ToList();
     }
 
   public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page=1)
     {
-        return _repo.GetPostsByAuthor<Observation>(author).Select(ToViewModel).ToList();
+        return _repo.GetPostsByAuthor<Observation>(author, page).Select(ToViewModel).ToList();
     }
 
     public List<ObservationViewModel> GetObservationDetails (

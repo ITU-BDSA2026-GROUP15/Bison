@@ -42,14 +42,10 @@ namespace Bison.Razor.DAL
             //refaktoriseres senere
             return _context.Posts
                 .OfType<T>()
-                .Where(p => p.Author.Name == authorName)
+                .Where(p => p.Author.Name == author)
                 .ToList();
         }
 
-        public List<Observation> GetObservationsFromAuthor(string author, int page = 1)
-        {
-            return _repo.GetPostsByAuthor<Observation>(author, page).ToList();
-        }
 
         //update
         public void UpdatePost(Post post)
