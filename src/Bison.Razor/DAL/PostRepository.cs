@@ -4,6 +4,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Bison.Razor.Models;
 
+//communicates with the database and returns psot objects determned by the generic type <T>
+
 namespace Bison.Razor.DAL
 {
     public class PostRepository : IPostRepository
@@ -16,6 +18,8 @@ namespace Bison.Razor.DAL
             _context = context;
         }
 
+        
+
         //create
         public void InsertPost(Post post)
         {
@@ -23,7 +27,7 @@ namespace Bison.Razor.DAL
         }
 
         //read
-        public IEnumerable<T> GetPosts<T>() where T : Post
+        public IEnumerable<T> GetPosts<T>(int page) where T : Post
         {
             return _context.Posts.OfType<T>().ToList();
         }
@@ -33,7 +37,7 @@ namespace Bison.Razor.DAL
             return _context.Posts.Find(id);
         }
 
-        public IEnumerable<T> GetPostsByAuthor<T>(string authorName) where T : Post
+        public IEnumerable<T> GetPostsByAuthor<T>(string author, int page) where T : Post
         {
             //refaktoriseres senere
             return _context.Posts
@@ -44,7 +48,7 @@ namespace Bison.Razor.DAL
 
         public List<Observation> GetObservationsFromAuthor(string author, int page = 1)
         {
-            return _repo.GetPostsByAuthor<Observation>(author, page, pageSize).ToList();
+            return _repo.GetPostsByAuthor<Observation>(author, page).ToList();
         }
 
         //update

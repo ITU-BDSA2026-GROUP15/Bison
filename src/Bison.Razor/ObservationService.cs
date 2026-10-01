@@ -1,7 +1,10 @@
+using System.Net;
+using System.Linq;
 using Bison.Razor.DAL;
 using Bison.Razor.Models;
 
 // Indeholder de oplysninger om en observation, som vises på siden.
+//translates between Repo and ObservationViewModel
 public record ObservationViewModel(
     string Author, string Message, string Timestamp);
 
@@ -37,12 +40,12 @@ public class ObservationService : IObservationService
     public List<ObservationViewModel> GetObservations(int page = 1)
     {
         // Sender sidetallet videre til databasekoden.
-        return _repo.GetPosts<Observation>(page);
+        return _repo.GetPosts<Observation>(author, page).Select(ToViewModel).ToList();
     }
 
-  public List<Observation> GetObservationsFromAuthor(string author)
+  public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page=1)
     {
-        return _repo.GetPostsByAuthor<Observation>(author).ToList();
+        return _repo.GetPostsByAuthor<Observation>(author).Select(ToViewModel).ToList();
     }
 
     public List<ObservationViewModel> GetObservationDetails (
@@ -61,5 +64,10 @@ public class ObservationService : IObservationService
         int id, int page = 1)
     {
         return _repo.GetComments(id, page);
+    }
+
+    private static ObservationViewModel ToViewModel(Observation o)
+    {
+        return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
     }
 }
