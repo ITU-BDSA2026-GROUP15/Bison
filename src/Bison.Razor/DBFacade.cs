@@ -212,6 +212,18 @@ public class DBFacade
         return result;
     }
 
+     public bool ObservationExists(int observationId)
+    {
+        using var connection = new SqliteConnection(_connectionString);
+        connection.Open();
+
+        using var command = connection.CreateCommand();
+        command.CommandText = "SELECT 1 FROM observation WHERE id = $id LIMIT 1";
+        command.Parameters.AddWithValue("$id", observationId);
+
+        return command.ExecuteScalar() is not null;
+    }
+
     // public, så den kan unit-testes fra Bison.Razor.Tests.
 
     public static string UnixTimeStampToDateTimeString(double unixTimeStamp) // copied from BisonService.cs

@@ -76,4 +76,12 @@ public class Taxonomy
         return _taxons.Where(t => t.ParentId == taxon.TaxonId).ToList(); //finder børnene til den taxon man indtaster
     }
 
+    // GetById returns null when the taxon ID does not exist in the taxonomy.
+    // Kontrollerer, om det angivne taxon-ID findes i taksonomien.
+    public static bool TaxonExists(Taxonomy taxonomy, string taxonId)
+    {
+         // Et resultat forskelligt fra null betyder, at taxonet findes.
+        return taxonomy.GetById(taxonId) is not null;
+    }
+
 }
