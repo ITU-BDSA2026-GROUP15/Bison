@@ -6,8 +6,7 @@ using Bison.Razor.Models;
 
 namespace Bison.Razor.DAL
 {
-    //IDisposable -> disposes the database context
-    public class PostRepository : IPostRepository, IDisposable
+    public class PostRepository : IPostRepository
     {
         //database context is defined as a variabel 
         private PostContext _context;
@@ -32,6 +31,20 @@ namespace Bison.Razor.DAL
         public Post GetPost(int id)
         {
             return _context.Posts.Find(id);
+        }
+
+        public IEnumerable<T> GetPostsByAuthor<T>(string authorName) where T : Post
+        {
+            //refaktoriseres senere
+            return _context.Posts
+                .OfType<T>()
+                .Where(p => p.Author.Name == authorName)
+                .ToList();
+        }
+
+        public List<Observation> GetObservationsFromAuthor(string author, int page = 1)
+        {
+            return _repo.GetPostsByAuthor<Observation>(author, page, pageSize).ToList();
         }
 
         //update

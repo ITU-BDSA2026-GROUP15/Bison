@@ -1,4 +1,5 @@
 using Bison.Razor.DAL;
+using Bison.Razor.Models;
 
 // Indeholder de oplysninger om en observation, som vises på siden.
 public record ObservationViewModel(
@@ -36,14 +37,12 @@ public class ObservationService : IObservationService
     public List<ObservationViewModel> GetObservations(int page = 1)
     {
         // Sender sidetallet videre til databasekoden.
-        return _repo.GetObservations(page);
+        return _repo.GetPosts<Observation>(page);
     }
 
-    public List<ObservationViewModel> GetObservationsFromAuthor(
-        string author, int page = 1)
+  public List<Observation> GetObservationsFromAuthor(string author)
     {
-        // Sender både forfatter og sidetal videre til databasekoden.
-        return _repo.GetObservationsFromAuthor(author, page);
+        return _repo.GetPostsByAuthor<Observation>(author).ToList();
     }
 
     public List<ObservationViewModel> GetObservationDetails (

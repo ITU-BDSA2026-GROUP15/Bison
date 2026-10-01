@@ -15,6 +15,7 @@ namespace Bison.Razor.DAL
         //read -> returns all posts
         IEnumerable<T> GetPosts<T>() where T : Post;
 
+        IEnumerable<T> GetPostsByAuthor<T>(string author) where T : Post;
         //read -> retuans a single post
         Post GetPost(int id);
         
