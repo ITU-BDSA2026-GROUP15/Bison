@@ -1,3 +1,5 @@
+
+
 // Indeholder de oplysninger om en observation, som vises på siden.
 public record ObservationViewModel(
     string Author, string Message, string Timestamp);
@@ -23,42 +25,42 @@ public interface IObservationService
 public class ObservationService : IObservationService
 {
     // DBFacade håndterer adgangen til SQLite-databasen.
-    private readonly DBFacade _db;
+    private readonly IPostRepository _repo;
 
     // Modtager DBFacade gennem dependency injection.
-    public ObservationService(DBFacade db)
+    public ObservationService(IPostRepository repo)
     {
-        _db = db;
+        _repo = repo;
     }
 
     public List<ObservationViewModel> GetObservations(int page = 1)
     {
         // Sender sidetallet videre til databasekoden.
-        return _db.GetObservations(page);
+        return _repo.GetObservations(page);
     }
 
     public List<ObservationViewModel> GetObservationsFromAuthor(
         string author, int page = 1)
     {
         // Sender både forfatter og sidetal videre til databasekoden.
-        return _db.GetObservationsFromAuthor(author, page);
+        return _repo.GetObservationsFromAuthor(author, page);
     }
 
     public List<ObservationViewModel> GetObservationDetails (
         int id, int page = 1)
     {
-        return _db.GetObservationDetails(id, page);
+        return _repo.GetObservationDetails(id, page);
     }
 
      public List<ObservationViewModel> GetProposals (
         int id, int page = 1)
     {
-        return _db.GetProposals(id, page);
+        return _repo.GetProposals(id, page);
     }
 
      public List<ObservationViewModel> GetComments (
         int id, int page = 1)
     {
-        return _db.GetComments(id, page);
+        return _repo.GetComments(id, page);
     }
 }

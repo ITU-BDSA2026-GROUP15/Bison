@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,9 @@ var dbPath   = envPath ?? tempPath;
             cmd.ExecuteNonQuery();
         }
     }
+
+builder.Services.AddDbContext<BisonDBContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 builder.Services.AddSingleton<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
 builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade
