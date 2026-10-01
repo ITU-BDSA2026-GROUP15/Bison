@@ -1,3 +1,5 @@
+
+
 // Indeholder de oplysninger om en observation, som vises på siden.
 public record ObservationViewModel(
     string Author, string Message, string Timestamp);
