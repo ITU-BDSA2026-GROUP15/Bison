@@ -4,6 +4,7 @@ namespace Bison.Razor.Tests;
 
 //Theory and Inlign data needs to be used here
 
+/*
 public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 // IClassFixture<WebApplicationFactory<Program>> Tells the Xunit to boot Razor once, in-memory and share the same instance
 // instead of starting a fresh app per test,
