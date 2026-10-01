@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bison.DAL.Repo
+namespace Bison.DAL
 {
     //IDisposable -> disposes the database context
     public class PostRepository : IPostRepository, IDisposable

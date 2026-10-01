@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Bison.Razor.Models;
 
-namespace Bison.DAL.Interface
+namespace Bison.DAL
 {
     public interface IPostRepository : IDisposable
     {

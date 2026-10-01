@@ -1,0 +1,2 @@
+[System.Runtime.CompilerServices.Nullable(0)]
+public class PostContext : IAsyncDisposable, IDisposable, Microsoft.EntityFrameworkCore.Infrastructure.IInfrastructure<IServiceProvider>, Microsoft.EntityFrameworkCore.Internal.IDBContextDependencies, Microsoft.EntityFrameworkCore.Internal.IDbContextPoolable, Microsoft.EntityFrameworkCore.Internal.IDbSetCache;
