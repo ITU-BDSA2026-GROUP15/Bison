@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Bison.Razor.Models;
 
-namespace Bison.DAL
+namespace Bison.Razor.DAL
 {
     public interface IPostRepository : IDisposable
     {
@@ -12,7 +13,7 @@ namespace Bison.DAL
         void InsertPost(Post post);
 
         //read -> returns all posts
-        IEnumerable<Post> GetPosts();
+        IEnumerable<T> GetPosts<T>() where T : Post;
 
         //read -> retuans a single post
         Post GetPost(int id);

@@ -1,4 +1,6 @@
 using System.Linq.Expressions;
+using Bison.Razor.DAL;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +29,7 @@ var dbPath   = envPath ?? tempPath;
         }
     }
 
-builder.Services.AddDbContext<BisonDBContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddDbContext<PostContext>(options => options.UseSqlite(dbPath));
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 builder.Services.AddSingleton<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.

@@ -1,3 +1,4 @@
+using Bison.Razor.DAL;
 
 // Indeholder de oplysninger om en observation, som vises på siden.
 public record ObservationViewModel(

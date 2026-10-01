@@ -1,53 +1,55 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Models;
+using Microsoft.EntityFrameworkCore;
+using Bison.Razor.Models;
 
-namespace Bison.DAL
+namespace Bison.Razor.DAL
 {
     //IDisposable -> disposes the database context
     public class PostRepository : IPostRepository, IDisposable
     {
         //database context is defined as a variabel 
-        private PostContext context;
+        private PostContext _context;
 
         public PostRepository(PostContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
         //create
         public void InsertPost(Post post)
         {
-            context.Post.Add(post);
+            _context.Posts.Add(post);
         }
 
         //read
-        public IEnumerable<Post> GetPosts()
+        public IEnumerable<T> GetPosts<T>() where T : Post
         {
-            return context.Post.ToList();
+            return _context.Posts.OfType<T>().ToList();
         }
 
         public Post GetPost(int id)
         {
-            return context.Posts.Find(id);
+            return _context.Posts.Find(id);
         }
 
         //update
         public void UpdatePost(Post post)
         {
-            context.Entry(post).State = EntityState.Modified;
+            _context.Entry(post).State = EntityState.Modified;
         }
 
         public void DeletePost(int id)
         {
-            Post post = context.Posts.Find(id);
-            context.Posts.Remove(post);
+            Post post = _context.Posts.Find(id);
+            // mangler null check
+            _context.Posts.Remove(post);
         }
 
         public void Save()
         {
-            context.SaveChanges();
+            _context.SaveChanges();
         }
 
         private bool disposed = false;
@@ -58,7 +60,7 @@ namespace Bison.DAL
             {
                 if (disposing)
                 {
-                    context.Dispose();
+                    _context.Dispose();
                 }
             }
             this.disposed = true;

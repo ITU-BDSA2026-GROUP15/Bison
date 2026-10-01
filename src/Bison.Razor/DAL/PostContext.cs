@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Bison.Razor.Models;
 
+namespace Bison.Razor.DAL {
 
 public class PostContext : DbContext
 {
@@ -8,4 +10,7 @@ public class PostContext : DbContext
     }
 
     public DbSet<Post> Posts { get; set; }
+    public DbSet<Observation> Observations { get; set; }
+    public DbSet<Proposal> Proposals { get; set; }
+}
 }
