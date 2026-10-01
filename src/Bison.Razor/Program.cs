@@ -1,14 +1,4 @@
 
-
-//string propFile = "joined.csv";
-
-// indlæs joined.csv, identificer alle taxonIDer tilføj dem til en liste,
-// tjek listen igennem når en ny taxon registres i 'propsal'
-//et andet sted?
-
-// Opretter taxon, der bruges til at kontrollere taxon-ID'er.
-var taxonomy = new Taxonomy();
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages(); // tilføjede razor pages til programmet
@@ -43,8 +33,6 @@ var app = builder.Build(); //building the webapplication itself (metadata)
 
 app.MapRazorPages(); // kobler URL til razor pages
 app.UseStaticFiles(); // kobler browseren til filerne i wwwroot -> altså css styling osv så det ikke bare er tekst
-
-// Gør Razor-siderne tilgængelige via deres URL'er.
 
 app.Run();
 

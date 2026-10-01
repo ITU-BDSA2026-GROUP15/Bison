@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Bison.Core\Bison.Taxonomy.csproj" />
+    <ProjectReference Include="..\..\src\Bison.Core\Bison.Core.csproj" />
    <!---->
   </ItemGroup>
 </Project>

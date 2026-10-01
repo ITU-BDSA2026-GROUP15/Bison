@@ -215,7 +215,7 @@ public class DBFacade
 
      public bool ObservationExists(int observationId)
     {
-        using var connection = new SqliteConnection(_connectionString);
+        using var connection = new SqliteConnection($"Data Source={_dbPath}");
         connection.Open();
 
         using var command = connection.CreateCommand();
