@@ -1,4 +1,4 @@
-namespace Bison.Razor.DTOs;
+namespace Bison.Razor.ModelsDTO;
 
 public class CommentDto
 {
@@ -6,6 +6,4 @@ public class CommentDto
     public string Text { get; set; } =  string.Empty;
     public string Timestamp { get; set; } = string.Empty;
     public string Author { get; set; } = string.Empty;
-    
-
 }

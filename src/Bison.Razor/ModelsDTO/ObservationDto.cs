@@ -1,4 +1,4 @@
-namespace Bison.Razor.DTOs;
+namespace Bison.Razor.ModelsDTO;
 
 public class ObservationDto
 {
@@ -10,6 +10,5 @@ public class ObservationDto
     
     public string AuthorName { get; set; } = string.Empty;
     
-    public string TaxonName { get; set; } = string.Empty;
-    
+    public string DanishVernacularName { get; set; } = string.Empty;
 }
