@@ -43,8 +43,11 @@ namespace Bison.Razor.DAL
         public void DeletePost(int id)
         {
             Post post = _context.Posts.Find(id);
-            // mangler null check
-            _context.Posts.Remove(post);
+            if ( post != null)
+            {
+                _context.Posts.Remove(post);        
+            }
+        
         }
 
         public void Save()
