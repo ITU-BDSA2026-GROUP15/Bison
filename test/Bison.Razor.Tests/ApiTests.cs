@@ -1,6 +1,5 @@
 namespace Bison.Razor.Tests;
 
-// Dump og schema stemmer ikke overens med project description. Jeg kan ikke lave testene som de står beskrevet.
 public class ApiTests : IClassFixture<TestWebFactory>
 {
     // En HttpClient, der taler direkte med den in-memory app.
@@ -12,10 +11,21 @@ public class ApiTests : IClassFixture<TestWebFactory>
         _client = factory.CreateClient();
     }
 
-    // GET /obs skal indeholde Peters "A big gray bird in a pond at DR byen".
-    [Fact(Skip = "Ikke skrevet endnu")]
-    public async Task PublicTimeline_ContainsPetersObservation()
+    [Fact]
+    public async Task PublicTimelineContainsJohansNewestObservation()
     {
+        // ACT
+        // Sender en GET-request til den offentlige tidslinje og læser svaret.
+        var response = await _client.GetAsync("/obs");
+        var html = await response.Content.ReadAsStringAsync();
+
+        // ASSERT
+        // Siden skal svare 200 OK
+        response.EnsureSuccessStatusCode();
+
+        // HTML'en skal indeholde både forfatteren og observationens tekst.
+        Assert.Contains("Johan", html);
+        Assert.Contains("Great Egret on the pond at the edge of town. Nests in colonies, often in trees near water.", html);
     }
 
     // GET /obs/Petra skal indeholde Petras "A heron".
