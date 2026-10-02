@@ -20,7 +20,7 @@ public class ApiTests : IClassFixture<TestWebFactory>
         var html = await response.Content.ReadAsStringAsync();
 
         // ASSERT
-        // Siden skal svare 200 OK
+        // Siden skal svare OK
         response.EnsureSuccessStatusCode();
 
         // HTML'en skal indeholde både forfatteren og observationens tekst.
@@ -28,9 +28,20 @@ public class ApiTests : IClassFixture<TestWebFactory>
         Assert.Contains("Great Egret on the pond at the edge of town. Nests in colonies, often in trees near water.", html);
     }
 
-    // GET /obs/Petra skal indeholde Petras "A heron".
-    [Fact(Skip = "Ikke skrevet endnu")]
-    public async Task PrivateTimeline_Petra_ContainsHeron()
+    [Fact]
+    public async Task PrivateTimelineContainsYukisNewestObservation()
     {
+        // ACT
+        // Sender en GET-request til Yukis private tidslinje og læser svaret.
+        var response = await _client.GetAsync("/obs/Yuki");
+        var html = await response.Content.ReadAsStringAsync();
+
+        // ASSERT
+        // Siden skal svare OK
+        response.EnsureSuccessStatusCode();
+
+        // HTML'en skal indeholde både forfatteren og observationens tekst.
+        Assert.Contains("Yuki", html);
+        Assert.Contains("A Least Bittern resting on a sandbank. Stays within cover almost all the time.", html);
     }
 }
