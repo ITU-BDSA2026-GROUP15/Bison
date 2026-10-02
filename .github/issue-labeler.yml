@@ -3,8 +3,8 @@
 # only existing labels can be apllied, it cannot create new ones (do that in github)
 
 bug:
-  - '(?i)\b(bug|error|crash)\b'
+  - '/\b(bug|error|crash)\b/i'
 enhancement:
-  - '(?i)\b(feature|enhancement|idea)\b'
+  - '/\b(feature|enhancement|idea)\b/i'
 question:
-  - '(?i)\b(question|how (do|to))\b'
+  - '/\b(question|how (do|to))\b/i'
