@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../SimpleDB/SimpleDB.csproj" />
-    <ProjectReference Include="..\Bison.Taxonomy\Bison.Taxonomy.csproj" />
+    <ProjectReference Include="..\Bison.Core\Bison.Core.csproj" />
   </ItemGroup>
     
   <ItemGroup>

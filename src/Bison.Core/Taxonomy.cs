@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Reflection;
 using CsvHelper;
 
-namespace Bison.Taxonomy;
+namespace Bison.Core;
 
 // i denne klasse læser vi fra csv filen vi fik på learnit, men den er embedded så den skal lige læses ekstra grundigt så at sige
 
@@ -27,7 +27,7 @@ public class Taxonomy
     public static List<Taxon> ReadTaxonsFromResource() // returnerer en liste med en taxon record for hver række i joined.csv
     {
         var assembly = Assembly.GetExecutingAssembly(); // dette skal bruges fordi det er en embedded ressource (i bytes i stedet for bogstaver). det skal vi bruge for at vi ikke kommer til at ændre i filen ved et uheld
-        using var stream = assembly.GetManifestResourceStream("Bison.Taxonomy.joined.csv")
+        using var stream = assembly.GetManifestResourceStream("Bison.Core.joined.csv")
                            ?? throw new InvalidOperationException("Resource not found");  // findes den ikke (forkert navn), får vi null, og så kaster vi en fejl
 
         using var reader = new StreamReader(stream);// her begynder vi faktisk at læse filen
@@ -74,6 +74,14 @@ public class Taxonomy
     public List<Taxon> GetSubtaxa(Taxon taxon)
     {
         return _taxons.Where(t => t.ParentId == taxon.TaxonId).ToList(); //finder børnene til den taxon man indtaster
+    }
+
+    // GetById returns null when the taxon ID does not exist in the taxonomy.
+    // Kontrollerer, om det angivne taxon-ID findes i taksonomien.
+    public static bool TaxonExists(Taxonomy taxonomy, string taxonId)
+    {
+         // Et resultat forskelligt fra null betyder, at taxonet findes.
+        return taxonomy.GetById(taxonId) is not null;
     }
 
 }

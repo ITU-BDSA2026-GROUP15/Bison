@@ -1,4 +1,4 @@
-namespace Bison.Taxonomy;
+namespace Bison.Core;
 
 /*
 This is the data model for Taxon

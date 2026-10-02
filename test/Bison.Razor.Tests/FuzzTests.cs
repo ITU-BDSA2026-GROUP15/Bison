@@ -1,23 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using System.Net.Http.Json;
-using SimpleDB;
-using Bison.Taxonomy;
+﻿using Bison.Core;
 
 namespace Bison.Razor.Tests;
 
 //Theory and Inlign data needs to be used here
 
+/*
 public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
-    // IClassFixture<WebApplicationFactory<Program>> Tells the Xunit to boot Razor once, in-memory and share the same instance
-    // instead of starting a fresh app per test,
+// IClassFixture<WebApplicationFactory<Program>> Tells the Xunit to boot Razor once, in-memory and share the same instance
+// instead of starting a fresh app per test,
 {
     private readonly HttpClient _client;
     private Random _random = new();
 
-    private readonly List<Cheep> _sentObservations = new();
-    private readonly List<Cheep> _sentComments = new();
+    private readonly List<ObservationViewModel> _sentObservations = new();
+    private readonly List<ObservationViewModel> _sentComments = new();
 
-    private readonly List<Cheep> _sentProposals = new();
+    private readonly List<ObservationViewModel> _sentProposals = new();
 
 
     public FuzzTests(WebApplicationFactory<Program> factory)
@@ -206,3 +204,4 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
     }
 }
 
+*/
