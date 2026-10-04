@@ -41,6 +41,19 @@ public class PostContext : DbContext
             .HasForeignKey(p => p.AuthorID); //Using author as a navigation property
         
         
+        //Taxon to Taxon relationship
+
+        modelBuilder.Entity<taxon>()
+            .HasOne(t => t.Parent) //One-To-One
+            .WithMany(t => t.Children) //One-to-Many
+            .HasForeignKey(t => t.ParentId)
+            .OnDelete(DeleteBehavior.Restrict); //Avoids cascading deletions 
+        
+        // Observations to Taxons
+        modelBuilder.Entity<Observation>()
+            .HasOne(o => o.Taxon)
+            .WithMany()
+            .HasForeignKey(p => p.TaxonId)
         
         
             
