@@ -25,7 +25,7 @@ namespace Bison.Razor.DAL
 
             //Table-per-Hierachy - this is used so we won't need three seperate tables for Observations, comments and proposals
             //Instead we create one table in which we will have a "PostType" which show what kind of posts we are dealing with
-            modelBuilder.Entity<post>()
+            modelBuilder.Entity<Post>()
                 .HasDiscriminator<string>("PostType")
                 .HasValue<Observation>("observation")
                 .HasValue<Comment>("Comment")
@@ -34,7 +34,7 @@ namespace Bison.Razor.DAL
 
             //Author-Posts relationsship: 
             //
-            modelBuilder.Entity<post>()
+            modelBuilder.Entity<Post>()
                 .HasOne(p => p.Author) //Each post has one related thing accessed by the Author, aka one-to-one
                 .WithMany(a => a.post) //Each Author has a related thing to a collection of posts, aka one-to-many
                 .HasForeignKey(p => p.AuthorID); //Using author as a navigation property
@@ -42,7 +42,7 @@ namespace Bison.Razor.DAL
 
             //Taxon to Taxon relationship
 
-            modelBuilder.Entity<taxon>()
+            modelBuilder.Entity<Taxon>()
                 .HasOne(t => t.Parent) //One-To-One
                 .WithMany(t => t.Children) //One-to-Many
                 .HasForeignKey(t => t.ParentId)
