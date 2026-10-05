@@ -87,13 +87,35 @@ namespace Bison.Razor.DAL
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
+        
+        
+        //Implementation of GetObservationDetails, getComments, GetProposals
+        // from interface methods.
         public Observation? GetObservationDetails(int id)
         {
             return _context.PostsOfType<Observation>()
-                .Include(c => c.Author)
+                .Include(o => o.Author)
                 .Include(o => o.Taxon)
                 .FirstOrDefault(o => o.Id == id);
+        }
+
+        public IEnumerable<Comment> GetComments(int observationId)
+        {
+            return _context.PostOfType<Comment>()
+                .Include (c => c.Author)
+                .Where (c => c.ObservationId =>observationId)
+                .ToList();
+            
+        }
+
+        public IEnumerable<Proposal> GetProposals(int observationId)
+        {
+            return _context.PostOfType<Proposal>()
+                .Include(p => p.Author)
+                .Include(p => p.Taxon)
+                .Where(p => p.ObservationId == observatioId)
+                .ToList();
+            
         }
 
     }
