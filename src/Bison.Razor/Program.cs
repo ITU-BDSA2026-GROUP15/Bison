@@ -1,7 +1,6 @@
 using System.Linq.Expressions;
 using Bison.Razor.DAL;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Sqlite;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +32,7 @@ var dbPath   = envPath ?? tempPath;
 builder.Services.AddDbContext<PostContext>(options => options.UseSqlite(dbPath));
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 
-builder.Services.AddSingleton<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
+builder.Services.AddScoped<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
 builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade
 
 var app = builder.Build(); //building the webapplication itself (metadata)
