@@ -35,8 +35,8 @@ namespace Bison.Razor.DAL
             //
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.Author) //Each post has one related thing accessed by the Author, aka one-to-one
-                .WithMany(a => a.Post) //Each Author has a related thing to a collection of posts, aka one-to-many
-                .HasForeignKey(p => p.AuthorID); //Using author as a navigation property
+                .WithMany(a => a.Posts) //Each Author has a related thing to a collection of posts, aka one-to-many
+                .HasForeignKey(p => p.AuthorId); //Using author as a navigation property
 
 
             //Taxon to Taxon relationship

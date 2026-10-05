@@ -93,7 +93,7 @@ namespace Bison.Razor.DAL
         // from interface methods.
         public Observation? GetObservationDetails(int id)
         {
-            return _context.PostsOfType<Observation>()
+            return _context.Posts.OfType<Observation>()
                 .Include(o => o.Author)
                 .Include(o => o.Taxon)
                 .FirstOrDefault(o => o.Id == id);
@@ -101,7 +101,7 @@ namespace Bison.Razor.DAL
 
         public IEnumerable<Comment> GetComments(int observationId)
         {
-            return _context.PostOfType<Comment>()
+            return _context.Posts.OfType<Comment>()
                 .Include (c => c.Author)
                 .Where (c => c.ObservationId == observationId)
                 .ToList();
@@ -110,10 +110,10 @@ namespace Bison.Razor.DAL
 
         public IEnumerable<Proposal> GetProposals(int observationId)
         {
-            return _context.PostOfType<Proposal>()
+            return _context.Posts.OfType<Proposal>()
                 .Include(p => p.Author)
                 .Include(p => p.Taxon)
-                .Where(p => p.ObservationId == observatioId)
+                .Where(p => p.ObservationId == observationId)
                 .ToList();
             
         }
