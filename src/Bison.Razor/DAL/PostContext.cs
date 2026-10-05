@@ -46,7 +46,7 @@ namespace Bison.Razor.DAL
                 .HasOne(t => t.Parent) //One-To-One
                 .WithMany(t => t.Children) //One-to-Many
                 .HasForeignKey(t => t.ParentId)
-                .OnDelete(DeleteBehavior.Restrict); //Avoids cascading deletions 
+                .OnDelete(DeleteBehavior.Restrict); //Avoids cascading deletions
 
             // Observations to Taxons
             modelBuilder.Entity<Observation>()
