@@ -27,6 +27,11 @@ IEnumerable<T> GetPostsByAuthor<T>(string author, int page) where T : Post;
         void DeletePost(int post);
 
         void Save();
+
+        Observation? GetObservationDetails(int id);
+        IEnumerable<Comment> GetComments(int ObservationId);
+        IEnumerable<Proposal> GetProposals(int ObservationId);
+        
     }
 
 }

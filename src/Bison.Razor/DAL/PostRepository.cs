@@ -88,5 +88,13 @@ namespace Bison.Razor.DAL
             GC.SuppressFinalize(this);
         }
 
+        public Observation? GetObservationDetails(int id)
+        {
+            return _context.PostsOfType<Observation>()
+                .Include(c => c.Author)
+                .Include(o => o.Taxon)
+                .FirstOrDefault(o => o.Id == id);
+        }
+
     }
 }
