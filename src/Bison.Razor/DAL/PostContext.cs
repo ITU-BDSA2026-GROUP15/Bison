@@ -32,11 +32,11 @@ namespace Bison.Razor.DAL
                 .HasValue<Proposal>("Proposal");
 
 
-            //Author-Posts relationsship: 
+            //Author-Posts relationsship:
             //
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.Author) //Each post has one related thing accessed by the Author, aka one-to-one
-                .WithMany(a => a.post) //Each Author has a related thing to a collection of posts, aka one-to-many
+                .WithMany(a => a.Post) //Each Author has a related thing to a collection of posts, aka one-to-many
                 .HasForeignKey(p => p.AuthorID); //Using author as a navigation property
 
 
@@ -54,7 +54,7 @@ namespace Bison.Razor.DAL
                 .WithMany() //Empty withMany() since there is no way for a taxon to reveal anything about an observation
                 .HasForeignKey(p => p.TaxonId);
 
-            //proposals -> Observations aka the relationship proposed about 
+            //proposals -> Observations aka the relationship proposed about
             modelBuilder.Entity<Proposal>()
                 .HasOne(p => p.Observation)
                 .WithMany(o => o.Proposals)
