@@ -74,9 +74,13 @@ public class ObservationService : IObservationService
     {
         return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
     }
-	private static ObservationViewModel ToProposalViewModel(Observation o){
-		=>
-}
-private static ObservationViewModel ToCommentViewModel(Observation o)
+	private static ObservationViewModel ToProposalViewModel(Observation o)
+	{
+		return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
+	}
 
+	private static ObservationViewModel ToCommentViewModel(Observation o)
+	{
+		return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
+	}
 }
