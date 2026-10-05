@@ -11,7 +11,8 @@ public record ObservationViewModel(
 public interface IObservationService
 {
     // Henter en side med observationer. Standard er side 1.
-    public List<ObservationViewModel> GetObservations(int page = 1);
+
+    public List<ObservationViewModel> GetObservations (int page = 1);
 
     // Henter en side med observationer fra en bestemt forfatter.
     public List<ObservationViewModel> GetObservationsFromAuthor(
@@ -47,11 +48,14 @@ public class ObservationService : IObservationService
     {
         return _repo.GetPostsByAuthor<Observation>(author, page).Select(ToViewModel).ToList();
     }
+// now the getObservationDetails have and the entity -> viewModel conversion
+    public List<ObservationViewModel> GetObservationDetails (int id, int page){
 
-    public List<ObservationViewModel> GetObservationDetails (
-        int id, int page = 1)
-    {
-        return _repo.GetObservationDetails(id, page);
+        var observation = _repo.GetObservationDetails(id);
+        return observation is null
+            ? new List<ObservationViewModel>()
+            : new List<ObservationViewModel> { ToViewModel(observation) };
+
     }
 
      public List<ObservationViewModel> GetProposals (

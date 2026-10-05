@@ -103,7 +103,7 @@ namespace Bison.Razor.DAL
         {
             return _context.PostOfType<Comment>()
                 .Include (c => c.Author)
-                .Where (c => c.ObservationId =>observationId)
+                .Where (c => c.ObservationId == observationId)
                 .ToList();
             
         }
