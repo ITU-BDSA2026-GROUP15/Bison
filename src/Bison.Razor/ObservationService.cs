@@ -61,17 +61,22 @@ public class ObservationService : IObservationService
      public List<ObservationViewModel> GetProposals (
         int id, int page = 1)
     {
-        return _repo.GetProposals(id, page);
+        return _repo.GetProposals(id).Select(ToProposalViewModel).ToList();
     }
 
      public List<ObservationViewModel> GetComments (
         int id, int page = 1)
     {
-        return _repo.GetComments(id, page);
+        return _repo.GetComments(id).Select(ToCommentViewModel).ToList();
     }
 
     private static ObservationViewModel ToViewModel(Observation o)
     {
         return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
     }
+	private static ObservationViewModel ToProposalViewModel(Observation o){
+		=>
+}
+private static ObservationViewModel ToCommentViewModel(Observation o)
+
 }
