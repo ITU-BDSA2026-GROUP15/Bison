@@ -6,7 +6,7 @@ public class Taxon {
     public int TaxonId { get; set; }
     // I did not know but it is "Darwin Core identifier" for this taxon.
     public string dwc_TaxonID { get; set; } = string.Empty;
-    public string? VernacularName { get; set; } = string.Empty;
+    public string? VernacularName { get; set; }
 
     // Roden i taxon-træet har ingen forælder.
     // måske rettet på et tidspunkt?!
