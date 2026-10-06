@@ -5,7 +5,7 @@ namespace Bison.Razor.Models;
 // abstract so we can not make just a "post" but an Observation, Comment or Proposal
 public abstract class Post {
 
-    public int Id { get; set; }
+    public int PostId { get; set; }
     public string Text { get; set; } = string.Empty;
     public DateTime TimeStamp { get; set; }
 

@@ -29,7 +29,7 @@ var dbPath   = envPath ?? tempPath;
         }
     }
 
-builder.Services.AddDbContext<PostContext>(options => options.UseSqlite(dbPath));
+builder.Services.AddDbContext<BisonDBContext>(options => options.UseSqlite(dbPath));
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 builder.Services.AddScoped<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
