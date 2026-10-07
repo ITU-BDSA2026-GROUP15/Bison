@@ -10,15 +10,15 @@ namespace Bison.Razor.DAL
 {
     public class PostRepository : IPostRepository
     {
-        //database context is defined as a variabel 
-        private PostContext _context;
+        //database context is defined as a variabel
+        private BisonDBContext _context;
 
-        public PostRepository(PostContext context)
+        public PostRepository(BisonDBContext context)
         {
             _context = context;
         }
 
-        
+
 
         //create
         public void InsertPost(Post post)
@@ -58,9 +58,9 @@ namespace Bison.Razor.DAL
             Post post = _context.Posts.Find(id);
             if ( post != null)
             {
-                _context.Posts.Remove(post);        
+                _context.Posts.Remove(post);
             }
-        
+
         }
 
         public void Save()
@@ -87,8 +87,8 @@ namespace Bison.Razor.DAL
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        
-        
+
+
         //Implementation of GetObservationDetails, getComments, GetProposals
         // from interface methods.
         public Observation? GetObservationDetails(int id)
@@ -96,7 +96,7 @@ namespace Bison.Razor.DAL
             return _context.Posts.OfType<Observation>()
                 .Include(o => o.Author)
                 .Include(o => o.Taxon)
-                .FirstOrDefault(o => o.Id == id);
+                .FirstOrDefault(o => o.PostId == id);
         }
 
         public IEnumerable<Comment> GetComments(int observationId)
@@ -105,7 +105,7 @@ namespace Bison.Razor.DAL
                 .Include (c => c.Author)
                 .Where (c => c.ObservationId == observationId)
                 .ToList();
-            
+
         }
 
         public IEnumerable<Proposal> GetProposals(int observationId)
@@ -115,7 +115,7 @@ namespace Bison.Razor.DAL
                 .Include(p => p.Taxon)
                 .Where(p => p.ObservationId == observationId)
                 .ToList();
-            
+
         }
 
     }

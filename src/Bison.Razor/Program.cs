@@ -10,32 +10,20 @@ var envPath  = Environment.GetEnvironmentVariable("BISONDBPATH");   // kan måsk
 var tempPath = Path.Combine(Path.GetTempPath(), "bison.db");        // fallback
 var dbPath   = envPath ?? tempPath;
 
-//NEW CHECK FOR PATH IF IT DOESN'T EXIST YET
-    if (!File.Exists(dbPath))
-    {
-        //makes a connection to the sqlite file on the dbPath
-        using var conn = new Microsoft.Data.Sqlite.SqliteConnection($"Data Source={dbPath}");
-        //lets us edit and send SQL to the database
-        conn.Open();
-
-        //runs through the two sql files, first schema, then dump
-        foreach (var file in new[] { "schema.sql", "dump.sql" })
-        {
-            using var cmd = conn.CreateCommand();
-            //reads everything from data-folder and use it as SQL-text
-            cmd.CommandText = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "data", file));
-            //non-quer means we don't expect rows returned, but only updated or inserted
-            cmd.ExecuteNonQuery();
-        }
-    }
-
-builder.Services.AddDbContext<PostContext>(options => options.UseSqlite(dbPath));
+builder.Services.AddDbContext<BisonDBContext>(options => options.UseSqlite($"Data Source={dbPath}"));
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 builder.Services.AddScoped<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
 builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade
 
 var app = builder.Build(); //building the webapplication itself (metadata)
+
+using (var scope = app.Services.CreateScope())
+{
+    var context  = scope.ServiceProvider.GetRequiredService<BisonDBContext>();
+    context.Database.EnsureCreated(); //opretter kun database, hvis den slet ikke findes
+    DbInitializer.SeedDatabase(context);
+}
 
 app.MapRazorPages(); // kobler URL til razor pages
 app.UseStaticFiles(); // kobler browseren til filerne i wwwroot -> altså css styling osv så det ikke bare er tekst

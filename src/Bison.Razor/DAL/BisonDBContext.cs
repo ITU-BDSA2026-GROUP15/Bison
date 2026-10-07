@@ -4,9 +4,9 @@ using Bison.Razor.Models;
 namespace Bison.Razor.DAL
 {
 
-    public class PostContext : DbContext
+    public class BisonDBContext : DbContext
     {
-        public PostContext(DbContextOptions<PostContext> options) : base(options)
+        public BisonDBContext(DbContextOptions<BisonDBContext> options) : base(options)
         {
         }
 
