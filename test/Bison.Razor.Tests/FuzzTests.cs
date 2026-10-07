@@ -74,7 +74,7 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
         int id = useValidID
             ? _sentObservations[_random.Next(_sentObservations.Count)].ID
             : _random.Next(100_000, 999_999);
-        
+
         List<Taxon> taxons = Bison.Taxonomy.Taxonomy.ReadTaxonsFromResource();
         bool useRealTaxonId = taxons.Count > 0;
 
@@ -99,19 +99,19 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
     }
 
     //What the fuzztest going on here
-    //Implementing Theory and InlineData 
+    //Implementing Theory and InlineData
     //The inLineData is used with attached seeds instead of a clean string or int, this makes it possible
     //to add the randomization to the process instead of just testing a specific string or int
-    
+
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
     [InlineData(3)]
-    
+
     public async Task FuzzObservationsAndComments_ServerStateMatchesOracle(int seed)
     {
         _random = new Random(seed);
-            
+
         const int iterations = 50;
 
         for (int i = 0; i < iterations; i++)
@@ -203,5 +203,5 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
         }
     }
 }
-
 */
+
