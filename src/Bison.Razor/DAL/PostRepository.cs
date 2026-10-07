@@ -11,7 +11,11 @@ namespace Bison.Razor.DAL
     public class PostRepository : IPostRepository
     {
         //database context is defined as a variabel
+        
+        privat
+        private const int PageSize = 32;
         private BisonDBContext _context;
+        
 
         public PostRepository(BisonDBContext context)
         {
@@ -29,12 +33,29 @@ namespace Bison.Razor.DAL
         //read
         public IEnumerable<T> GetPosts<T>(int page) where T : Post
         {
-            return _context.Posts.OfType<T>().ToList();
+            page = Math.Max(1, page);
+            int offset = (page - 1) * PageSize;
+
+            return _context.Posts.OfType<T>()
+                .Include(p => p.Author
+                .OrderByDescending(p => p.TimeStamp)
+                .Skip(offset)
+                .Take(PageSize)
+                .ToList();
         }
 
         public Post GetPost(int id)
         {
-            return _context.Posts.Find(id);
+            page = Math.Max(1, page);
+            int offset = (page - 1) * PageSize;
+
+            return _context.Posts.OfType<T>()
+                .Include(p => p.Author
+                .Where(p => p.Author.Name == author)
+                .OrderByDescending(p => p.TimeStamp)
+                .Skip(offset)
+                .Take(PageSize)
+                .ToList();
         }
 
         public IEnumerable<T> GetPostsByAuthor<T>(string author, int page) where T : Post
