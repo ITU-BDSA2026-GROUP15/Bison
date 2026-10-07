@@ -12,7 +12,6 @@ namespace Bison.Razor.DAL
     {
         //database context is defined as a variabel
         
-        privat
         private const int PageSize = 32;
         private BisonDBContext _context;
         
@@ -37,7 +36,7 @@ namespace Bison.Razor.DAL
             int offset = (page - 1) * PageSize;
 
             return _context.Posts.OfType<T>()
-                .Include(p => p.Author
+                .Include(p => p.Author)
                 .OrderByDescending(p => p.TimeStamp)
                 .Skip(offset)
                 .Take(PageSize)
@@ -46,24 +45,20 @@ namespace Bison.Razor.DAL
 
         public Post GetPost(int id)
         {
-            page = Math.Max(1, page);
-            int offset = (page - 1) * PageSize;
-
-            return _context.Posts.OfType<T>()
-                .Include(p => p.Author
-                .Where(p => p.Author.Name == author)
-                .OrderByDescending(p => p.TimeStamp)
-                .Skip(offset)
-                .Take(PageSize)
-                .ToList();
+            return _context.Posts.Find(id);
         }
 
         public IEnumerable<T> GetPostsByAuthor<T>(string author, int page) where T : Post
         {
-            //refaktoriseres senere
-            return _context.Posts
-                .OfType<T>()
+            page = Math.Max(1, page);
+            int offset = (page - 1) * PageSize;
+
+            return _context.Posts.OfType<T>()
+                .Include(p => p.Author)
                 .Where(p => p.Author.Name == author)
+                .OrderByDescending(p => p.TimeStamp)
+                .Skip(offset)
+                .Take(PageSize)
                 .ToList();
         }
 
