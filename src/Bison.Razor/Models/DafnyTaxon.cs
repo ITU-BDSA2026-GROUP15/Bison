@@ -1,5 +1,6 @@
 namespace Bison.Razor.Models;
 
+// C#-implementeringen af {:extern}-klassen fra src/Dafny/Taxon.dfy.
 public class DafnyTaxon
 {
     // Den "rigtige" EF-taxon, som denne Dafny-taxon repræsenterer.
@@ -14,7 +15,7 @@ public class DafnyTaxon
     public bool isSubTaxon(DafnyTaxon ancestor)
     {
         Taxon? current = this.Taxon; 
-                     
+
         while (current != null)                    
         {
            if (current.TaxonId == ancestor.Taxon.TaxonId) return true;
