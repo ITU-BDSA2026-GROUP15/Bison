@@ -1,5 +1,5 @@
 include "Taxon.dfy"
 
 class {:extern} DafnyObservation {
-    function {:extern} getTaxon(): Taxon
+    function {:extern} getTaxon(): DafnyTaxon
 }

@@ -2,7 +2,7 @@ namespace Bison.Razor.Models;
 
 public class DafnyObservation
 {
-    public Taxon getTaxon()
+    public DafnyTaxon getTaxon()
     {
         return null;
     }

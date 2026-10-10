@@ -1,3 +1,3 @@
 class {:extern} DafnyTaxon {
-    function {:extern} isSubTaxon(ancestor: Taxon): bool
+    function {:extern} isSubTaxon(ancestor: DafnyTaxon): bool
 }
