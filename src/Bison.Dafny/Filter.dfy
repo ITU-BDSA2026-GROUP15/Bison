@@ -5,7 +5,7 @@ ensures forall o :: o in obs && o.getTaxon().isSubTaxon(root) ==> o in FilterBy(
 ensures |FilterBy(root, obs) | <= |obs|
 
 {
-if|obs| == 0 then []
+if|obs| == 0 then [] //Best case: if the input sequence is empty, the result is the empty sequence []
 else
 (if obs[0].getTaxon().isSubTaxon(root) then [obs[0]] else []) +
 FilterBy(root, obs[1..])
