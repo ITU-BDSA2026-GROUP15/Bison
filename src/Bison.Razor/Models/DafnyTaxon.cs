@@ -1,6 +1,6 @@
 namespace Bison.Razor.Models;
 
-// C#-implementeringen af {:extern}-klassen fra src/Dafny/Taxon.dfy.
+// C#-implementeringen af {:extern}-klassen Taxon fra src/Bison.Dafny/dafnyModels.dfy.
 public class DafnyTaxon
 {
     // Den "rigtige" EF-taxon, som denne Dafny-taxon repræsenterer.
