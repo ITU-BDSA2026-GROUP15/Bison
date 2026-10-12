@@ -13,7 +13,7 @@ public class DafnyObservation
     }
 
     // Kaldes af den genererede FilterBy-kode. Kaster en fejl, hvis Taxon ikke er indlæst fra databasen
-    // (fx med .Include(o => o.Taxon)), i stedet for at returnere null - null er ikke en gyldig Dafny-værdi.
+    // (fx med .Include(o => o.Taxon)), i stedet for at returnere null.
     public DafnyTaxon getTaxon()
     {
         return new DafnyTaxon(Observation.Taxon);
