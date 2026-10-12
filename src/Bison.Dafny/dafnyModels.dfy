@@ -1,7 +1,7 @@
-class {:extern} DafnyTaxon {
-    function {:extern} isSubTaxon(ancestor: DafnyTaxon): bool
+class {:extern "Bison.Razor.Models.DafnyTaxon"} Taxon {
+    function {:extern} {:axiom} isSubTaxon(ancestor: Taxon): bool
 }
 
-class {:extern} DafnyObservation {
-    function {:extern} getTaxon(): DafnyTaxon
+class {:extern "Bison.Razor.Models.DafnyObservation"} Observation {
+    function {:extern} {:axiom} getTaxon(): Taxon
 }

@@ -1,3 +1,4 @@
+include "dafnyModels.dfy"
 
 function FilterBy ( root: Taxon, obs: seq<Observation>): seq<Observation>
 ensures forall o :: o in FilterBy (root, obs) ==> o in obs && o.getTaxon().isSubTaxon(root)
