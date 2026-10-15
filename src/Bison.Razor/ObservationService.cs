@@ -81,7 +81,7 @@ public class ObservationService : IObservationService
         var input = Dafny.Sequence<DafnyObservation>.FromArray(dafnyObs);
         
         //calling the wrapper, and verify the filtering
-        var result = Bison.Razor.DafnyWrapper.Wrap.Filter(root, input);
+        var result = DafnyWrapper.Wrap.Filter(root, input);
 
         //unwrapping from dafnyObservation to Observation and convert to ViewModel
         return result.Elements.Select(daf => ToViewModel(daf.Observation)).ToList();
