@@ -32,6 +32,6 @@ The filtering logic is verified in Dafny (`Bison.Dafny/`) and compiled to C#.
 
 **Usage from C#:**
 ```csharp
-Bison.Dafny.wrapper.Api.Filter(root, observations);
+Bison.Dafny.wrapper.Wrap.Filter(root, observations);
 ```
 Note that `observations` must be a `Dafny.ISequence<DafnyObservation>`, not a `List`.
