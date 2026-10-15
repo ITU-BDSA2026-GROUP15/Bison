@@ -43,7 +43,7 @@ module Filtering {
   import opened Models
 }
 
-module Models {
+module {:extern ""Bison.Razor.Models""} Models {
   class {:extern ""Bison.Razor.Models.DafnyTaxon""} Taxon {
     function {:extern} {:axiom} isSubTaxon(ancestor: Taxon): bool
       decreases ancestor
@@ -5728,24 +5728,24 @@ internal static class FuncExtensions {
   }
 }
 // end of class FuncExtensions
-namespace Models {
+namespace Bison.Razor.Models {
 
 
 
-} // end of namespace Models
+} // end of namespace Bison.Razor.Models
 namespace Filtering {
 
   public partial class __default {
-    public static Dafny.ISequence<Models.Bison.Razor.Models.DafnyObservation> FilterBy(Models.Bison.Razor.Models.DafnyTaxon root, Dafny.ISequence<Models.Bison.Razor.Models.DafnyObservation> obs)
+    public static Dafny.ISequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation> FilterBy(Bison.Razor.Models.Bison.Razor.Models.DafnyTaxon root, Dafny.ISequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation> obs)
     {
-      Dafny.ISequence<Models.Bison.Razor.Models.DafnyObservation> _0___accumulator = Dafny.Sequence<Models.Bison.Razor.Models.DafnyObservation>.FromElements();
+      Dafny.ISequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation> _0___accumulator = Dafny.Sequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation>.FromElements();
     TAIL_CALL_START: ;
       if ((new BigInteger((obs).Count)).Sign == 0) {
-        return Dafny.Sequence<Models.Bison.Razor.Models.DafnyObservation>.Concat(_0___accumulator, Dafny.Sequence<Models.Bison.Razor.Models.DafnyObservation>.FromElements());
+        return Dafny.Sequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation>.Concat(_0___accumulator, Dafny.Sequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation>.FromElements());
       } else {
-        _0___accumulator = Dafny.Sequence<Models.Bison.Razor.Models.DafnyObservation>.Concat(_0___accumulator, (((((obs).Select(BigInteger.Zero)).getTaxon()).isSubTaxon(root)) ? (Dafny.Sequence<Models.Bison.Razor.Models.DafnyObservation>.FromElements((obs).Select(BigInteger.Zero))) : (Dafny.Sequence<Models.Bison.Razor.Models.DafnyObservation>.FromElements())));
-        Models.Bison.Razor.Models.DafnyTaxon _in0 = root;
-        Dafny.ISequence<Models.Bison.Razor.Models.DafnyObservation> _in1 = (obs).Drop(BigInteger.One);
+        _0___accumulator = Dafny.Sequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation>.Concat(_0___accumulator, (((((obs).Select(BigInteger.Zero)).getTaxon()).isSubTaxon(root)) ? (Dafny.Sequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation>.FromElements((obs).Select(BigInteger.Zero))) : (Dafny.Sequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation>.FromElements())));
+        Bison.Razor.Models.Bison.Razor.Models.DafnyTaxon _in0 = root;
+        Dafny.ISequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation> _in1 = (obs).Drop(BigInteger.One);
         root = _in0;
         obs = _in1;
         goto TAIL_CALL_START;
@@ -5759,9 +5759,9 @@ namespace Bison.Dafny.wrapper {
   public partial class Wrap {
     public Wrap() {
     }
-    public static Dafny.ISequence<Models.Bison.Razor.Models.DafnyObservation> Filter(Models.Bison.Razor.Models.DafnyTaxon root, Dafny.ISequence<Models.Bison.Razor.Models.DafnyObservation> obs)
+    public static Dafny.ISequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation> Filter(Bison.Razor.Models.Bison.Razor.Models.DafnyTaxon root, Dafny.ISequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation> obs)
     {
-      Dafny.ISequence<Models.Bison.Razor.Models.DafnyObservation> r = Dafny.Sequence<Models.Bison.Razor.Models.DafnyObservation>.Empty;
+      Dafny.ISequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation> r = Dafny.Sequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation>.Empty;
       r = Filtering.__default.FilterBy(root, obs);
       return r;
     }
