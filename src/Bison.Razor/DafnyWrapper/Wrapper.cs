@@ -13,7 +13,7 @@ using System.Collections;
 // Wrapper.dfy
 
 
-module {:extern ""Bison.Dafny.wrapper""} Wrapper {
+module {:extern ""DafnyWrapper""} Wrapper {
 
   import opened Models
 
@@ -44,12 +44,12 @@ module Filtering {
 }
 
 module {:extern ""Bison.Razor.Models""} Models {
-  class {:extern ""Bison.Razor.Models.DafnyTaxon""} Taxon {
+  class {:extern ""DafnyTaxon""} Taxon {
     function {:extern} {:axiom} isSubTaxon(ancestor: Taxon): bool
       decreases ancestor
   }
 
-  class {:extern ""Bison.Razor.Models.DafnyObservation""} Observation {
+  class {:extern ""DafnyObservation""} Observation {
     function {:extern} {:axiom} getTaxon(): Taxon
   }
 }
@@ -5736,16 +5736,16 @@ namespace Bison.Razor.Models {
 namespace Filtering {
 
   public partial class __default {
-    public static Dafny.ISequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation> FilterBy(Bison.Razor.Models.Bison.Razor.Models.DafnyTaxon root, Dafny.ISequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation> obs)
+    public static Dafny.ISequence<Bison.Razor.Models.DafnyObservation> FilterBy(Bison.Razor.Models.DafnyTaxon root, Dafny.ISequence<Bison.Razor.Models.DafnyObservation> obs)
     {
-      Dafny.ISequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation> _0___accumulator = Dafny.Sequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation>.FromElements();
+      Dafny.ISequence<Bison.Razor.Models.DafnyObservation> _0___accumulator = Dafny.Sequence<Bison.Razor.Models.DafnyObservation>.FromElements();
     TAIL_CALL_START: ;
       if ((new BigInteger((obs).Count)).Sign == 0) {
-        return Dafny.Sequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation>.Concat(_0___accumulator, Dafny.Sequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation>.FromElements());
+        return Dafny.Sequence<Bison.Razor.Models.DafnyObservation>.Concat(_0___accumulator, Dafny.Sequence<Bison.Razor.Models.DafnyObservation>.FromElements());
       } else {
-        _0___accumulator = Dafny.Sequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation>.Concat(_0___accumulator, (((((obs).Select(BigInteger.Zero)).getTaxon()).isSubTaxon(root)) ? (Dafny.Sequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation>.FromElements((obs).Select(BigInteger.Zero))) : (Dafny.Sequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation>.FromElements())));
-        Bison.Razor.Models.Bison.Razor.Models.DafnyTaxon _in0 = root;
-        Dafny.ISequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation> _in1 = (obs).Drop(BigInteger.One);
+        _0___accumulator = Dafny.Sequence<Bison.Razor.Models.DafnyObservation>.Concat(_0___accumulator, (((((obs).Select(BigInteger.Zero)).getTaxon()).isSubTaxon(root)) ? (Dafny.Sequence<Bison.Razor.Models.DafnyObservation>.FromElements((obs).Select(BigInteger.Zero))) : (Dafny.Sequence<Bison.Razor.Models.DafnyObservation>.FromElements())));
+        Bison.Razor.Models.DafnyTaxon _in0 = root;
+        Dafny.ISequence<Bison.Razor.Models.DafnyObservation> _in1 = (obs).Drop(BigInteger.One);
         root = _in0;
         obs = _in1;
         goto TAIL_CALL_START;
@@ -5753,20 +5753,20 @@ namespace Filtering {
     }
   }
 } // end of namespace Filtering
-namespace Bison.Dafny.wrapper {
+namespace DafnyWrapper {
 
 
   public partial class Wrap {
     public Wrap() {
     }
-    public static Dafny.ISequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation> Filter(Bison.Razor.Models.Bison.Razor.Models.DafnyTaxon root, Dafny.ISequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation> obs)
+    public static Dafny.ISequence<Bison.Razor.Models.DafnyObservation> Filter(Bison.Razor.Models.DafnyTaxon root, Dafny.ISequence<Bison.Razor.Models.DafnyObservation> obs)
     {
-      Dafny.ISequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation> r = Dafny.Sequence<Bison.Razor.Models.Bison.Razor.Models.DafnyObservation>.Empty;
+      Dafny.ISequence<Bison.Razor.Models.DafnyObservation> r = Dafny.Sequence<Bison.Razor.Models.DafnyObservation>.Empty;
       r = Filtering.__default.FilterBy(root, obs);
       return r;
     }
   }
-} // end of namespace Bison.Dafny.wrapper
+} // end of namespace DafnyWrapper
 namespace _module {
 
 } // end of namespace _module
