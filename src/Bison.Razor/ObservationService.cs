@@ -2,6 +2,7 @@ using System.Net;
 using System.Linq;
 using Bison.Razor.DAL;
 using Bison.Razor.Models;
+using AspNetCoreGeneratedDocument;
 
 // Indeholder de oplysninger om en observation, som vises på siden.
 //translates between Repo and ObservationViewModel
@@ -25,6 +26,7 @@ public interface IObservationService
 
     public List<ObservationViewModel> GetComments (int id, int page =1);
 
+    public List<ObservationViewModel> GetObservationsFromTaxon (DafnyTaxon root, int page = 1);
 }
 
 public class ObservationService : IObservationService
@@ -70,6 +72,10 @@ public class ObservationService : IObservationService
         return _repo.GetComments(id).Select(ToCommentViewModel).ToList();
     }
 
+    public List<ObservationViewModel> GetObservationsFromTaxon(DafnyTaxon root, int page = 1)
+    {
+        
+    }
     private static ObservationViewModel ToViewModel(Observation o)
     {
         return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
@@ -83,4 +89,6 @@ public class ObservationService : IObservationService
 	{
 		return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
 	}
+
+
 }
