@@ -74,7 +74,17 @@ public class ObservationService : IObservationService
 
     public List<ObservationViewModel> GetObservationsFromTaxon(DafnyTaxon root, int page = 1)
     {
+        //wrapping an observation to a DafnyObservation
+        var dafnyObservation = _repo.GetPosts<Observation>(page).Select(Observation => new DafnyObservation(obs)).ToArray();
+
+        //converting to a dafny-sequence, which is the parameter for the wrapper class
+        var input = Dafny.Sequence<DafnyObservation>FromArray(dafnyObs);
         
+        //calling the wrapper, and verify the filtering
+        var result = Bison.Razor.DafnyWrapper.Wrap.Filter(root, input);
+
+        //unwrapping from dafnyObservation to Observation and convert to ViewModel
+        return result.Elements.Select(daf => ToViewModel(daf.Observation)).ToList();
     }
     private static ObservationViewModel ToViewModel(Observation o)
     {
