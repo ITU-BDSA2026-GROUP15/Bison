@@ -99,8 +99,7 @@ public void GetComments_ReturnsExpectedViewModels(int seed)
     // Assert
     Assert.Equal(expected, result);
 }
-private sealed class ObservationTestRepository : IPostRepository
-    {
+private sealed class ObservationTestRepository : IPostRepository{
     private readonly List<Observation> _observations;
     private readonly List<Comment> _comments = new();
     public ObservationTestRepository(List<Observation> observations){
