@@ -1,8 +1,9 @@
     using Bison.Razor.DAL;
     using Bison.Razor.Models;
+    using Bison.Core;
 
     public interface IFilterService{
-        public List<ObservationViewModel> GetObservationsFromTaxon (Taxon root, int page = 1);
+        public List<ObservationViewModel> GetObservationsFromTaxon (int taxonId, int page = 1);
 
     }
 
@@ -17,14 +18,21 @@
             _repo = repo;
         }
     
-    public List<ObservationViewModel> GetObservationsFromTaxon(Taxon root, int page = 1)
+    public List<ObservationViewModel> GetObservationsFromTaxon(int taxonId, int page = 1)
     {
+        var root = _repo.GetTaxon(taxonId);
+        if (root is null)
+        {
+            return new List<ObservationViewModel>();
+        }
+
         //wrapping an observation to a DafnyObservation
         var dafnyObs = _repo.GetPosts<Observation>(page).Select(obs => new DafnyObservation(obs)).ToArray();
 
         //converting to a dafny-sequence, which is the parameter for the wrapper class
         var input = Dafny.Sequence<DafnyObservation>.FromArray(dafnyObs);
 
+    
         var dafnyRoot = new DafnyTaxon(root);
         
         //calling the wrapper, and verify the filtering

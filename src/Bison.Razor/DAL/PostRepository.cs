@@ -115,6 +115,12 @@ namespace Bison.Razor.DAL
                 .FirstOrDefault(o => o.PostId == id);
         }
 
+        public Taxon? GetTaxon(int id)
+        {
+            return _context.Posts.OfType<Taxon>()
+                .FirstOrDefault(o => o.PostId == id);
+        }
+
         public IEnumerable<Comment> GetComments(int observationId)
         {
             return _context.Posts.OfType<Comment>()

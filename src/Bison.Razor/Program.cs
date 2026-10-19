@@ -18,7 +18,6 @@ builder.Services.AddScoped<IFilterService, FilterService>();
 
 builder.Services.AddScoped<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
 builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade
-builder.Services.AddSingleton<Taxonomy>();
 
 var app = builder.Build(); //building the webapplication itself (metadata)
 
