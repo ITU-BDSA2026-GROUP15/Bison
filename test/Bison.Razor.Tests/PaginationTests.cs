@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-
+using Bison.Razor.DAL;
+using Bison.Razor.Models;
+using Microsoft.EntityFrameworkCore;
 namespace Bison.Razor.Tests;
 
 // IDisposable gør, at xUnit kalder Dispose efter hver test.
@@ -22,69 +24,58 @@ public class PaginationTests : IDisposable
 
         // Åbner testdatabasen. SQLite opretter filen, hvis den ikke findes.
         // Pooling=False lukker denne forbindelse helt efter brug.
-        using (var connection = new SqliteConnection(
-            $"Data Source={_dbPath};Pooling=False"))
+       var options = new DbContextOptionsBuilder<BisonDBContext>()
+    .UseSqlite($"Data Source={_dbPath};Pooling=False")
+    .Options;
+
+using (var context = new BisonDBContext(options))
+{
+    context.Database.EnsureCreated();
+
+    var peter = new Author
+    {
+        Name = "Peter",
+        Email = "peter@example.test"
+    };
+
+    var paul = new Author
+    {
+        Name = "Paul",
+        Email = "paul@example.test"
+    };
+
+    var taxon = new Taxon
+    {
+        dwc_TaxonID = "test-taxon",
+        VernacularName = "Testfugl"
+    };
+
+    for (int id = 1; id <= 69; id++)
+    {
+        context.Observations.Add(new Observation
         {
-            connection.Open();
+            PostId = id,
+            Author = id <= 65 ? peter : paul,
+            Taxon = taxon,
+            Text = $"PAGETEST_{id:D3}",
+            TimeStamp = new DateTime(2026, 1, 1)
+        });
+    }
 
-            // Opretter de tabeller og brugere, som testene skal bruge.
-            using var command = connection.CreateCommand();
-            command.CommandText = """
-                CREATE TABLE user (
-                    user_id INTEGER PRIMARY KEY,
-                    username TEXT NOT NULL,
-                    email TEXT NOT NULL
-                );
-
-                CREATE TABLE observation (
-                    observation_id INTEGER PRIMARY KEY,
-                    author_id INTEGER NOT NULL,
-                    text TEXT NOT NULL,
-                    pub_date INTEGER NOT NULL
-                );
-
-                INSERT INTO user VALUES
-                    (1, 'Peter', 'peter@example.test'),
-                    (2, 'Paul', 'paul@example.test');
-                """;
-            command.ExecuteNonQuery();
-
-            // Opretter 69 observationer: 65 fra Peter og 4 fra Paul.
-            for (int id = 1; id <= 69; id++)
-            {
-                using var insert = connection.CreateCommand();
-                insert.CommandText = """
-                    INSERT INTO observation
-                        (observation_id, author_id, text, pub_date)
-                    VALUES (@id, @author, @text, @date);
-                    """;
-
-                // Parametrene indsætter værdierne i SQL-forespørgslen.
-                insert.Parameters.AddWithValue("@id", id);
-
-                // Id 1-65 tilhører Peter. De sidste fire tilhører Paul.
-                insert.Parameters.AddWithValue("@author", id <= 65 ? 1 : 2);
-
-                // En unik tekst gør observationen genkendelig i HTML'en.
-                // D3 formaterer eksempelvis 1 som 001.
-                insert.Parameters.AddWithValue("@text", $"PAGETEST_{id:D3}");
-
-                // Samme dato kontrollerer, at id bruges som ekstra sortering.
-                insert.Parameters.AddWithValue("@date", 1690895308);
-
-                insert.ExecuteNonQuery();
-            }
-        }
-
+    context.SaveChanges();
+}
         // Opretter en testversion af webappen.
         _factory = new WebApplicationFactory<Program>()
             .WithWebHostBuilder(builder =>
             {
                 builder.ConfigureServices(services =>
                 {
-                    // Erstatter appens DBFacade med en, der bruger testdatabasen.
-                    services.RemoveAll<DBFacade>();
-                    services.AddSingleton(new DBFacade(_dbPath));
+                    // Lader webappen bruge EF Core-testdatabasen.
+                    services.RemoveAll<BisonDBContext>();
+                    services.RemoveAll<DbContextOptions<BisonDBContext>>();
+                    services.AddDbContext<BisonDBContext>(options =>
+                        options.UseSqlite($"Data Source={_dbPath};Pooling=False"));
+                    
                 });
             });
 
