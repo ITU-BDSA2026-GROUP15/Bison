@@ -14,6 +14,8 @@ public class DafnyTaxon
 
     public bool isSubTaxon(DafnyTaxon ancestor)
     {
+        if (ancestor?.Taxon == null) return false;
+        
         Taxon? current = this.Taxon; 
 
         while (current != null)                    
