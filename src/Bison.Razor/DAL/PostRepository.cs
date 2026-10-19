@@ -142,10 +142,13 @@ namespace Bison.Razor.DAL
 
         public List<Observation> GetAllObservations()
         {
+            //loads all taxons to reference the parent taxon
+            _context.Taxons.Load();
+
             return _context.Posts.OfType<Observation>()
                 .Include(p => p.Author)
                 .Include(p => p.Taxon)
-                .ThenInclude(t => t.Parent)
+                //.ThenInclude(t => t.Parent)
                 .OrderByDescending(p => p.TimeStamp)
                 .ToList();
         }
