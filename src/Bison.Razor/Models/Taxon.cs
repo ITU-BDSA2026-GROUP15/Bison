@@ -3,7 +3,7 @@ namespace Bison.Razor.Models;
 // Represents a taxon with its identifiers, Danish name, and place in the taxonomy.
 public class Taxon {
     // Internal database identifier.
-    public string TaxonId { get; set; }
+    public int TaxonId { get; set; }
     // I did not know but it is "Darwin Core identifier" for this taxon.
     public string dwc_TaxonID { get; set; } = string.Empty;
     public string? VernacularName { get; set; }

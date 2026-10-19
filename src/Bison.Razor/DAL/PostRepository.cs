@@ -144,6 +144,7 @@ namespace Bison.Razor.DAL
         {
             return _context.Posts.OfType<Observation>()
                 .Include(p => p.Author)
+                .Include(p => p.Taxon)
                 .OrderByDescending(p => p.TimeStamp)
                 .ToList();
         }

@@ -17,9 +17,13 @@
         {
             _repo = repo;
         }
+
+        private const int PageSize = 32;
     
     public List<ObservationViewModel> GetObservationsFromTaxon(int taxonId, int page = 1)
     {
+        page = Math.Max(1, page);
+
         var root = _repo.GetTaxon(taxonId);
         if (root is null)
         {
@@ -38,6 +42,10 @@
         var result = DafnyWrapper.Wrap.Filter(dafnyRoot, input);
 
         //unwrapping from dafnyObservation to Observation and convert to ViewModel
-        return result.Elements.Select(daf => ObservationService.ToViewModel(daf.Observation)).ToList();
+        return result.Elements
+            .Skip((page-1) * PageSize)
+            .Take(PageSize)
+            .Select(daf => ObservationService.ToViewModel(daf.Observation))
+            .ToList();
     }
 }
