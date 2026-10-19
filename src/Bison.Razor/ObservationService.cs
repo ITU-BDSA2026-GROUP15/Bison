@@ -2,7 +2,7 @@ using System.Net;
 using System.Linq;
 using Bison.Razor.DAL;
 using Bison.Razor.Models;
-using AspNetCoreGeneratedDocument;
+
 
 // Indeholder de oplysninger om en observation, som vises på siden.
 //translates between Repo and ObservationViewModel
