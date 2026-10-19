@@ -1,8 +1,7 @@
     using Bison.Razor.DAL;
     using Bison.Razor.Models;
 
-    public interface IFilterService
-    
+    public interface IFilterService{
         public List<ObservationViewModel> GetObservationsFromTaxon (Taxon root, int page = 1);
 
     }
