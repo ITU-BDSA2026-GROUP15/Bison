@@ -6,8 +6,7 @@ using AspNetCoreGeneratedDocument;
 
 // Indeholder de oplysninger om en observation, som vises på siden.
 //translates between Repo and ObservationViewModel
-public record ObservationViewModel(
-    string Author, string Message, string Timestamp);
+public record ObservationViewModel(string Author, string Message, string Timestamp);
 
 public interface IObservationService
 {
@@ -26,7 +25,6 @@ public interface IObservationService
 
     public List<ObservationViewModel> GetComments (int id, int page =1);
 
-    public List<ObservationViewModel> GetObservationsFromTaxon (DafnyTaxon root, int page = 1);
 }
 
 public class ObservationService : IObservationService
@@ -86,7 +84,7 @@ public class ObservationService : IObservationService
         //unwrapping from dafnyObservation to Observation and convert to ViewModel
         return result.Elements.Select(daf => ToViewModel(daf.Observation)).ToList();
     }
-    private static ObservationViewModel ToViewModel(Observation o)
+    public static ObservationViewModel ToViewModel(Observation o)
     {
         return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
     }
