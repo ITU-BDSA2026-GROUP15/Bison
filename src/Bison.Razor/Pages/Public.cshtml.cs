@@ -30,10 +30,10 @@ public class PublicModel : PageModel
 
 //Razor-siden til at læse sidetallet fra URL’en og sende det videre.
     //[FromQuery] læser page fra URL’en,
-    public ActionResult OnGet([FromQuery] int page=1, [FromQuery] string? taxonId = null){
+    public ActionResult OnGet([FromQuery] int page=1, [FromQuery] int? taxonId = null){
         
-        Observations = !string.IsNullOrEmpty(taxonId)            
-            ? _filterService.GetObservationsFromTaxon(taxonId, page)
+        Observations = taxonId.HasValue            
+            ? _filterService.GetObservationsFromTaxon(taxonId.Value, page)
             : _service.GetObservations(page);
     
         

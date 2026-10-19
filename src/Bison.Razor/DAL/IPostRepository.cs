@@ -29,7 +29,7 @@ namespace Bison.Razor.DAL
         void Save();
 
         Observation? GetObservationDetails(int id);
-        Taxon? GetTaxon(string id);
+        Taxon? GetTaxon(int id);
         IEnumerable<Comment> GetComments(int ObservationId);
         IEnumerable<Proposal> GetProposals(int ObservationId);
 

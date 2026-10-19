@@ -3,7 +3,7 @@
     using Bison.Core;
 
     public interface IFilterService{
-        public List<ObservationViewModel> GetObservationsFromTaxon (string taxonId, int page = 1);
+        public List<ObservationViewModel> GetObservationsFromTaxon (int taxonId, int page = 1);
 
     }
 
@@ -18,7 +18,7 @@
             _repo = repo;
         }
     
-    public List<ObservationViewModel> GetObservationsFromTaxon(string taxonId, int page = 1)
+    public List<ObservationViewModel> GetObservationsFromTaxon(int taxonId, int page = 1)
     {
         var root = _repo.GetTaxon(taxonId);
         if (root is null)
