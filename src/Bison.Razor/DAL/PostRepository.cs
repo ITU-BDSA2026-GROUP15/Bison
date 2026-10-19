@@ -38,6 +38,7 @@ namespace Bison.Razor.DAL
             return _context.Posts.OfType<T>()
                 .Include(p => p.Author)
                 .OrderByDescending(p => p.TimeStamp)
+                .ThenByDescending(p => p.PostId)
                 .Skip(offset)
                 .Take(PageSize)
                 .ToList();
@@ -57,6 +58,7 @@ namespace Bison.Razor.DAL
                 .Include(p => p.Author)
                 .Where(p => p.Author.Name == author)
                 .OrderByDescending(p => p.TimeStamp)
+                .ThenByDescending(p => p.PostId)
                 .Skip(offset)
                 .Take(PageSize)
                 .ToList();
