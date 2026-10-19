@@ -17,9 +17,9 @@ public class PublicModel : PageModel
     private readonly IObservationService _service;
 
     private readonly IFilterService _filterService;
-    public List<ObservationViewModel> Observations { get; set; }
+    public List<ObservationViewModel> Observations { get; set; } = new();
 
-    public List<ObservationViewModel> FilteredObservations { get; set; }
+    //public List<ObservationViewModel> FilteredObservations { get; set; }
 
 
     public PublicModel(IObservationService service, IFilterService filterService)
@@ -30,14 +30,12 @@ public class PublicModel : PageModel
 
 //Razor-siden til at læse sidetallet fra URL’en og sende det videre.
     //[FromQuery] læser page fra URL’en,
-    public ActionResult OnGet([FromQuery] int page=1, [FromQuery] int? taxonId = null){
+    public ActionResult OnGet([FromQuery] int page=1, [FromQuery] string? taxonId = null){
         
-        if (taxonId != null) {
-            FilteredObservations = _filterService.GetObservationsFromTaxon(taxonId.GetValueOrDefault(), page);
-        } else
-        {
-            Observations = _service.GetObservations(page);
-        }         
+        Observations = !string.IsNullOrEmpty(taxonId)            
+            ? _filterService.GetObservationsFromTaxon(taxonId, page)
+            : _service.GetObservations(page);
+    
         
         return Page();
     }

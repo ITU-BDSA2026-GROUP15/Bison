@@ -3,7 +3,7 @@
     using Bison.Core;
 
     public interface IFilterService{
-        public List<ObservationViewModel> GetObservationsFromTaxon (int taxonId, int page = 1);
+        public List<ObservationViewModel> GetObservationsFromTaxon (string taxonId, int page = 1);
 
     }
 
@@ -18,7 +18,7 @@
             _repo = repo;
         }
     
-    public List<ObservationViewModel> GetObservationsFromTaxon(int taxonId, int page = 1)
+    public List<ObservationViewModel> GetObservationsFromTaxon(string taxonId, int page = 1)
     {
         var root = _repo.GetTaxon(taxonId);
         if (root is null)
@@ -27,12 +27,11 @@
         }
 
         //wrapping an observation to a DafnyObservation
-        var dafnyObs = _repo.GetPosts<Observation>(page).Select(obs => new DafnyObservation(obs)).ToArray();
+        var dafnyObs = _repo.GetAllObservations().Select(obs => new DafnyObservation(obs)).ToArray();
 
         //converting to a dafny-sequence, which is the parameter for the wrapper class
         var input = Dafny.Sequence<DafnyObservation>.FromArray(dafnyObs);
 
-    
         var dafnyRoot = new DafnyTaxon(root);
         
         //calling the wrapper, and verify the filtering
