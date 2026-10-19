@@ -33,6 +33,9 @@ namespace Bison.Razor.DAL
         IEnumerable<Comment> GetComments(int ObservationId);
         IEnumerable<Proposal> GetProposals(int ObservationId);
 
+        List<Observation> GetAllObservations();
+
+
         
     }
 
