@@ -9,7 +9,7 @@ using System;
 using System.Numerics;
 using System.Collections;
 [assembly: DafnyAssembly.DafnySourceAttribute(@"// dafny 4.11.0.0
-// Command-line arguments: translate cs --include-runtime Wrapper.dfy
+// Command-line arguments: translate cs --include-runtime Wrapper.dfy --output ../Bison.Razor/DafnyWrapper/Wrapper.cs
 // Wrapper.dfy
 
 
@@ -29,10 +29,11 @@ module {:extern ""DafnyWrapper""} Wrapper {
 
 module Filtering {
   function FilterBy(root: Taxon, obs: seq<Observation>): seq<Observation>
+    reads root, obs, set o: Observation {:trigger o in obs} | o in obs :: o
     ensures forall o: Observation {:trigger o.getTaxon()} {:trigger o in obs} {:trigger o in FilterBy(root, obs)} :: (o in FilterBy(root, obs) ==> o in obs) && (o in FilterBy(root, obs) ==> o.getTaxon().isSubTaxon(root))
     ensures forall o: Observation {:trigger o in FilterBy(root, obs)} {:trigger o.getTaxon()} {:trigger o in obs} :: o in obs && o.getTaxon().isSubTaxon(root) ==> o in FilterBy(root, obs)
     ensures |FilterBy(root, obs)| <= |obs|
-    decreases root, obs
+    decreases (set _s2s_0: Observation? {:trigger _s2s_0 in obs} | _s2s_0 in obs :: _s2s_0) + (set o: Observation {:trigger o in obs} | o in obs :: o) + {root}, root, obs
   {
     if |obs| == 0 then
       []

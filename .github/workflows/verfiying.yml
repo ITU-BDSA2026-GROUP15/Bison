@@ -22,6 +22,7 @@ jobs:
       - name: Verfiy Dafny
         run: dafny verify src/Bison.Dafny/Wrapper.dfy
 
+      # Does it now generate every time, despite already having a file here?
       - name: Generate C# from Dafny
         run: dafny translate cs --include-runtime src/Bison.Dafny/Wrapper.dfy --output src/bison.razor/DafnyWrapper/Wrapper.cs
 

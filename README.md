@@ -25,9 +25,9 @@ The filtering logic is verified in Dafny (`Bison.Dafny/`) and compiled to C#.
 ```
 2. Generate the C# code (includes the Dafny runtime):
 ```
-   dafny translate cs --include-runtime Wrapper.dfy
+   dafny translate cs --include-runtime Wrapper.dfy --output ../Bison.Razor/DafnyWrapper/Wrapper.cs
 ```
-3. Replace the old `Wrapper.cs` in `Bison.Razor/Dafny/` with the newly generated file.
+3. Check the  `Wrapper.cs` is in `Bison.Razor/DafnyWrapper/` with the newly generated file.
 4. Build the project.
 
 **Usage from C#:**
