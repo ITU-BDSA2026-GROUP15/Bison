@@ -24,3 +24,9 @@ jobs:
 
       - name: Generate C# from Dafny
         run: dafny translate cs --include-runtime src/Bison.Dafny/Wrapper.dfy --output src/bison.razor/DafnyWrapper/Wrapper.cs
+
+      # If changes have been made to the .dfy files, we should generate a new Wrapper.cs
+      # This step check if the wrapper is up to date with the .dfy files
+      # We can put the wrapper.cs in .gitignore, so a new file is generated each time
+      - name: Check generated code is up to date
+        run: git diff --exit-code src/bison.razor/DafnyWrapper/Wrapper.cs
