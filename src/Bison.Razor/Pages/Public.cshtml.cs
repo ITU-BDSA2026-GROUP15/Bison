@@ -28,7 +28,7 @@ public class PublicModel : PageModel
         _filterService = filterService;
     }
 
-//Razor-siden til at læse sidetallet fra URL’en og sende det videre.
+    //Razor-siden til at læse sidetallet fra URL’en og sende det videre.
     //[FromQuery] læser page fra URL’en,
     public ActionResult OnGet([FromQuery] int page=1, [FromQuery] int? taxonId = null){
         CurrentPage = Math.Max(1, page);
