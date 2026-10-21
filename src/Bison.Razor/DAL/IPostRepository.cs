@@ -16,7 +16,7 @@ namespace Bison.Razor.DAL
        IEnumerable<T> GetPosts<T>(int page) where T : Post;
 
        //read -> returns posts by a certain author
-IEnumerable<T> GetPostsByAuthor<T>(string author, int page) where T : Post;
+        IEnumerable<T> GetPostsByAuthor<T>(string author, int page) where T : Post;
         //read -> retuans a single post
         Post GetPost(int id);
         
@@ -29,8 +29,13 @@ IEnumerable<T> GetPostsByAuthor<T>(string author, int page) where T : Post;
         void Save();
 
         Observation? GetObservationDetails(int id);
+        Taxon? GetTaxon(int id);
         IEnumerable<Comment> GetComments(int ObservationId);
         IEnumerable<Proposal> GetProposals(int ObservationId);
+
+        List<Observation> GetAllObservations();
+
+
         
     }
 

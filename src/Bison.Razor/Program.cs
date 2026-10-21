@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Bison.Core;
 using Bison.Razor.DAL;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,8 @@ var dbPath   = envPath ?? tempPath;
 
 builder.Services.AddDbContext<BisonDBContext>(options => options.UseSqlite($"Data Source={dbPath}"));
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+
+builder.Services.AddScoped<IFilterService, FilterService>();
 
 builder.Services.AddScoped<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
 builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade

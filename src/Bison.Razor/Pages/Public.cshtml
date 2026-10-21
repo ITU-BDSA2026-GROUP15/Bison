@@ -37,6 +37,13 @@
                 </li>
             }
         </ul>
+        <p>
+            @if (Model.CurrentPage > 1)
+            {
+                <a href="/obs?page=@(Model.CurrentPage - 1)@(Model.CurrentTaxonId.HasValue ? "&taxonId=" + Model.CurrentTaxonId : "")">Previous</a>
+            }
+            <a href="/obs?page=@(Model.CurrentPage + 1)@(Model.CurrentTaxonId.HasValue ? "&taxonId=" + Model.CurrentTaxonId : "")">Next</a>
+        </p>
     }
     else
     {

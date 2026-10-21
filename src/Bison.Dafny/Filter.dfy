@@ -5,7 +5,8 @@ module Filtering {
 
     //looks for a root-taxon and creates a sequence of observations that fit that
     function FilterBy ( root: Taxon, obs: seq<Observation>): seq<Observation>
-    
+        reads root, obs, set o | o in obs :: o
+
     //verfification steps, ensuring every relevant observation is included
     ensures forall o :: o in FilterBy (root, obs) ==> o in obs && o.getTaxon().isSubTaxon(root)
     ensures forall o :: o in obs && o.getTaxon().isSubTaxon(root) ==> o in FilterBy(root, obs)

@@ -117,6 +117,12 @@ namespace Bison.Razor.DAL
                 .FirstOrDefault(o => o.PostId == id);
         }
 
+        public Taxon? GetTaxon(int id)
+        {
+            return _context.Taxons.OfType<Taxon>()
+                .FirstOrDefault(o => o.TaxonId == id);
+        }
+
         public IEnumerable<Comment> GetComments(int observationId)
         {
             return _context.Posts.OfType<Comment>()
@@ -134,6 +140,19 @@ namespace Bison.Razor.DAL
                 .Where(p => p.ObservationId == observationId)
                 .ToList();
 
+        }
+
+        public List<Observation> GetAllObservations()
+        {
+            //loads all taxons to reference the parent taxon
+            _context.Taxons.Load();
+
+            return _context.Posts.OfType<Observation>()
+                .Include(p => p.Author)
+                .Include(p => p.Taxon)
+                //.ThenInclude(t => t.Parent)
+                .OrderByDescending(p => p.TimeStamp)
+                .ToList();
         }
 
     }
