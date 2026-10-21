@@ -1,0 +1,32 @@
+name: verfifying
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with: 
+          dotnet-version: '8.0.x'
+
+      - uses: dafny-lang/setup-dafny-action@v1
+        with: 
+          dafny-version: '4.11.0'
+      
+      - name: Verfiy Dafny
+        run: dafny verify src/Bison.Dafny/Wrapper.dfy
+
+      - name: Generate C# from Dafny
+        run: dafny translate cs --include-runtime src/Bison.Dafny/Wrapper.dfy --output src/bison.razor/DafnyWrapper/Wrapper.cs
+
+      # If changes have been made to the .dfy files, we should generate a new Wrapper.cs
+      # This step check if the wrapper is up to date with the .dfy files
+      # We can put the wrapper.cs in .gitignore, so a new file is generated each time
+      - name: Check generated code is up to date
+        run: git diff --exit-code src/bison.razor/DafnyWrapper/Wrapper.cs
