@@ -23,4 +23,4 @@ jobs:
         run: dafny verify src/Bison.Dafny/Wrapper.dfy
 
       - name: Generate C# from Dafny
-        run: dafny translate cs --include-runtime src/Bison.Dafny/Wrapper.dfy
+        run: dafny translate cs --include-runtime src/Bison.Dafny/Wrapper.dfy --output src/bison.razor/DafnyWrapper/Wrapper.cs
