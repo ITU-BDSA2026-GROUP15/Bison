@@ -129,6 +129,10 @@ private sealed class ObservationTestRepository : IPostRepository{
     public void Save() { }
     public Observation? GetObservationDetails(int id) => throw new NotImplementedException();
     public IEnumerable<Proposal> GetProposals(int ObservationId) => throw new NotImplementedException();
+    
+    public Taxon? GetTaxon(int id) => throw new NotImplementedException();
+
+    public List<Observation> GetAllObservations() => throw new NotImplementedException();
     }
 }
 

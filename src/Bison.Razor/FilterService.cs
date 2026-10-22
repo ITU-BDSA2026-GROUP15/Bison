@@ -4,7 +4,6 @@
 
     public interface IFilterService{
         public List<ObservationViewModel> GetObservationsFromTaxon (int taxonId, int page = 1);
-
     }
 
     public class FilterService : IFilterService
