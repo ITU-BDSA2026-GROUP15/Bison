@@ -20,7 +20,7 @@ jobs:
           dafny-version: '4.11.0'
       
       - name: Verfiy Dafny
-        run: dafny verify src/Bison.Dafny/Wrapper.dfy
+        run: dafny verify Bison/src/Bison.Dafny/Wrapper.dfy
 
       # Does it now generate every time, despite already having a file here?
       # - name: Generate C# from Dafny
