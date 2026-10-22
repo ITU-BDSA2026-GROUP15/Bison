@@ -90,6 +90,9 @@ public class ProposalTests
         public void Save() => throw new NotImplementedException();
         public Observation? GetObservationDetails(int id) => throw new NotImplementedException();
         public IEnumerable<Comment> GetComments(int ObservationId) => throw new NotImplementedException();
+        public Taxon? GetTaxon(int id) => throw new NotImplementedException();
+
+        public List<Observation> GetAllObservations() => throw new NotImplementedException();
     }
 
 }
