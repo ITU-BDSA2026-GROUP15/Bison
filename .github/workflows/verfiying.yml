@@ -23,7 +23,7 @@ jobs:
         run: dafny verify src/Bison.Dafny/Wrapper.dfy
 
       - name: Generate C# from Dafny
-         run: dafny translate cs --include-runtime src/Bison.Dafny/Wrapper.dfy --output src/bison.razor/DafnyWrapper/Wrapper.cs
+        run: dafny translate cs --include-runtime src/Bison.Dafny/Wrapper.dfy --output src/bison.razor/DafnyWrapper/Wrapper.cs
 
       # If changes have been made to the .dfy files, we should generate a new Wrapper.cs
       # This step check if the wrapper is up to date with the .dfy files
