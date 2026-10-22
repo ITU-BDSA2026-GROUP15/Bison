@@ -32,11 +32,8 @@ namespace Bison.Razor.DAL
         Taxon? GetTaxon(int id);
         IEnumerable<Comment> GetComments(int ObservationId);
         IEnumerable<Proposal> GetProposals(int ObservationId);
-
         List<Observation> GetAllObservations();
 
-
-        
     }
 
 }
