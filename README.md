@@ -10,6 +10,12 @@ Clone the repository and run the web application from the repository root:
 dotnet run --project src/Bison.Razor
 ```
 
+## URL for webapp:
+
+```
+https://bdsagroup15bison-cgasdggzfrheb4cx.germanywestcentral-01.azurewebsites.net
+```
+
 ## Generating the Dafny wrapper
 
 The filtering logic is verified in Dafny (`Bison.Dafny/`) and compiled to C#.
