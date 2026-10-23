@@ -4,7 +4,7 @@
 name: .NET
 
 on:
-  push: #no branch specefication means it will happen on every push/pull
+  #push: #no branch specefication means it will happen on every push/pull
   pull_request:
 
 jobs:
