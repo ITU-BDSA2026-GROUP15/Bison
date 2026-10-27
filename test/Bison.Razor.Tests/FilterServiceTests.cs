@@ -131,4 +131,7 @@ public class FilterServiceTests
     Assert.Equal("Anne", actual.Author);
     }
 
+    public void GetObservationsFromTaxon_Subtaxon_ReturnsObservation()
+    {    
+    }
 }
