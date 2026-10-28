@@ -38,6 +38,11 @@ public class FilterServiceTests
         // using var sørger for, at context bliver frigivet efter testen.
         using var context = new BisonDBContext(options);
 
+        // Opretter tabellerne. De indeholder stadig ingen data.
+        // context.Database.EnsureCreated() kommer fra Microsoft.EntityFrameworkCore.
+        // Hvis tabellerne allerede findes, gør EnsureCreated ingenting.
+        context.Database.EnsureCreated();
+
         // PostRepository er klassen fra Bison.Razor.DAL.
         // Repositoryet får adgang til testdatabasen gennem context.
         using var repository = new PostRepository(context);
@@ -75,6 +80,7 @@ public class FilterServiceTests
 
     // Taxon er klassen fra Bison.Razor.Models.
     // Opretter det taxon, vi senere filtrerer på.
+    //vernacularName er det danske navn, som vises i viewet, fra taxon.cs
     var taxon = new Taxon
     {
         TaxonId = 1,
@@ -131,7 +137,81 @@ public class FilterServiceTests
     Assert.Equal("Anne", actual.Author);
     }
 
+    // Tester, at observationer fra en undergruppe også kommer med i resultatet.
+    [Fact]
     public void GetObservationsFromTaxon_Subtaxon_ReturnsObservation()
-    {    
+    {
+        //arrange
+        // Opretter og åbner en isoleret SQLite-database i hukommelsen.
+        using var connection =
+            new SqliteConnection("Data Source=:memory:");
+        connection.Open();
+
+        // Opsætter BisonDBContext til at bruge testdatabasen.
+        var options = new DbContextOptionsBuilder<BisonDBContext>()
+            .UseSqlite(connection)
+            .Options;
+
+        // opretter context og de tomme tabeller.
+        using var context = new BisonDBContext(options);
+        context.Database.EnsureCreated();
+
+      
+        // Opretter det overordnede taxon, som vi vil filtrere på.
+        var parentTaxon = new Taxon
+        {
+            TaxonId = 1,
+            VernacularName = "Andefugle"
+        };
+
+        // Opretter et subTaxon.
+        // Parent knytter Ænder til det overordnede taxon Andefugle.
+        var childTaxon = new Taxon
+        {
+            TaxonId = 2,
+            VernacularName = "Ænder",
+            Parent = parentTaxon
+        };
+
+        // Opretter observationens forfatter.
+        var author = new Author
+        {
+            Name = "Anne",
+            Email = "anne@example.test"
+        };
+
+        // Observationen knyttes til subTaxonet Ænder.
+        var observation = new Observation
+        {
+            Taxon = childTaxon,
+            Author = author,
+            Text = "En and ved søen",
+            TimeStamp = new DateTime(2026, 1, 1, 12, 0, 0)
+        };
+
+        // Tilføjer observationen og de tilknyttede objekter.
+        // EF Core følger også forbindelsen fra childTaxon til parentTaxon.
+        context.Observations.Add(observation);
+
+        // Gemmer forfatteren, begge taxoner og observationen i databasen.
+        context.SaveChanges();
+
+        // Fjerner de gemte objekter fra contextens hukommelse.
+        // Repositoryet skal selv indlæse taxonerne og deres relation.
+        context.ChangeTracker.Clear();
+
+        // Opretter repositoryet og filterservicen med testdatabasen.
+        using var repository = new PostRepository(context);
+        var service = new FilterService(repository);
+        //act
+        // Filtrerer på Andefugle, selvom observationen er knyttet til Ænder.
+        var result = service.GetObservationsFromTaxon(1);
+
+        //assert
+        // Kontrollerer, at præcis én observation bliver returneret.
+        var actual = Assert.Single(result);
+
+        // Kontrollerer, at observationen fra undertaxonet er med.
+        Assert.Equal("En and ved søen", actual.Message);
     }
 }
