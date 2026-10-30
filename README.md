@@ -16,6 +16,8 @@ dotnet run --project src/Bison.Razor
 https://bdsagroup15bison-cgasdggzfrheb4cx.germanywestcentral-01.azurewebsites.net
 ```
 
+Works a looot better in Chrome especially with authentication
+
 ## Generating the Dafny wrapper
 
 The filtering logic is verified in Dafny (`Bison.Dafny/`) and compiled to C#.
