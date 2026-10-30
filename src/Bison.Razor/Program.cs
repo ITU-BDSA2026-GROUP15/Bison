@@ -1,12 +1,7 @@
-using System.Linq.Expressions;
-using Bison.Core;
 using Bison.Razor.DAL;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using Bison.Razor.Models;
-
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +36,7 @@ builder.Services.AddScoped<IFilterService, FilterService>();
 builder.Services.AddScoped<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
 builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade
 
-builder.Services.AddDefaultIdentity<Bison.Razor.Models.ApplicationUser>(options =>
+builder.Services.AddDefaultIdentity<Bison.Razor.DAL.ApplicationUser>(options =>
 {
 options.SignIn.RequireConfirmedAccount = false;
 
@@ -69,7 +64,7 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated(); //opretter kun database, hvis den slet ikke findes
     DbInitializer.SeedDatabase(context);
 
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Bison.Razor.Models.ApplicationUser>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Bison.Razor.DAL.ApplicationUser>>();
     await CreateUser (userManager, "edka@itu.dk", "123456");
     await CreateUser (userManager, "debloh@itu.dk", "password");
 
@@ -83,11 +78,11 @@ app.MapRazorPages(); // kobler URL til razor pages
 
 app.Run();
 
-static async Task CreateUser(UserManager<Bison.Razor.Models.ApplicationUser> userManager, string email, string password)
+static async Task CreateUser(UserManager<Bison.Razor.DAL.ApplicationUser> userManager, string email, string password)
 {
    if (await userManager.FindByEmailAsync(email) != null) return;
 
-   var result = await userManager.CreateAsync(new Bison.Razor.Models.ApplicationUser { UserName = email, Email = email }, password);
+   var result = await userManager.CreateAsync(new Bison.Razor.DAL.ApplicationUser { UserName = email, Email = email }, password);
 if (!result.Succeeded)
 {
     throw new Exception( string.Join(", ", result.Errors.Select(e => e.Description)));
