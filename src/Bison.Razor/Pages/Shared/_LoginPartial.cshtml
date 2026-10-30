@@ -4,8 +4,8 @@
         <div>
             <a href="/obs/@(User.Identity.Name)">My Observations</a> |
             <a href="/">Public Observations</a> |
-            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })">
-                <button  type="submit" class="nav-link btn btn-link text-dark">Logout [@(User.Identity.Name)]</button>
+            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Public", new { area = "" })">
+                <button  type="submit" >Logout [@(User.Identity.Name)]</button>
             </form>
         </div>
     }
