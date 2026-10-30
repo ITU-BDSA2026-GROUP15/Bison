@@ -20,7 +20,10 @@ builder.Services.AddAuthentication(options =>
         o.CallbackPath = "/signin-github";
     });
 
-builder.Services.AddRazorPages(); // tilføjede razor pages til programmet
+builder.Services.AddRazorPages(o =>
+{
+    o.Conventions.AddPageRoute("/Public", "/");
+}); // tilføjede razor pages til programmet
 
 var envPath  = Environment.GetEnvironmentVariable("BISONDBPATH");   // kan måske være null
 var tempPath = Path.Combine(Path.GetTempPath(), "bison.db");        // fallback
@@ -43,11 +46,12 @@ using (var scope = app.Services.CreateScope())
     DbInitializer.SeedDatabase(context);
 }
 
+app.UseStaticFiles(); // kobler browseren til filerne i wwwroot -> altså css styling osv så det ikke bare er tekst
+
 app.UseAuthentication();
 app.UseAuthorization();
 //app.UseSession(); skal vi bruge dette? tag stilling til
 
-app.UseStaticFiles(); // kobler browseren til filerne i wwwroot -> altså css styling osv så det ikke bare er tekst
 app.MapRazorPages(); // kobler URL til razor pages
 
 app.Run();
