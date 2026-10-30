@@ -57,8 +57,8 @@ using (var scope = app.Services.CreateScope())
 
 }
 app.UseStaticFiles(); // kobler browseren til filerne i wwwroot -> altså css styling osv så det ikke bare er tekst
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseAuthentication();// hvem personen er, altså login, og hvad de har adgang til.
+app.UseAuthorization(); //hvad personen der er logget ind må gøre, altså hvilke sider de har adgang til.
 
 app.MapRazorPages(); // kobler URL til razor pages
 

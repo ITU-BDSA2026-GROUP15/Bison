@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Bison.Razor.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Bison.Razor.DAL
 {
 
-    public class BisonDBContext : DbContext
+    public class BisonDBContext : IdentityDbContext<ApplicationUser>
     {
         public BisonDBContext(DbContextOptions<BisonDBContext> options) : base(options)
         {
@@ -16,6 +17,8 @@ namespace Bison.Razor.DAL
         public DbSet<Proposal> Proposals { get; set; } = null;
         public DbSet<Author> Authors { get; set; } = null;
         public DbSet<Taxon> Taxons { get; set; } = null;
+
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
