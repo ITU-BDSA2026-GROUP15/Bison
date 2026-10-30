@@ -51,15 +51,29 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated(); //opretter kun database, hvis den slet ikke findes
     DbInitializer.SeedDatabase(context);
 
-    cv
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Bison.Razor.Models.ApplicationUser>>();
+    await CreateUser (userManager, "edka@itu.dk", "123456");
+    await CreateUser (userManager, "debloh@itu.dk", "password");
+
 }
+app.UseStaticFiles(); // kobler browseren til filerne i wwwroot -> altså css styling osv så det ikke bare er tekst
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages(); // kobler URL til razor pages
-app.UseStaticFiles(); // kobler browseren til filerne i wwwroot -> altså css styling osv så det ikke bare er tekst
 
 app.Run();
+
+static async Task CreateUser(UserManager<Bison.Razor.Models.ApplicationUser> userManager, string email, string password)
+{
+   if (await userManager.FindByEmailAsync(email) != null) return;
+
+   var result = await userManager.CreateAsync(new Bison.Razor.Models.ApplicationUser { UserName = email, Email = email }, password);
+if (!result.Succeeded)
+{
+    throw new Exception( string.Join(", ", result.Errors.Select(e => e.Description)));
+}
+}
 
 // Gør den (ellers implicit genererede) Program-klasse offentlig og tilgængelig, så
 // WebApplicationFactory<Program> kan bruges fra Bison.Razor.Tests til at køre servicen in-memory.
