@@ -2,6 +2,10 @@ using System.Linq.Expressions;
 using Bison.Core;
 using Bison.Razor.DAL;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Bison.Razor.Models;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +23,26 @@ builder.Services.AddScoped<IFilterService, FilterService>();
 builder.Services.AddScoped<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
 builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade
 
+builder.Services.AddDefaultIdentity<Bison.Razor.Models.ApplicationUser>(options => 
+{
+options.SignIn.RequireConfirmedAccount = false;
+
+options.User.RequireUniqueEmail = true;
+options.Password.RequiredLength = 6;
+
+options.Password.RequiredUniqueChars = 1;
+options.Password.RequireNonAlphanumeric = false;
+options.Password.RequireLowercase = false;
+options.Password.RequireUppercase = false;
+options.Password.RequireDigit = false;
+
+
+})
+.AddEntityFrameworkStores<BisonDBContext>();
+
+
+
+
 var app = builder.Build(); //building the webapplication itself (metadata)
 
 using (var scope = app.Services.CreateScope())
@@ -26,7 +50,11 @@ using (var scope = app.Services.CreateScope())
     var context  = scope.ServiceProvider.GetRequiredService<BisonDBContext>();
     context.Database.EnsureCreated(); //opretter kun database, hvis den slet ikke findes
     DbInitializer.SeedDatabase(context);
+
+    cv
 }
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages(); // kobler URL til razor pages
 app.UseStaticFiles(); // kobler browseren til filerne i wwwroot -> altså css styling osv så det ikke bare er tekst
