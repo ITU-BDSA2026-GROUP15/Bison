@@ -1,1 +1,18 @@
-
+<div class=navigation>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div>
+            <a href="/@(User.Identity.Name)">My Observations</a> |
+            <a href="/">Public Observations</a> |
+            <a ... >Logout [@(User.Identity.Name)]</a>
+        </div>
+    }
+    else
+    {
+        <div>
+        </div>
+        <a href="/">Public Observations</a> |
+        <a ... >Register</a>
+            <a ... >Login</a>
+    }
+</div>
