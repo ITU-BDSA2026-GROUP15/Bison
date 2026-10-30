@@ -1,9 +1,24 @@
 using System.Linq.Expressions;
 using Bison.Core;
 using Bison.Razor.DAL;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = "GitHub";
+    })
+    .AddCookie()
+    .AddGitHub(o =>
+    {
+        o.ClientId = builder.Configuration["authentication:github:clientId"];
+        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"];
+        o.CallbackPath = "/signin-github";
+    });
 
 builder.Services.AddRazorPages(); // tilføjede razor pages til programmet
 
@@ -28,8 +43,12 @@ using (var scope = app.Services.CreateScope())
     DbInitializer.SeedDatabase(context);
 }
 
-app.MapRazorPages(); // kobler URL til razor pages
+app.UseAuthentication();
+app.UseAuthorization();
+//app.UseSession(); skal vi bruge dette? tag stilling til
+
 app.UseStaticFiles(); // kobler browseren til filerne i wwwroot -> altså css styling osv så det ikke bare er tekst
+app.MapRazorPages(); // kobler URL til razor pages
 
 app.Run();
 
