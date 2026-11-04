@@ -1,4 +1,4 @@
-﻿@page "/obs" 
+﻿@page "/obs"
 <!-- associated with the obs URL, must be the very first in the code -->
 
 <!-- The path to the c# code that the html file uses, here Public.cshtml.cs -->
@@ -34,6 +34,10 @@
                         @obs.Message
                         <small>&mdash; @obs.Timestamp</small>
                     </p>
+                    @if (obs.PictureUrl != null)
+                    {
+                        <img class="observation-picture" src=@obs.PictureUrl alt="Picture of the observed animal">
+                    }
                 </li>
             }
         </ul>
