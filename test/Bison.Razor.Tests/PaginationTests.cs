@@ -30,7 +30,7 @@ public class PaginationTests : IDisposable
 
 using (var context = new BisonDBContext(options))
 {
-    context.Database.EnsureCreated();
+    context.Database.Migrate();
 
     var peter = new Author
     {
@@ -75,7 +75,7 @@ using (var context = new BisonDBContext(options))
                     services.RemoveAll<DbContextOptions<BisonDBContext>>();
                     services.AddDbContext<BisonDBContext>(options =>
                         options.UseSqlite($"Data Source={_dbPath};Pooling=False"));
-                    
+
                 });
             });
 

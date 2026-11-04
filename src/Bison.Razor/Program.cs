@@ -49,7 +49,7 @@ var app = builder.Build(); //building the webapplication itself (metadata)
 using (var scope = app.Services.CreateScope())
 {
     var context  = scope.ServiceProvider.GetRequiredService<BisonDBContext>();
-    context.Database.EnsureCreated(); //opretter kun database, hvis den slet ikke findes
+    context.Database.Migrate(); //opretter kun database, hvis den slet ikke findes
     DbInitializer.SeedDatabase(context);
 
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Bison.Razor.DAL.ApplicationUser>>();
