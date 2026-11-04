@@ -97,7 +97,7 @@ namespace Bison.Razor.Migrations
 
                     b.HasKey("AuthorId");
 
-                    b.ToTable("Authors", (string)null);
+                    b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("Bison.Razor.Models.Post", b =>
@@ -125,7 +125,7 @@ namespace Bison.Razor.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
 
                     b.HasDiscriminator<string>("PostType").HasValue("Post");
 
@@ -152,7 +152,7 @@ namespace Bison.Razor.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Taxons", (string)null);
+                    b.ToTable("Taxons");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -303,6 +303,9 @@ namespace Bison.Razor.Migrations
                 {
                     b.HasBaseType("Bison.Razor.Models.Post");
 
+                    b.Property<string>("PictureUrl")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("TaxonId")
                         .HasColumnType("INTEGER");
 
@@ -325,7 +328,7 @@ namespace Bison.Razor.Migrations
 
                     b.HasIndex("TaxonId");
 
-                    b.ToTable("Posts", null, t =>
+                    b.ToTable("Posts", t =>
                         {
                             t.Property("ObservationId")
                                 .HasColumnName("Proposal_ObservationId");

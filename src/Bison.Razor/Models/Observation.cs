@@ -9,6 +9,9 @@ public class Observation : Post {
     // Reference to the taxon associated with this observation.
     public Taxon Taxon { get; set; } = null!;
 
+    // Optional URL to a picture, if the user wants to add it to the observation. Null if not.
+    public string? PictureUrl { get; set; }
+
     // Contains the comments on this observation.
     // Contains the proposed taxon identifications for this observation.
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();

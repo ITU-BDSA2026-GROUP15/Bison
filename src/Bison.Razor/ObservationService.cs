@@ -6,7 +6,7 @@ using Bison.Razor.Models;
 
 // Indeholder de oplysninger om en observation, som vises på siden.
 //translates between Repo and ObservationViewModel
-public record ObservationViewModel(string Author, string Message, string Timestamp);
+public record ObservationViewModel(string Author, string Message, string Timestamp, string? PictureUrl = null);
 
 public interface IObservationService
 {
@@ -72,7 +72,7 @@ public class ObservationService : IObservationService
 
     public static ObservationViewModel ToViewModel(Observation o)
     {
-        return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
+        return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"), o.PictureUrl);
     }
 	private static ObservationViewModel ToProposalViewModel(Proposal o)
 	{
