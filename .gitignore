@@ -484,3 +484,6 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 .idea/
+
+# Pictures uploaded by users while running the app locally
+wwwroot/uploads/
