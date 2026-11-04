@@ -27,12 +27,16 @@
                 @ob.Message
                 <small>&mdash; @ob.Timestamp</small>
             </p>
+            @if (ob.PictureUrl != null)
+            {
+                <img class="observation-picture" src=@ob.PictureUrl alt="Picture of the observed animal">
+            }
         </div>
 
         @*COMMENTS*@
         <div class="comments">
             <h3>Comments for this observation</h3>
-            
+
             @if (Model.Comments.Any())
             {
                 <ul>
@@ -44,14 +48,14 @@
                         <small>&mdash; @comment.Timestamp</small>
                     </li>
                 }
-                </ul>  
+                </ul>
             }
             else
             {
                 <em>There are no comments for this observation yet.</em>
             }
         </div>
-        
+
 
         @*PROPOSALS*@
         <div class="proposals">
@@ -75,7 +79,7 @@
                 <em>There are no proposals for this observation yet.</em>
             }
         </div>
-    
+
     }
     else
     {
