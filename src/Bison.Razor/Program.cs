@@ -1,6 +1,7 @@
 using Bison.Razor.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Bison.Razor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,10 @@ builder.Services.AddScoped<IFilterService, FilterService>();
 
 builder.Services.AddScoped<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
 builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade
+
+//when a page asks for a IPictureStorage, it gets a LocalPictureStorage in wwwroot/uploads
+builder.Services.AddScoped<IObservationService, ObservationService>();
+builder.Services.AddScoped<IPictureStorage, LocalPictureStorage>();
 
 builder.Services.AddDefaultIdentity<Bison.Razor.DAL.ApplicationUser>(options =>
 {
