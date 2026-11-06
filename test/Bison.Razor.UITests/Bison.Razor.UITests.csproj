@@ -22,4 +22,9 @@
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 
+  <!-- Sørger for, at Bison bliver bygget, før testene starter den. Testene bruger ikke koden direkte. -->
+  <ItemGroup>
+    <ProjectReference Include="../../src/Bison.Razor/Bison.Razor.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
 </Project>
