@@ -156,4 +156,20 @@ namespace Bison.Razor.DAL
         }
 
     }
+
+        public Author? GetAuthorByName(string name)
+        {
+            return _context.Authors.FirstOrDefault(author => author.Name == name);
+        }
+
+        public IReadOnlyList<Taxon> GetTaxons()
+        {
+            // Formularen skal kun læse taxonerne, så EF behøver ikke spore dem.
+            return _context.Taxons
+                .AsNoTracking()
+                .OrderBy(taxon => taxon.VernacularName ?? taxon.dwc_TaxonID)
+                .ThenBy(taxon => taxon.TaxonId)
+                .ToList();
+        }
+
 }

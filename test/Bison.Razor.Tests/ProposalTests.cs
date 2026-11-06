@@ -95,6 +95,13 @@ public class ProposalTests
         public List<Observation> GetAllObservations() => throw new NotImplementedException();
     }
 
+    // Disse testklasser bruges til andre funktioner end oprettelse.
+    public Author? GetAuthorByName(string name) =>
+        throw new NotImplementedException();
+
+    public IReadOnlyList<Taxon> GetTaxons() =>
+        throw new NotImplementedException();
+
 }
 
 /*
