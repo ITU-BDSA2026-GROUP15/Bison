@@ -8,6 +8,13 @@
         "dafny"
       ],
       "rollForward": false
+    },
+    "dotnet-ef": {
+      "version": "8.0.33",
+      "commands": [
+        "dotnet-ef"
+      ],
+      "rollForward": false
     }
   }
 }

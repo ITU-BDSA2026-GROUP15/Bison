@@ -7,10 +7,10 @@ public class FilterServiceTests
 {
     // Tester, at et ukendt taxon giver en tom liste.
     [Fact]
-   
+
     public void getObservationsFromTaxon_unknownTaxon_returnsEmptyList()
     {
-        //arrange 
+        //arrange
         //oprette en tom midlertidig database i hukommelsen
 
         // SqliteConnection kommer fra Microsoft.Data.Sqlite.
@@ -18,7 +18,7 @@ public class FilterServiceTests
         // var betyder, at C# selv udleder variablens type: SqliteConnection.
         // using var sørger for, at forbindelsen lukkes, når testen slutter.
         using var connection = new SqliteConnection("DataSource=:memory:");
-        
+
 
         // Åbner forbindelsen. SQLite opretter databasen i hukommelsen.
         // Databasen eksisterer, så længe forbindelsen er åben.
@@ -39,9 +39,7 @@ public class FilterServiceTests
         using var context = new BisonDBContext(options);
 
         // Opretter tabellerne. De indeholder stadig ingen data.
-        // context.Database.EnsureCreated() kommer fra Microsoft.EntityFrameworkCore.
-        // Hvis tabellerne allerede findes, gør EnsureCreated ingenting.
-        context.Database.EnsureCreated();
+        context.Database.Migrate();
 
         // PostRepository er klassen fra Bison.Razor.DAL.
         // Repositoryet får adgang til testdatabasen gennem context.
@@ -51,7 +49,7 @@ public class FilterServiceTests
         // FilterService får repositoryet gennem sin konstruktør.
         var service = new FilterService(repository);
 
-    
+
 
         //act - Søg efter taxon 999, som ikke findes i den tomme database.
 
@@ -76,7 +74,7 @@ public class FilterServiceTests
 
     // Opretter context og databasens tomme tabeller.
     using var context = new BisonDBContext(options);
-    context.Database.EnsureCreated();
+    context.Database.Migrate();
 
     // Taxon er klassen fra Bison.Razor.Models.
     // Opretter det taxon, vi senere filtrerer på.
@@ -154,9 +152,9 @@ public class FilterServiceTests
 
         // opretter context og de tomme tabeller.
         using var context = new BisonDBContext(options);
-        context.Database.EnsureCreated();
+        context.Database.Migrate();
 
-      
+
         // Opretter det overordnede taxon, som vi vil filtrere på.
         var parentTaxon = new Taxon
         {

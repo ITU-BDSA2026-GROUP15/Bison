@@ -25,7 +25,7 @@ public class TestWebFactory : WebApplicationFactory<Program>
             .Options;
 
         using var context = new BisonDBContext(options);
-        context.Database.EnsureCreated();
+        context.Database.Migrate();
 
         var johan = new Author
         {

@@ -27,6 +27,10 @@
                         @ob.Message
                         <small>&mdash; @ob.Timestamp</small>
                     </p>
+                    @if (ob.PictureUrl != null)
+                    {
+                        <img class="observation-picture" src=@ob.PictureUrl alt="Picture of the observed animal">
+                    }
                 </li>
             }
         </ul>

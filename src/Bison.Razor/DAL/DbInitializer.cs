@@ -485,7 +485,7 @@ public static class DbInitializer
             var o407 = new Observation() { PostId = 423, Author = a7, Taxon = tBotaurusMinutus, Text = "About 15 little bitterns passing the salt marsh heading south.", TimeStamp = DateTime.Parse("2023-09-02 20:10:00") };
             var o408 = new Observation() { PostId = 424, Author = a9, Taxon = tBotaurusMinutus, Text = "Quick look at Three little bitterns near the harbour.", TimeStamp = DateTime.Parse("2023-09-03 05:00:00") };
             var o409 = new Observation() { PostId = 425, Author = a1, Taxon = tEgrettaGarzetta, Text = "Three little egrets resting near the salt marsh.", TimeStamp = DateTime.Parse("2023-09-03 05:26:00") };
-            var o410 = new Observation() { PostId = 426, Author = a4, Taxon = tPlataleaLeucorodia, Text = "About 30 spoonbills at the lagoon, seen through the scope.", TimeStamp = DateTime.Parse("2023-09-03 07:27:00") };
+            var o410 = new Observation() { PostId = 426, Author = a4, Taxon = tPlataleaLeucorodia, Text = "About 30 spoonbills at the lagoon, seen through the scope.", TimeStamp = DateTime.Parse("2023-09-03 07:27:00"), PictureUrl = "/images/cat_jump.webp"};
 
             // Comments
             var c1 = new Comment() { PostId = 11, Author = a2, Observation = o1, Text = "Nice! I saw one there yesterday too.", TimeStamp = DateTime.Parse("2023-08-01 09:00:00") };
