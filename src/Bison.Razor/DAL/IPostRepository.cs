@@ -34,6 +34,12 @@ namespace Bison.Razor.DAL
         IEnumerable<Proposal> GetProposals(int ObservationId);
         List<Observation> GetAllObservations();
 
+       // Finder den forfatter, der svarer til brugerens login-navn.
+        Author? GetAuthorByName(string name);
+
+        // Henter de taxoner, brugeren kan vælge i formularen.
+        IReadOnlyList<Taxon> GetTaxons();
+
     }
 
 }

@@ -13,7 +13,14 @@
 }
 
 <div>
-    <h2> Public Timeline </h2>
+   <h2>Public Observations</h2>
+
+    @* Vis observationsformularen for indloggede brugere.
+    Model.Taxons indeholder valgmulighederne til dropdownen. *@
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <partial name="_ObservationForm" model="Model.Taxons" />
+    }
 
     <!-- the if-condition checks if there are any observations to run -->
     @if (Model.Observations.Any())

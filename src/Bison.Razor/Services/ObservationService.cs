@@ -24,6 +24,17 @@ public interface IObservationService
     public List<ObservationViewModel> GetProposals (int id, int page =1);
 
     public List<ObservationViewModel> GetComments (int id, int page =1);
+    
+   // Henter de taxoner, brugeren kan vælge i observationsformularen.
+    IReadOnlyList<Taxon> GetTaxons();
+
+    // Forsøger at gemme en observation for den angivne forfatter.
+    // E-mailen bruges, hvis forfatteren skal oprettes.
+    // taxonId identificerer det taxon, brugeren har valgt.
+    // Returnerer true, når observationen er gemt, og false,
+    // hvis forfatternavnet eller teksten mangler, eller taxonet ikke findes.
+    bool TryCreateObservation(
+    string authorName, string email, string text, int taxonId); 
 
 }
 
@@ -84,5 +95,61 @@ public class ObservationService : IObservationService
 		return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
 	}
 
+
+    public IReadOnlyList<Taxon> GetTaxons()
+    {
+        // Hent de taxoner, som brugeren kan vælge i observationsformularen.
+        // Repositoryet står for at læse dem fra databasen.
+        return _repo.GetTaxons();
+    }
+
+    public bool TryCreateObservation(
+        string authorName, string email, string text, int taxonId)
+    {
+        // En observation skal have en forfatter og en tekst.
+        // IsNullOrWhiteSpace fanger også tekst, der kun består af mellemrum.
+        if (string.IsNullOrWhiteSpace(authorName) ||
+            string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+
+        // Slå det valgte taxon op. Et indsendt ID kan være ugyldigt,
+        // selvom brugeren normalt vælger det fra en dropdown.
+        var taxon = _repo.GetTaxon(taxonId);
+        if (taxon is null)
+            return false;
+
+        // Genbrug forfatteren, hvis vedkommende allerede findes.
+        // Operatoren ?? opretter kun en ny Author, når opslaget giver null.
+        // E-mailen bruges til at udfylde den nye forfatters oplysninger.
+        var author = _repo.GetAuthorByName(authorName) ?? new Author
+        {
+            Name = authorName,
+            Email = email
+        };
+
+        // Knyt observationen til forfatteren og det valgte taxon.
+        var observation = new Observation
+        {
+            Author = author,
+            Taxon = taxon,
+
+            // Fjern mellemrum før og efter teksten.
+            Text = text.Trim(),
+
+            // Brug serverens aktuelle tid i UTC som oprettelsestidspunkt.
+            TimeStamp = DateTime.UtcNow
+        };
+
+        // InsertPost registrerer observationen til indsættelse.
+        // Save skriver ændringerne til databasen. Hvis Author er ny,
+        // bliver den gemt sammen med observationen.
+        _repo.InsertPost(observation);
+        _repo.Save();
+
+        // true betyder, at gemningen blev gennemført.
+        return true;
+    }
 
 }

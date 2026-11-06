@@ -10,8 +10,17 @@
 }
 
 <div>
-    @*Finds observation for the a certain author per request*@
-    <h2> @routeName's Observations </h2>
+    @* Vis formularen, når brugeren ser sin egen oversigt. *@
+    @if (Model.IsOwnTimeline)
+    {
+        <h2>My Observations</h2>
+        <partial name="_ObservationForm" model="Model.Taxons" />
+    }
+    else
+    {
+        @* Behold forfatterens navn i overskriften på andres oversigter. *@
+        <h2>@(routeName)'s Observations</h2>
+    }
 
     @*show all observations and list them for the author*@
     @if (Model.Observations.Any())
