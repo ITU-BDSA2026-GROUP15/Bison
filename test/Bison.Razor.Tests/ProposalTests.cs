@@ -93,7 +93,7 @@ public class ProposalTests
         public Taxon? GetTaxon(int id) => throw new NotImplementedException();
 
         public List<Observation> GetAllObservations() => throw new NotImplementedException();
-    }
+    
 
     // Disse testklasser bruges til andre funktioner end oprettelse.
     public Author? GetAuthorByName(string name) =>
@@ -102,6 +102,7 @@ public class ProposalTests
     public IReadOnlyList<Taxon> GetTaxons() =>
         throw new NotImplementedException();
 
+}
 }
 
 /*

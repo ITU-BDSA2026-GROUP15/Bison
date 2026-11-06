@@ -22,6 +22,10 @@ public class PublicModel : PageModel
     public int CurrentPage {get; set;} = 1;
     public int? CurrentTaxonId {get; set;}
 
+    // Taxonerne, som brugeren kan vælge i formularen.
+    public IReadOnlyList<Bison.Razor.Models.Taxon> Taxons { get; private set; } =
+        Array.Empty<Bison.Razor.Models.Taxon>();
+
     public PublicModel(IObservationService service, IFilterService filterService)
     {
         _service = service;
@@ -37,7 +41,14 @@ public class PublicModel : PageModel
         Observations = taxonId.HasValue            
             ? _filterService.GetObservationsFromTaxon(taxonId.Value, page)
             : _service.GetObservations(page);
-    
+        
+        // Hent taxonerne til formularens dropdown, hvis brugeren er logget ind.
+        // Besøgende får ikke vist formularen, så for dem forbliver listen tom.
+        if (User.Identity?.IsAuthenticated == true)
+        {
+            Taxons = _service.GetTaxons();
+        }
+
         
         return Page();
     }

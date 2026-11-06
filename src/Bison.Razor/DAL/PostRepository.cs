@@ -155,7 +155,7 @@ namespace Bison.Razor.DAL
                 .ToList();
         }
 
-    }
+
 
         public Author? GetAuthorByName(string name)
         {
@@ -171,5 +171,7 @@ namespace Bison.Razor.DAL
                 .ThenBy(taxon => taxon.TaxonId)
                 .ToList();
         }
-
+    }
 }
+
+
