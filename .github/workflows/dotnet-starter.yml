@@ -23,5 +23,7 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore #already called restore, no need to do it again
+    - name: Install Playwright browser #the script only exists after the build; --with-deps also installs the Linux packages Chromium needs
+      run: pwsh test/Bison.Razor.UITests/bin/Debug/net8.0/playwright.ps1 install --with-deps chromium
     - name: Test
       run: dotnet test --no-build --verbosity normal #see reasoning above
