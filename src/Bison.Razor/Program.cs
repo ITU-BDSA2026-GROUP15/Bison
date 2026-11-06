@@ -41,13 +41,21 @@ options.Password.RequireDigit = false;
 })
 .AddEntityFrameworkStores<BisonDBContext>();
 
-builder.Services.AddAuthentication()
-    .AddGitHub(o =>
-    {
-        o.ClientId = builder.Configuration["authentication:github:clientId"];
-        o.ClientSecret = builder.Configuration["authentication:github:clientSecret"];
-        o.CallbackPath = "/signin-github";
-    });
+var gitHubClientId = builder.Configuration["authentication:github:clientId"];
+var gitHubClientSecret = builder.Configuration["authentication:github:clientSecret"];
+
+// GitHub-login kræver nøgler, som kun findes i user secrets eller på Azure. Uden denne betingelse
+// giver sider med login 500-fejl, hvor nøglerne mangler, fx i GitHub Actions.
+if (!string.IsNullOrEmpty(gitHubClientId) && !string.IsNullOrEmpty(gitHubClientSecret))
+{
+    builder.Services.AddAuthentication()
+        .AddGitHub(o =>
+        {
+            o.ClientId = gitHubClientId;
+            o.ClientSecret = gitHubClientSecret;
+            o.CallbackPath = "/signin-github";
+        });
+}
 
 var app = builder.Build(); //building the webapplication itself (metadata)
 
