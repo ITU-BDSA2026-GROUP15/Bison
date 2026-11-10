@@ -33,9 +33,16 @@
             }
         </div>
 
+
         @*COMMENTS*@
+
         <div class="comments">
             <h3>Comments for this observation</h3>
+
+             @if (User.Identity?.IsAuthenticated == true)
+            {
+            <partial name="_CommentForm" model="Model.ObservationId" />
+            }
 
             @if (Model.Comments.Any())
             {

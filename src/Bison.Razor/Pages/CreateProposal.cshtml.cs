@@ -13,6 +13,8 @@ public class CreateProposalModel : PageModel
 {
     private readonly IObservationService _service;
 
+    public IReadOnlyList<Taxon> Taxons { get; set; } = new List<Taxon>();
+
     public CreateProposalModel(IObservationService service)
     {
         _service = service;

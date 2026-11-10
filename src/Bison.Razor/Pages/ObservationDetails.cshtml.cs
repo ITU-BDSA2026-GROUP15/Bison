@@ -11,6 +11,7 @@ public class ObservationDetailsModel : PageModel
     public List<ObservationViewModel> ObservationDetails { get; set; }
     public List<ObservationViewModel> Comments { get; set; }
     public List<ObservationViewModel> Proposals { get; set; }
+    public int ObservationId { get; set; }
 
 
     public ObservationDetailsModel(IObservationService service)
@@ -28,8 +29,9 @@ public class ObservationDetailsModel : PageModel
             ObservationDetails = _service.GetObservationDetails(id.Value, page);
             Comments = _service.GetComments(id.Value, page);
             Proposals = _service.GetProposals(id.Value, page);
+            ObservationId = id.Value;
         
-        return Page();
+            return Page();
         }
     }
 }
