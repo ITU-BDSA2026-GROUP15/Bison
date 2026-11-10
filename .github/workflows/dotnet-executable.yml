@@ -24,6 +24,12 @@ jobs:
     - name: Restore
       run: dotnet restore #
 
+    - name: Build
+      run: dotnet build --no-restore --configuration Release #playwright.ps1 is created by the build
+
+    - name: Install Playwright browser
+      run: pwsh test/Bison.Razor.UITests/bin/Release/net8.0/playwright.ps1 install --with-deps chromium
+
     - name: Test
       run: dotnet test --configuration Release #runs before publishing, which means the tests will run before any actions are made
 
