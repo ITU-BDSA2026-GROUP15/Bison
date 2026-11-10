@@ -1,33 +1,33 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
-using Bison.Razor.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+
 
 namespace Bison.Razor.Pages;
 
 // Kræver login, også hvis nogen sender en POST direkte til siden.
 [Authorize]
-public class CreateCommentModel : PageModel
+public class CreateProposalModel : PageModel
 {
     private readonly IObservationService _service;
 
-    public CreateCommentModel(IObservationService service)
+    public CreateProposalModel(IObservationService service)
     {
         _service = service;
     }
 
     // Razor Pages læser værdierne fra formularen.
     [BindProperty]
-    [Required(ErrorMessage = "Write your comment.")]
+    [Required(ErrorMessage = "Write your proposal.")]
     public string Text { get; set; } = "";
 
     [BindProperty]
     [Range(1, int.MaxValue, ErrorMessage = "Choose an observation.")]
     public int ObservationId { get; set; }
-
-
+    
+    [BindProperty]
+    [Range(1, int.MaxValue, ErrorMessage = "Choose a taxon.")]
+    public int taxonId { get; set; }
+   
     public IActionResult OnPost()
     {
         // Hent forfatteren fra den indloggede bruger.
@@ -41,10 +41,10 @@ public class CreateCommentModel : PageModel
 
         var email = User.FindFirstValue(ClaimTypes.Email) ?? "";
 
-        if (!_service.TryCreateComment(authorName, email, Text, ObservationId))
+        if (!_service.TryCreateProposal(authorName, email, Text, ObservationId, taxonId))
         {
             ModelState.AddModelError(
-                string.Empty, "Enter a comment and choose a valid observation to comment on.");
+                string.Empty, "Enter a proposal and choose a valid taxon id.");
 
             return ShowForm();
         }
