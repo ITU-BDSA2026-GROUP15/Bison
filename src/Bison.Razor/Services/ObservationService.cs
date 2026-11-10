@@ -36,6 +36,9 @@ public interface IObservationService
     bool TryCreateObservation(
     string authorName, string email, string text, int taxonId); 
 
+    bool TryCreateObservation(
+    string authorName, string email, string text, int observationID);
+
 }
 
 public class ObservationService : IObservationService
@@ -165,7 +168,7 @@ public class ObservationService : IObservationService
 
         // Slå den tilknytted observation op. Et indsendt ID kan være ugyldigt,
         // selvom brugeren normalt vælger det fra en dropdown.
-        var obs = _repo.GetObservation(observationId);
+        var obs = _repo.GetObservationDetails(observationId);
         if (obs is null)
             return false;
 
