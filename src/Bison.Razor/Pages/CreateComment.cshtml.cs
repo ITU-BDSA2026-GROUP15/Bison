@@ -50,8 +50,7 @@ public class CreateCommentModel : PageModel
         }
 
         // Vis brugerens oversigt efter gemning.
-        return RedirectToPage("/UserTimeline", new { author = authorName });
-
+        return RedirectToPage("/ObservationDetails", new { id = ObservationId });
     }
 
     private PageResult ShowForm()
