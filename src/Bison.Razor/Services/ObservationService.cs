@@ -242,6 +242,7 @@ public class ObservationService : IObservationService
         {
             Author = author,
             Observation = obs,
+            ObservationId = observationId,
 
             // Fjern mellemrum før og efter teksten.
             Taxon = taxon, 
