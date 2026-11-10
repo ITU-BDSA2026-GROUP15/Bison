@@ -62,7 +62,7 @@ public class CreateProposalModel : PageModel
     private PageResult ShowForm()
     {
         // Hent listen igen, så brugeren kan rette formularen.
-        //Comments = _service.GetComments(ObservationId);
+        Taxons = _service.GetTaxons();
         return Page();
     }
 }
