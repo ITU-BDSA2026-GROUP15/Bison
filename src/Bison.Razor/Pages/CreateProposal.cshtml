@@ -1,0 +1,11 @@
+@page
+@model CreateProposalModel
+@{
+    ViewData["Title"] = "Make a proposal";
+    Layout = "Shared/_Layout";
+}
+
+<h2>Make a comment</h2>
+
+@* Vis formularen, hvis brugeren skal rette sin indtastning. *@
+<partial name="_ProposalForm" model="Model.Proposal" />
