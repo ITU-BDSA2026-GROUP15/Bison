@@ -67,6 +67,12 @@
         @*PROPOSALS*@
         <div class="proposals">
             <h3>Proposals for this observation</h3>
+           
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                ViewData["ObservationId"] = Model.ObservationId;
+                <partial name="_ProposalForm" model="Model.Taxons" />
+            }
 
             @if (Model.Proposals.Any())
             {

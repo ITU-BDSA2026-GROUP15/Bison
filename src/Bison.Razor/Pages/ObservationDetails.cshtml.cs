@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Bison.Razor.Models;
 
 namespace Bison.Razor.Pages;
 
@@ -12,7 +13,7 @@ public class ObservationDetailsModel : PageModel
     public List<ObservationViewModel> Comments { get; set; }
     public List<ObservationViewModel> Proposals { get; set; }
     public int ObservationId { get; set; }
-
+public IReadOnlyList<Taxon> Taxons { get; set; } = new List<Taxon>();
 
     public ObservationDetailsModel(IObservationService service)
     {
@@ -30,6 +31,7 @@ public class ObservationDetailsModel : PageModel
             Comments = _service.GetComments(id.Value, page);
             Proposals = _service.GetProposals(id.Value, page);
             ObservationId = id.Value;
+            Taxons = _service.GetTaxons();
         
             return Page();
         }
