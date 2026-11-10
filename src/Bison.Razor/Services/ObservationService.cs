@@ -204,4 +204,53 @@ public class ObservationService : IObservationService
         return true;
     }
 
+    public bool TryCreateProposal(
+        string authorName, string email, int observationId, int taxonId)
+    {
+        // En proposal skal have en forfatter, et id der knytter den til en obs, samt et taxon id.
+        // IsNullOrWhiteSpace fanger også tekst, der kun består af mellemrum.
+        if (string.IsNullOrWhiteSpace(authorName) ||
+             observationId <= 0 || taxonId <= 0) // 0 er svarende til null for int
+        {
+            return false;
+        }
+
+        // Slå den tilknytted proposal op. Et indsendt ID kan være ugyldigt,
+        // selvom brugeren normalt vælger det fra en dropdown.
+        var taxon = _repo.GetTaxon(taxonId);
+        if (taxon is null)
+            return false;
+
+        // Genbrug forfatteren, hvis vedkommende allerede findes.
+        // Operatoren ?? opretter kun en ny Author, når opslaget giver null.
+        // E-mailen bruges til at udfylde den nye forfatters oplysninger.
+        var author = _repo.GetAuthorByName(authorName) ?? new Author
+        {
+            Name = authorName,
+            Email = email
+        };
+
+        // Knyt kommentaren til forfatteren og den valgte observation.
+        var proposal = new Proposal
+        {
+            Author = author,
+            Observation = obs,
+
+            // Fjern mellemrum før og efter teksten.
+            Taxon = taxon, 
+
+            // Brug serverens aktuelle tid i UTC som oprettelsestidspunkt.
+            TimeStamp = DateTime.UtcNow
+        };
+
+        // InsertPost registrerer proposal til indsættelse.
+        // Save skriver ændringerne til databasen. Hvis Author er ny,
+        // bliver den gemt sammen med proposal.
+        _repo.InsertPost(proposal);
+        _repo.Save();
+
+        // true betyder, at gemningen blev gennemført.
+        return true;
+    }
+
 }
