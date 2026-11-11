@@ -33,9 +33,16 @@
             }
         </div>
 
+
         @*COMMENTS*@
+
         <div class="comments">
             <h3>Comments for this observation</h3>
+
+             @if (User.Identity?.IsAuthenticated == true)
+            {
+            <partial name="_CommentForm" model="Model.ObservationId" />
+            }
 
             @if (Model.Comments.Any())
             {
@@ -60,6 +67,12 @@
         @*PROPOSALS*@
         <div class="proposals">
             <h3>Proposals for this observation</h3>
+           
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                ViewData["ObservationId"] = Model.ObservationId;
+                <partial name="_ProposalForm" model="Model.Taxons" />
+            }
 
             @if (Model.Proposals.Any())
             {
