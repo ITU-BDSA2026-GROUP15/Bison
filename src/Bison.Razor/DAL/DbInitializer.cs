@@ -70,8 +70,9 @@ public static class DbInitializer
             var a8 = new Author() { AuthorId = 8, Name = "Octavio Wagganer", Email = "Octavio.Wagganer@dtu.dk", Posts = new List<Post>() };
             var a9 = new Author() { AuthorId = 9, Name = "Johnnie Calixto", Email = "Johnnie+Calixto@itu.dk", Posts = new List<Post>() };
             var a10 = new Author() { AuthorId = 10, Name = "Jacqualine Gilcoine", Email = "Jacqualine.Gilcoine@gmail.com", Posts = new List<Post>() };
+            var a11 = new Author() { AuthorId = 11, Name = "Lærke Roest", Email = "lroe@itu.dk", Posts = new List<Post>() };
 
-            var authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10 };
+            var authors = new List<Author>() { a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11 };
 
             // Observations
             var o1 = new Observation() { PostId = 1, Author = a1, Taxon = tArdeaCinerea, Text = "Grey heron standing still in the reeds at the lake.", TimeStamp = DateTime.Parse("2023-08-01 07:12:00") };
@@ -486,6 +487,7 @@ public static class DbInitializer
             var o408 = new Observation() { PostId = 424, Author = a9, Taxon = tBotaurusMinutus, Text = "Quick look at Three little bitterns near the harbour.", TimeStamp = DateTime.Parse("2023-09-03 05:00:00") };
             var o409 = new Observation() { PostId = 425, Author = a1, Taxon = tEgrettaGarzetta, Text = "Three little egrets resting near the salt marsh.", TimeStamp = DateTime.Parse("2023-09-03 05:26:00") };
             var o410 = new Observation() { PostId = 426, Author = a4, Taxon = tPlataleaLeucorodia, Text = "About 30 spoonbills at the lagoon, seen through the scope.", TimeStamp = DateTime.Parse("2023-09-03 07:27:00"), PictureUrl = "/images/cat_jump.webp"};
+            var o411 = new Observation() { PostId = 427, Author = a11, Taxon = tPlataleaLeucorodia, Text = "I saw a fricking bad bird steal my bread, it must have been a pigeon", TimeStamp = DateTime.Parse("2026-11-11 11:01:00"), PictureUrl = "/images/pigeon_evil.jpeg"};
 
             // Comments
             var c1 = new Comment() { PostId = 11, Author = a2, Observation = o1, Text = "Nice! I saw one there yesterday too.", TimeStamp = DateTime.Parse("2023-08-01 09:00:00") };
