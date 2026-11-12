@@ -11,9 +11,9 @@ public class ObservationCreationIntegrationTest
 {
     
    [Fact] //fact gør at vi kan lave testmetoden uden parametre.
-    public void tryCreateObservation()
+    public void tryCreateObservationThatAppearsInPublicAndAuthorLists()
     {
-        //arrange 
+        //arrange Databasen i hukommelsen lever, så længe forbindelsen er åben.
 
         using var connection = new SqliteConnection("Data Source=:memory:");
         connection.Open();
@@ -42,18 +42,14 @@ public class ObservationCreationIntegrationTest
 
 
 
-        var author = new Author
-        {
-            Name = "Anne",
-            Email = "anne@example.test"
-            
-        };
-
-
-
-        //act
+        const string authorName = "Anne";
+        const string authorEmail = "anne@example.test";
         const string observationText = "Jeg så en solsort i haven";
-        var created = writeService.TryCreateObservation(author.Name , author.Email, observationText,  taxon.TaxonId);
+
+
+        //act - Opret en observation for en forfatter, der endnu ikke findes.
+       
+        var created = writeService.TryCreateObservation(authorName , authorEmail, observationText,  taxon.TaxonId);
 
 
         // Assert: Læs tilbage med en ny context på samme database,
@@ -66,9 +62,9 @@ public class ObservationCreationIntegrationTest
 
         var publicObservation = Assert.Single(readService.GetObservations());
         var authorObservation = Assert.Single(
-            readService.GetObservationsFromAuthor(author.Name));
+            readService.GetObservationsFromAuthor(authorName));
 
-        Assert.Equal(author.Name, publicObservation.Author);
+        Assert.Equal(authorName, publicObservation.Author);
         Assert.Equal(observationText, publicObservation.Message);
         Assert.Equal(publicObservation, authorObservation);
     }
