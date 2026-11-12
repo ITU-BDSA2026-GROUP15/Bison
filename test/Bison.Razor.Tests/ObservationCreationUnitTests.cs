@@ -38,19 +38,29 @@ public class ObservationCreationUnitTest
     }    
 
     [Fact]
-    public void tryCreateObservationFromNonValidTaxon()
+    public void tryCreateObservationFromUnknownTaxon()
     {
         //arrange - reporsitorty kender allerede til taxonet og forfatteren
         //så vi kan oprette en observation med et eksisterende taxon og forfatter
 
-        var taxon = new Taxon{TaxonId = 1, VernacularName = "Solsort"};
+        var taxon = new Taxon{TaxonId = 1,};
         var author = new Author{Name = "Anne", Email = "anne@example.com"};
+        using var repository = new TestRepository(taxon, author);
+        var service = new ObservationService(repository);
+        //act - 999 er et ukendt taxon id
+        var created = service.TryCreateObservation( author.Name , author.Email,"Jeg så en fugl",  999); 
 
-        //act
 
 
 
-        //assert
+        //assert - AssertFalse tester om servicen returnerer false, 
+        // og at repository ikke modtager nogen observation og Save() ikke kaldes.
+
+        //Assert.Null tester om repository.InsertedPost er null, 
+        // hvilket betyder, at ingen observation blev oprettet.
+        Assert.False(created,"Observation was not created successfully");
+        Assert.Null(repository.InsertedPost);
+        Assert.False(repository.SaveCalled);
 
     }
     private sealed class TestRepository : IPostRepository
