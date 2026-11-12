@@ -10,7 +10,7 @@ namespace Bison.Razor.Tests;
 public class ObservationCreationIntegrationTest
 {
     
-   [Fact] //fact gør at vi kan lave testmetoden uden parametre.
+   [Fact] //fact gør at vi kan lave testmetoden uden parametre. Markerer metoden som en xUnit-test uden testdata.
     public void tryCreateObservationThatAppearsInPublicAndAuthorLists()
     {
         //arrange Databasen i hukommelsen lever, så længe forbindelsen er åben.
