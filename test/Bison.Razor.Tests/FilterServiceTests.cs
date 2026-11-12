@@ -170,6 +170,12 @@ public class FilterServiceTests
             VernacularName = "Ænder",
             Parent = parentTaxon
         };
+        // Opretter et taxon, som ikke er relateret til Andefugle.
+        var unrelatedTaxon = new Taxon
+        {
+            TaxonId = 10,
+            VernacularName = "Solsort"
+        };
 
         // Opretter observationens forfatter.
         var author = new Author
@@ -187,9 +193,17 @@ public class FilterServiceTests
             TimeStamp = new DateTime(2026, 1, 1, 12, 0, 0)
         };
 
+        var unrelatedObservation = new Observation
+        {
+            Taxon = unrelatedTaxon,
+            Author = author,
+            Text = "En solsort i haven",
+            TimeStamp = new DateTime(2026, 1, 1, 12, 0, 0)
+        };
+
         // Tilføjer observationen og de tilknyttede objekter.
         // EF Core følger også forbindelsen fra childTaxon til parentTaxon.
-        context.Observations.Add(observation);
+        context.Observations.AddRange(observation, unrelatedObservation);
 
         // Gemmer forfatteren, begge taxoner og observationen i databasen.
         context.SaveChanges();
