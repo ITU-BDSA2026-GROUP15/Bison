@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 
 namespace Bison.Razor.UITests;
 
@@ -22,6 +23,8 @@ public class BisonServer
     private Process? _process;
     private string? _databaseFolder;
 
+    private readonly StringBuilder _errorOutput = new();
+
     [OneTimeSetUp]
     public async Task StartAsync()
     {
@@ -33,13 +36,17 @@ public class BisonServer
         // --no-launch-profile: ellers ville launchSettings.json bestemme porten i stedet for os.
         var startInfo = new ProcessStartInfo("dotnet", $"run --no-build --no-launch-profile --configuration {BuildConfiguration}")
         {
-            WorkingDirectory = Path.Combine(FindRepositoryRoot(), "src", "Bison.Razor")
+            WorkingDirectory = Path.Combine(FindRepositoryRoot(), "src", "Bison.Razor"),
+            RedirectStandardError = true
         };
         startInfo.Environment["ASPNETCORE_URLS"] = BaseUrl;
         startInfo.Environment["ASPNETCORE_ENVIRONMENT"] = "Development";
         startInfo.Environment["BISONDBPATH"] = Path.Combine(_databaseFolder, "bison.db");
 
-        _process = Process.Start(startInfo);
+        _process = Process.Start(startInfo) ?? throw new InvalidOperationException("Could not start Bison.");
+
+        _process.ErrorDataReceived += (_, e) => { if (e.Data is not null) _errorOutput.AppendLine(e.Data); };
+        _process.BeginErrorReadLine();
 
         await WaitUntilServerRespondsAsync();
     }
@@ -72,7 +79,9 @@ public class BisonServer
         {
             if (_process!.HasExited)
             {
-                throw new InvalidOperationException("Bison stoppede under opstart. Er port 5299 optaget? Kør 'dotnet run' i src/Bison.Razor for at se fejlen.");
+                _process.WaitForExit(); // sikrer, at den sidste stderr-tekst er nået frem
+                throw new InvalidOperationException(
+                $"Bison exited during startup (exit code {_process.ExitCode}):{Environment.NewLine}{_errorOutput}");
             }
 
             try
@@ -91,7 +100,7 @@ public class BisonServer
             await Task.Delay(250);
         }
 
-        throw new TimeoutException("Bison svarede ikke inden for 60 sekunder.");
+        throw new TimeoutException("Bison failed to respond within 60 seconds.");
     }
 
     // Testene kører fra bin/Debug/net8.0, så vi går op gennem mapperne, til vi finder roden af repoet.
@@ -104,6 +113,6 @@ public class BisonServer
             folder = folder.Parent;
         }
 
-        return folder?.FullName ?? throw new DirectoryNotFoundException("Kunne ikke finde Bison.sln.");
+        return folder?.FullName ?? throw new DirectoryNotFoundException("Could not find Bison.sln.");
     }
 }
