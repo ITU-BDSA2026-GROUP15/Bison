@@ -19,13 +19,22 @@ public class ObservationCreationUnitTest
         using var repository = new TestRepository(taxon, author);
         var service = new ObservationService(repository);
 
-        //act
+        //act - forsøger at oprette en observation ud fra taxon og forfatteren, som repository kender til. 
 
-        var observation = service.TryCreateObservation( author.Name , author.Email,"Jeg så en solsort i haven",  taxon.TaxonId);
+        var created = service.TryCreateObservation( author.Name , author.Email,"Jeg så en solsort i haven",  taxon.TaxonId);
 
 
-        //assert
+        //assert - forventer, at servicen returnerer true og sender en
+        // observation med det valgte taxon, den rigtige forfatter og den
+        // indtastede tekst til repositoryet.forventer også, at Save() kaldes.
 
+        //same betyder, at det er den samme instans af objektet, som vi forventer.
+        Assert.True(created,"Observation was created successfully");
+        var observation = Assert.IsType<Observation>(repository.InsertedPost);
+        Assert.Same(taxon, observation.Taxon);
+        Assert.Same(author, observation.Author);
+        Assert.Equal("Jeg så en solsort i haven", observation.Text);
+        Assert.True(repository.SaveCalled);
     }    
 
     private sealed class TestRepository : IPostRepository
@@ -37,13 +46,6 @@ public class ObservationCreationUnitTest
         {
             _taxon = taxon;
             _author = author;
-        }
-
-        public bool TryCreateObservation(string authorName, string email, string text, int taxonId)
-        {
-            // Simulerer oprettelse af observationen i databasen.
-            // Returnerer true, hvis taxonId og forfatter findes.
-            return taxonId == _taxon.TaxonId && email == _author.Email;
         }
 
         //creates a post and returns it, so we can check if the post was created correctly
