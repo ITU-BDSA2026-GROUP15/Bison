@@ -37,6 +37,22 @@ public class ObservationCreationUnitTest
         Assert.True(repository.SaveCalled);
     }    
 
+    [Fact]
+    public void tryCreateObservationFromNonValidTaxon()
+    {
+        //arrange - reporsitorty kender allerede til taxonet og forfatteren
+        //så vi kan oprette en observation med et eksisterende taxon og forfatter
+
+        var taxon = new Taxon{TaxonId = 1, VernacularName = "Solsort"};
+        var author = new Author{Name = "Anne", Email = "anne@example.com"};
+
+        //act
+
+
+
+        //assert
+
+    }
     private sealed class TestRepository : IPostRepository
     {
         private readonly Taxon _taxon;
