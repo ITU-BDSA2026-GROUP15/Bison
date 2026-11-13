@@ -36,7 +36,7 @@ public class BisonServer
         // --no-launch-profile: ellers ville launchSettings.json bestemme porten i stedet for os.
         var startInfo = new ProcessStartInfo("dotnet", $"run --no-build --no-launch-profile --configuration {BuildConfiguration}")
         {
-            WorkingDirectory = Path.Combine(FindRepositoryRoot(), "src", "Bison.Razor"),
+            WorkingDirectory = Path.Combine(FindRepositoryRoot(), "src", "Bison.Web"),
             RedirectStandardError = true
         };
         startInfo.Environment["ASPNETCORE_URLS"] = BaseUrl;

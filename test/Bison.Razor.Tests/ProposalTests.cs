@@ -1,16 +1,16 @@
 //using Bison.Core;
-using Bison.Razor.Models;
-using Bison.Razor.DAL;
+using Bison.Web.Models;
+using Bison.Web.DAL;
 
 public class ProposalTests
 {
     private const string ValidTaxonId = "MSTSNM:Arter:3e4e67e4-f785-ea11-aa77-501ac539d1ea";
-    
+
 
     [Fact]
     public void GetProposal_returningExpectedViewmodel()
     {
-        //Arrgange 
+        //Arrgange
         var timestamp = new DateTime(2026, 1, 1, 12, 0, 0);
 
         var proposal = new Proposal
@@ -27,7 +27,7 @@ public class ProposalTests
         var result = service.GetProposals(7);
 
         //Assert
-      
+
         var actual = Assert.Single(result);
 
         Assert.Equal("Anne", actual.Author);
@@ -93,7 +93,7 @@ public class ProposalTests
         public Taxon? GetTaxon(int id) => throw new NotImplementedException();
 
         public List<Observation> GetAllObservations() => throw new NotImplementedException();
-    
+
 
     // Disse testklasser bruges til andre funktioner end oprettelse.
     public Author? GetAuthorByName(string name) =>

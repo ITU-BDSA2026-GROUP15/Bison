@@ -1,5 +1,5 @@
-using Bison.Razor.DAL;
-using Bison.Razor.Models;
+using Bison.Web.DAL;
+using Bison.Web.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;

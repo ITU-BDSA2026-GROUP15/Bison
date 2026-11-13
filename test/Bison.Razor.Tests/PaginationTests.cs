@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Bison.Razor.DAL;
-using Bison.Razor.Models;
+using Bison.Web.DAL;
+using Bison.Web.Models;
 using Microsoft.EntityFrameworkCore;
 namespace Bison.Razor.Tests;
 

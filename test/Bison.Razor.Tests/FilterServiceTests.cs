@@ -1,8 +1,8 @@
 namespace Bison.Razor.Tests;
-using Bison.Razor.DAL;
+using Bison.Web.DAL;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Bison.Razor.Models;
+using Bison.Web.Models;
 public class FilterServiceTests
 {
     // Tester, at et ukendt taxon giver en tom liste.
