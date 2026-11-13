@@ -42,16 +42,23 @@ app.MapPost("/observation", (Cheep observation) => {
     cheepDb.Store(obsFile, stored);
     return stored; });
 
-app.MapGet("/comments", (int id)=> cheepDb.Read(comFile).Where(comment => comment.ID == id));
-//app.MapGet("/comments", () => commentDb.Read(comFile));
+    app.MapGet("/comments", (int id)=> cheepDb.Read(comFile).Where(comment => comment.ID == id));
 
-app.MapPost("/comment", (Cheep comment)=>  {
+    app.MapPost("/comment", (Cheep comment)=>  {
 
     if (!ProposalValidator.ObservationExists(cheepDb.Read(obsFile), comment.ID)) {
         return Results.BadRequest("Invalid observation ID");
     }
-        return Results.Ok(comment);}
-    );
+        cheepDb.Store(comFile, comment);
+        return Results.Ok(new
+        {
+            comment,
+            file = comFile,
+            exists = File.Exists(comFile)
+        }
+        //return Results.Ok(comment);}
+        );
+    });
 
 
 

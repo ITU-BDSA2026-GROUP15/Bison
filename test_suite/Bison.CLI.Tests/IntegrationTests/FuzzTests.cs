@@ -143,22 +143,24 @@ public class FuzzTests
 
                 var responseBody = await response.Content.ReadAsStringAsync();
 
-if (!response.IsSuccessStatusCode)
-{
-    throw new Exception(
-        $"Request failed: {(int)response.StatusCode} " +
-        $"{response.StatusCode}. Response: {responseBody}");
-}
+                if (referenceRealObservation)
+                {
+                    Assert.True(
+                        response.IsSuccessStatusCode,
+                        await response.Content.ReadAsStringAsync());
 
-                //Work is needed before we can continue here - since /comments does not validate ID.
-                //The CLI method comment() does, but we need to make this a possibility for /comments
-
-                response.EnsureSuccessStatusCode(); //This needs to be changed now that comments validate id's correctly
-
-                _sentComments.Add(comment);
+                    var storedComment = await response.Content.ReadFromJsonAsync<Cheep>();
+                    Assert.NotNull(storedComment);
+                    _sentComments.Add(storedComment);
+                }
+                else
+                {
+                    Assert.Equal(
+                        System.Net.HttpStatusCode.BadRequest,
+                        response.StatusCode);
+                }
             }
             //ORACLE Check - with get function
-
 
         }
 

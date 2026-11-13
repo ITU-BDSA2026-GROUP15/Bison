@@ -19,12 +19,17 @@ public class CSVDBServiceFixture : IDisposable
         {
             FileName = "dotnet",
             UseShellExecute = false,
-            CreateNoWindow = true
+            CreateNoWindow = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true
         };
 
         startInfo.ArgumentList.Add("run");
         startInfo.ArgumentList.Add("--project");
         startInfo.ArgumentList.Add(FindProjectPath());
+
+        //alt efter -- sendes videre til selve webservicen
+        startInfo.ArgumentList.Add("--");
         startInfo.ArgumentList.Add("--urls");
         startInfo.ArgumentList.Add("http://localhost:5273");
         startInfo.ArgumentList.Add("--DataDir");
@@ -48,7 +53,14 @@ public class CSVDBServiceFixture : IDisposable
             {
                 var response = Client.GetAsync("/observations").GetAwaiter().GetResult();
                 if (response.IsSuccessStatusCode)
+                {
                     return;
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    var body = response.Content.ReadAsStringAsync()
+                        .GetAwaiter().GetResult();
+                }
             }
             catch (HttpRequestException)
             {
