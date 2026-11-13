@@ -60,7 +60,20 @@ namespace Bison.Razor.DAL
         {
             page = Math.Max(1, page);
             int offset = (page-1)* PageSize;
-            
+
+            return _context.Posts.OfType<Observation>()
+                .Include(o => o.Author)
+                .Include(o => o.Taxon)
+                .Where(o => o.Author.Name == author)
+                .OrderByDescending(o=> o.TimeStamp)
+                .ThenByDescending(o => o.PostId)
+                .Skip(offset)
+                .Take(PageSize)
+                .AsEnumerable()
+                .Select(ToObservationDto) //For later
+                .ToList();
+
+
         }
 
         //update
