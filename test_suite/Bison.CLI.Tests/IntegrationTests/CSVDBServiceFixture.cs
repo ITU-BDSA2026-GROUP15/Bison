@@ -3,31 +3,32 @@ using System.Net.Http.Json;
 
 namespace Bison.CLI.Tests;
 
-// Starter Bison.Razor (web servicen) som en rigtig proces, én gang, delt mellem alle tests
+// Starter web servicen som en rigtig proces, én gang, delt mellem alle tests
 // i en collection (test-klasse).
-public class BisonRazorFixture : IDisposable
+public class CSVDBServiceFixture : IDisposable
 {
     public HttpClient Client { get; }
 
     private readonly Process process;
+    private readonly string tempDir = Directory.CreateTempSubdirectory("bison-test").FullName;
 
-    public BisonRazorFixture()
+    public CSVDBServiceFixture()
     {
-        string projectPath = FindProjectPath();
 
         var startInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
             UseShellExecute = false,
             CreateNoWindow = true
         };
+
         startInfo.ArgumentList.Add("run");
         startInfo.ArgumentList.Add("--project");
-        startInfo.ArgumentList.Add(projectPath);
+        startInfo.ArgumentList.Add(FindProjectPath());
         startInfo.ArgumentList.Add("--urls");
         startInfo.ArgumentList.Add("http://localhost:5273");
+        startInfo.ArgumentList.Add("--DataDir");
+        startInfo.ArgumentList.Add(tempDir);
 
         process = Process.Start(startInfo)!;
 
@@ -57,7 +58,7 @@ public class BisonRazorFixture : IDisposable
             Thread.Sleep(500);
         }
 
-        throw new InvalidOperationException("Bison.Razor startede ikke inden for den forventede tid.");
+        throw new InvalidOperationException("The webservice did not launch in expected time frame.");
     }
 
     private static string FindProjectPath()
@@ -71,7 +72,7 @@ public class BisonRazorFixture : IDisposable
         if (dir is null)
             throw new InvalidOperationException("Kunne ikke finde solution-roden.");
 
-        return Path.Combine(dir.FullName, "src", "Bison.Razor", "Bison.Razor.csproj");
+        return Path.Combine(dir.FullName, "src", "Bison.CSVDBService", "Bison.CSVDBService.csproj");
     }
 
     public void Dispose()
@@ -85,10 +86,13 @@ public class BisonRazorFixture : IDisposable
         }
 
         process.Dispose();
+
+        try { Directory.Delete(tempDir, true); } catch { /* ligegyldigt */ }
+    
     }
 }
 
-[CollectionDefinition("Bison.Razor service")]
-public class BisonRazorCollection : ICollectionFixture<BisonRazorFixture>
+[CollectionDefinition("Webservice")]
+public class CSVDBServiceCollection : ICollectionFixture<CSVDBServiceFixture>
 {
 }

@@ -1,7 +1,7 @@
 using System;
 using SimpleDB;
 
-static class UserInterface
+public static class UserInterface
 {
     public static void PrintObservations(IEnumerable<Cheep> cheeps)
     {    

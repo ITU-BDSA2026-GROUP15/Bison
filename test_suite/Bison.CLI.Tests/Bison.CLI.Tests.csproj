@@ -1,4 +1,5 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -8,8 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.11" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="NSubstitute" Version="6.2.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
   </ItemGroup>
@@ -19,8 +20,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../src/Bison.Razor/Bison.Razor.csproj" />
-    <ProjectReference Include="..\..\src\Bison.Taxonomy\Bison.Taxonomy.csproj" />
-   <!-- <ProjectReference Include="..\..\src\Bison.Razor\Bison.Razor.csproj" /> -->
+    <ProjectReference Include="..\..\src\Bison.CLI\Bison.CLI.csproj" />
+    <ProjectReference Include="..\..\src\SimpleDB\SimpleDB.csproj" />
+    <ProjectReference Include="..\..\src\SimpleDB\Prop" />
   </ItemGroup>
+
+    <ItemGroup>
+        <None Update="E2ETest.csv">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
 </Project>

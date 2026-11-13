@@ -5,14 +5,14 @@ using SimpleDB;
 
 namespace Bison.CLI.Tests;
 
-// [Collection(...)] deler den samme kørende Bison.Razor-instans med UnitTest-klassen,
+// [Collection(...)] deler den samme kørende CSVDBService-instans med UnitTest-klassen,
 // i stedet for at starte endnu en service op.
-[Collection("Bison.Razor service")]
+[Collection("Webservice")]
 public class EndToEnd
 {
     private readonly HttpClient client;
 
-    public EndToEnd(BisonRazorFixture fixture)
+    public EndToEnd(CSVDBServiceFixture fixture)
     {
         client = fixture.Client;
     }
