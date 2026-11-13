@@ -1,4 +1,4 @@
-namespace Bison.Web.Models;
+namespace Bison.Core.Models;
 
 // C#-implementeringen af {:extern}-klassen Observation fra src/Bison.Dafny/dafnyModels.dfy.
 public class DafnyObservation

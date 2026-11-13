@@ -1,4 +1,4 @@
-namespace Bison.Web.Models;
+namespace Bison.Core.Models;
 
 // Represents a taxon with its identifiers, Danish name, and place in the taxonomy.
 public class Taxon {

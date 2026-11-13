@@ -1,8 +1,7 @@
-using System.Net;
-using System.Linq;
-using Bison.Web.DAL;
-using Bison.Web.Models;
+using Bison.Core.Models;
+using Bison.Infrastructure.Repositories;
 
+namespace Bison.Infrastructure.Services;
 
 // Indeholder de oplysninger om en observation, som vises på siden.
 //translates between Repo and ObservationViewModel
@@ -25,7 +24,7 @@ public interface IObservationService
 
     public List<ObservationViewModel> GetComments (int id, int page =1);
 
-   // Henter de taxoner, brugeren kan vælge i observationsformularen.
+    // Henter de taxoner, brugeren kan vælge i observationsformularen.
     IReadOnlyList<Taxon> GetTaxons();
 
     // Forsøger at gemme en observation for den angivne forfatter.
@@ -34,13 +33,13 @@ public interface IObservationService
     // Returnerer true, når observationen er gemt, og false,
     // hvis forfatternavnet eller teksten mangler, eller taxonet ikke findes.
     bool TryCreateObservation(
-    string authorName, string email, string text, int taxonId);
+        string authorName, string email, string text, int taxonId);
 
     bool TryCreateComment(
-    string authorName, string email, string text, int observationID);
+        string authorName, string email, string text, int observationID);
 
     bool TryCreateProposal(
-    string authorName, string email, string text, int observationId, int taxonId);
+        string authorName, string email, string text, int observationId, int taxonId);
 
 }
 
@@ -61,7 +60,7 @@ public class ObservationService : IObservationService
         return _repo.GetPosts<Observation>(page).Select(ToViewModel).ToList();
     }
 
-  public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page=1)
+    public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page=1)
     {
         return _repo.GetPostsByAuthor<Observation>(author, page).Select(ToViewModel).ToList();
     }
@@ -75,13 +74,13 @@ public class ObservationService : IObservationService
 
     }
 
-     public List<ObservationViewModel> GetProposals (
+    public List<ObservationViewModel> GetProposals (
         int id, int page = 1)
     {
         return _repo.GetProposals(id).Select(ToProposalViewModel).ToList();
     }
 
-     public List<ObservationViewModel> GetComments (
+    public List<ObservationViewModel> GetComments (
         int id, int page = 1)
     {
         return _repo.GetComments(id).Select(ToCommentViewModel).ToList();
@@ -91,15 +90,15 @@ public class ObservationService : IObservationService
     {
         return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"), o.PictureUrl);
     }
-	private static ObservationViewModel ToProposalViewModel(Proposal o)
-	{
-		return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
-	}
+    private static ObservationViewModel ToProposalViewModel(Proposal o)
+    {
+        return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
+    }
 
-	private static ObservationViewModel ToCommentViewModel(Comment o)
-	{
-		return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
-	}
+    private static ObservationViewModel ToCommentViewModel(Comment o)
+    {
+        return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
+    }
 
 
     public IReadOnlyList<Taxon> GetTaxons()
@@ -213,7 +212,7 @@ public class ObservationService : IObservationService
         // En proposal skal have en forfatter, et id der knytter den til en obs, samt et taxon id.
         // IsNullOrWhiteSpace fanger også tekst, der kun består af mellemrum.
         if (string.IsNullOrWhiteSpace(authorName) || string.IsNullOrWhiteSpace(text) ||
-             observationId <= 0 || taxonId <= 0) // 0 er svarende til null for int
+            observationId <= 0 || taxonId <= 0) // 0 er svarende til null for int
         {
             return false;
         }
@@ -226,7 +225,7 @@ public class ObservationService : IObservationService
 
         var obs = _repo.GetObservationDetails(observationId);
         if (obs is null)
-        return false;
+            return false;
 
         // Genbrug forfatteren, hvis vedkommende allerede findes.
         // Operatoren ?? opretter kun en ny Author, når opslaget giver null.

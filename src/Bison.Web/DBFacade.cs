@@ -1,5 +1,8 @@
 using System.Globalization;
+using Bison.Infrastructure.Services;
 using Microsoft.Data.Sqlite;
+
+namespace Bison.Web;
 
 public class DBFacade
 {
@@ -24,11 +27,11 @@ public class DBFacade
 
         var command = connection.CreateCommand(); // det her viser bare alle observationer så at sige
 
-       // Før hentede SQL'en alle observationer sorteret efter dato.
+        // Før hentede SQL'en alle observationer sorteret efter dato.
         // Nu henter den højst 32 og springer tidligere sider over med OFFSET.
         // Id bruges som ekstra sortering, når observationer har samme dato.
 
-       command.CommandText = @"
+        command.CommandText = @"
             select user.username, observation.text, observation.pub_date
             from observation
             join user on observation.author_id = user.user_id
@@ -213,7 +216,7 @@ public class DBFacade
         return result;
     }
 
-     public bool ObservationExists(int observationId)
+    public bool ObservationExists(int observationId)
     {
         using var connection = new SqliteConnection($"Data Source={_dbPath}");
         connection.Open();

@@ -1,9 +1,10 @@
 ﻿using System;
+using Bison.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Bison.Web.Migrations
+namespace Bison.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

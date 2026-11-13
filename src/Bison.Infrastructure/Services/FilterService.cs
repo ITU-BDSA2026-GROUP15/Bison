@@ -1,23 +1,25 @@
-    using Bison.Web.DAL;
-    using Bison.Web.Models;
-    using Bison.Core;
+using Bison.Core.Models;
+using Bison.Infrastructure.DafnyWrapper;
+using Bison.Infrastructure.Repositories;
 
-    public interface IFilterService{
-        public List<ObservationViewModel> GetObservationsFromTaxon (int taxonId, int page = 1);
+namespace Bison.Infrastructure.Services;
+
+public interface IFilterService{
+    public List<ObservationViewModel> GetObservationsFromTaxon (int taxonId, int page = 1);
+}
+
+public class FilterService : IFilterService
+{
+    // DBFacade håndterer adgangen til SQLite-databasen.
+    private readonly IPostRepository _repo;
+
+    // Modtager DBFacade gennem dependency injection.
+    public FilterService(IPostRepository repo)
+    {
+        _repo = repo;
     }
 
-    public class FilterService : IFilterService
-    {
-        // DBFacade håndterer adgangen til SQLite-databasen.
-        private readonly IPostRepository _repo;
-
-        // Modtager DBFacade gennem dependency injection.
-        public FilterService(IPostRepository repo)
-        {
-            _repo = repo;
-        }
-
-        private const int PageSize = 32;
+    private const int PageSize = 32;
 
     public List<ObservationViewModel> GetObservationsFromTaxon(int taxonId, int page = 1)
     {
@@ -33,7 +35,7 @@
         var dafnyObs = _repo.GetAllObservations().Select(obs => new DafnyObservation(obs)).ToArray();
 
         //converting to a dafny-sequence, which is the parameter for the wrapper class
-        var input = Dafny.Sequence<DafnyObservation>.FromArray(dafnyObs);
+        var input = Sequence<DafnyObservation>.FromArray(dafnyObs);
 
         var dafnyRoot = new DafnyTaxon(root);
 

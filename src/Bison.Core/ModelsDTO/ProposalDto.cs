@@ -1,4 +1,4 @@
-namespace Bison.Web.ModelsDTO;
+namespace Bison.Core.ModelsDTO;
 
 public class ProposalDto
 {

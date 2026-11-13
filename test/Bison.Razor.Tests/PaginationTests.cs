@@ -1,10 +1,11 @@
 using System.Text.RegularExpressions;
+using Bison.Core.Models;
+using Bison.Infrastructure.Data;
+using Bison.Web;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Bison.Web.DAL;
-using Bison.Web.Models;
 using Microsoft.EntityFrameworkCore;
 namespace Bison.Razor.Tests;
 

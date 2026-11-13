@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Bison.Core.Models;
+using Bison.Infrastructure.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Bison.Web.Pages;
@@ -11,8 +13,8 @@ public class UserTimelineModel : PageModel
     public bool IsOwnTimeline { get; private set; }
 
     // Indeholder valgmulighederne til observationsformularen.
-    public IReadOnlyList<Bison.Web.Models.Taxon> Taxons { get; private set; } =
-        Array.Empty<Bison.Web.Models.Taxon>();
+    public IReadOnlyList<Taxon> Taxons { get; private set; } =
+        Array.Empty<Taxon>();
 
     public UserTimelineModel(IObservationService service)
     {

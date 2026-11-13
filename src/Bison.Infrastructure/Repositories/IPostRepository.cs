@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
-using Bison.Web.Models;
+using Bison.Core.Models;
 
-namespace Bison.Web.DAL
+namespace Bison.Infrastructure.Repositories
 {
     public interface IPostRepository : IDisposable
     {

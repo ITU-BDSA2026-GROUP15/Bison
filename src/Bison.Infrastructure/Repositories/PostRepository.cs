@@ -1,12 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Bison.Core.Models;
+using Bison.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Bison.Web.Models;
 
 //communicates with the database and returns psot objects determned by the generic type <T>
 
-namespace Bison.Web.DAL
+namespace Bison.Infrastructure.Repositories
 {
     public class PostRepository : IPostRepository
     {

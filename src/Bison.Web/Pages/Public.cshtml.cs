@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Bison.Core.Models;
+using Bison.Infrastructure.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 
@@ -23,8 +25,8 @@ public class PublicModel : PageModel
     public int? CurrentTaxonId {get; set;}
 
     // Taxonerne, som brugeren kan vælge i formularen.
-    public IReadOnlyList<Bison.Web.Models.Taxon> Taxons { get; private set; } =
-        Array.Empty<Bison.Web.Models.Taxon>();
+    public IReadOnlyList<Taxon> Taxons { get; private set; } =
+        Array.Empty<Taxon>();
 
     public PublicModel(IObservationService service, IFilterService filterService)
     {

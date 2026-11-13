@@ -1,7 +1,9 @@
-using Bison.Web.DAL;
-using Microsoft.EntityFrameworkCore;
+using Bison.Infrastructure.Data;
+using Bison.Infrastructure.Repositories;
+using Bison.Infrastructure.Services;
+using Bison.Web;
 using Microsoft.AspNetCore.Identity;
-using Bison.Web.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +28,7 @@ builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en
 builder.Services.AddScoped<IObservationService, ObservationService>();
 builder.Services.AddScoped<IPictureStorage, LocalPictureStorage>();
 
-builder.Services.AddDefaultIdentity<Bison.Web.DAL.ApplicationUser>(options =>
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
 options.SignIn.RequireConfirmedAccount = false;
 
@@ -65,7 +67,7 @@ using (var scope = app.Services.CreateScope())
     context.Database.Migrate(); //opretter kun database, hvis den slet ikke findes
     DbInitializer.SeedDatabase(context);
 
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Bison.Web.DAL.ApplicationUser>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
     await CreateUser (userManager, "edka@itu.dk", "123456");
     await CreateUser (userManager, "debloh@itu.dk", "password");
 
@@ -79,11 +81,11 @@ app.MapRazorPages(); // kobler URL til razor pages
 
 app.Run();
 
-static async Task CreateUser(UserManager<Bison.Web.DAL.ApplicationUser> userManager, string email, string password)
+static async Task CreateUser(UserManager<ApplicationUser> userManager, string email, string password)
 {
    if (await userManager.FindByEmailAsync(email) != null) return;
 
-   var result = await userManager.CreateAsync(new Bison.Web.DAL.ApplicationUser { UserName = email, Email = email }, password);
+   var result = await userManager.CreateAsync(new ApplicationUser { UserName = email, Email = email }, password);
 if (!result.Succeeded)
 {
     throw new Exception( string.Join(", ", result.Errors.Select(e => e.Description)));
@@ -92,4 +94,7 @@ if (!result.Succeeded)
 
 // Gør den (ellers implicit genererede) Program-klasse offentlig og tilgængelig, så
 // WebApplicationFactory<Program> kan bruges fra Bison.Web.Tests til at køre servicen in-memory.
-public partial class Program { }
+namespace Bison.Web
+{
+    public partial class Program { }
+}

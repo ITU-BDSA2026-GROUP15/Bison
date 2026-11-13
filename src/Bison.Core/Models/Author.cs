@@ -1,4 +1,4 @@
-namespace Bison.Web.Models;
+namespace Bison.Core.Models;
 //ovenstående bruges til at fortælle hvor denne klasse hører til, at det er taxon fra denne klasse! (meget vigtig!)
 
 // Represents an author and the posts they have written.

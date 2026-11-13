@@ -1,5 +1,7 @@
-using Bison.Web.DAL;
-using Bison.Web.Models;
+using Bison.Core.Models;
+using Bison.Infrastructure.Data;
+using Bison.Infrastructure.Repositories;
+using Bison.Infrastructure.Services;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 

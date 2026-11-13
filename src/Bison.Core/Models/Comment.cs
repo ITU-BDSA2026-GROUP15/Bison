@@ -1,4 +1,4 @@
-namespace Bison.Web.Models;
+namespace Bison.Core.Models;
 
 
 //sådan skriver man sub og super klasser!

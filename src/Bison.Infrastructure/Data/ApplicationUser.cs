@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace Bison.Web.DAL
+namespace Bison.Infrastructure.Data
 {
     public class ApplicationUser : IdentityUser
     {

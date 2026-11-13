@@ -1,4 +1,4 @@
-namespace Bison.Web.Models;//meget vigtig!
+namespace Bison.Core.Models;//meget vigtig!
 
 // igen sub-klassen : super-klassen nedenunder sådan skrives det!
 //ARVER fra post

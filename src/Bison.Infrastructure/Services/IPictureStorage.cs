@@ -1,6 +1,6 @@
-namespace Bison.Web.Services;
-
 using Microsoft.AspNetCore.Http;
+
+namespace Bison.Infrastructure.Services;
 
 //this interface is for the LocalPictureStorage
 public interface IPictureStorage

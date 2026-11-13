@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Bison.Infrastructure.Data;
 
 #nullable disable
 
-namespace Bison.Web.Migrations
+namespace Bison.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class AddObservationPicture : Migration

@@ -1,8 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using Bison.Web.Models;
+using Bison.Core.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
-namespace Bison.Web.DAL
+namespace Bison.Infrastructure.Data
 {
 
     public class BisonDBContext : IdentityDbContext<ApplicationUser>

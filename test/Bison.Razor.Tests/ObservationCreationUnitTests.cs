@@ -1,5 +1,6 @@
-using Bison.Web.Models;
-using Bison.Web.DAL;
+using Bison.Core.Models;
+using Bison.Infrastructure.Repositories;
+using Bison.Infrastructure.Services;
 
 namespace Bison.Razor.Tests;
 

@@ -1,6 +1,6 @@
-using Bison.Web.Models;
+using Bison.Core.Models;
 
-namespace Bison.Web.DAL;
+namespace Bison.Infrastructure.Data;
 
 public static class DbInitializer
 {

@@ -1,7 +1,7 @@
-namespace Bison.Web.Services;
-
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+
+namespace Bison.Infrastructure.Services;
 
 //saves the picture in wwwroot/uploads folder
 public class LocalPictureStorage : IPictureStorage
