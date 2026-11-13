@@ -56,6 +56,13 @@ namespace Bison.Razor.DAL
 
         }
 
+        public IEnumerable<ObservationsDto> GetObservationByAuthor (string author, int page)
+        {
+            page = Math.Max(1, page);
+            int offset = (page-1)* PageSize;
+            
+        }
+
         //update
         public void UpdatePost(Post post)
         {
