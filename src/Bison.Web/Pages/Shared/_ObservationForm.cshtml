@@ -1,0 +1,31 @@
+@model IReadOnlyList<Bison.Web.Models.Taxon>
+
+<div class="observationbox">
+    <h3>What did you see, @(User.Identity?.Name)?</h3>
+
+    @* Share sender tekst og taxon til CreateObservationModel.OnPost(). *@
+    <form method="post" asp-page="/CreateObservation">
+        <div asp-validation-summary="All"></div>
+
+        <label for="observation-text">Observation</label>
+        @Html.TextBox("Text", null, new
+        {
+            id = "observation-text",
+            required = "required"
+        })
+
+        @* Vis navnet på taxonet, men send dets ID. *@
+        <label for="observation-taxon">Taxon</label>
+        @Html.DropDownList(
+            "TaxonId",
+            Model.Select(taxon => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            {
+                Value = taxon.TaxonId.ToString(),
+                Text = taxon.VernacularName ?? taxon.dwc_TaxonID
+            }),
+            "Choose a taxon",
+            new { id = "observation-taxon", required = "required" })
+
+        <input type="submit" value="Share" />
+    </form>
+</div>

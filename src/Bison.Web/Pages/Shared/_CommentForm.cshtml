@@ -1,0 +1,21 @@
+@model int
+
+<div class="commentbox">
+    <h3>What is your comment, @(User.Identity?.Name)?</h3>
+
+    @* Share sender tekst og taxon til CreateObservationModel.OnPost(). *@
+    <form method="post" asp-page="/CreateComment">
+        <div asp-validation-summary="All"></div>
+
+        <input type="hidden" name="ObservationId" value="@Model" />
+
+        <label for="comment-text">Comment</label>
+        @Html.TextBox("Text", null, new
+        {
+            id = "comment-text",
+            required = "required"
+        })
+
+        <input type="submit" value="Share" />
+    </form>
+</div>
