@@ -15,18 +15,17 @@ using System.Data.Common;
 
 class Program {
 
-    //HttpClient snakker med Bison.CSVDBService (Bison.Razor) i stedet for at kalde SimpleDB direkte.
-    private static readonly HttpClient httpClient = new HttpClient();
-
-    //Statisk konstruktør: kører én gang, første gang klassen bruges.
-    static Program()
+    private readonly IDatabaseRepository _db;
+    public Program(IDatabaseRepository db)
     {
-        httpClient.BaseAddress = new Uri("http://localhost:5273");
+        _db= db;
     }
 
     public static void Main(string[] args) { //args is what you write in the terminal after the program name, for example: dotnet run observe
-
-        parseArguments(args);
+        var http = new HttpClient { BaseAddress = new Uri("http://localhost:5273") };
+        var db = new HttpDatabaseRepository(http);
+        var program = new Program(db);
+        program.parseArguments(args);
 
     }
 
@@ -70,20 +69,7 @@ class Program {
             readLocation(options.Location);
         });
 
-}
-
-
-
-    // read() henter nu observationerne fra web servicen (GET /observations) i stedet for at læse CSV-filen direkte.
-    private static void read() {
-        var task = httpClient.GetFromJsonAsync<List<Cheep>>("/observations");
-        var awaiter = task.GetAwaiter();
-        var cheeps = awaiter.GetResult();
-
-        UserInterface.PrintObservations(cheeps ?? new List<Cheep>());
-
     }
-
     //added location
 
     // observe() poster nu til web servicen (POST /observation) i stedet for at skrive til CSV-filen direkte.
@@ -94,15 +80,7 @@ class Program {
 
         var newCheep = new Cheep(author, 0, observation, timestamp, location);
 
-        var postTask = httpClient.PostAsJsonAsync("/observation", newCheep);
-        var postAwaiter = postTask.GetAwaiter();
-        var response = postAwaiter.GetResult();
-
-        var readTask = response.Content.ReadFromJsonAsync<Cheep>();
-        var readAwaiter = readTask.GetAwaiter();
-        var storedCheep = readAwaiter.GetResult();
-
-        UserInterface.PrintObservationAdded(storedCheep ?? newCheep);
+        UserInterface.PrintObservationAdded(_db.AddObservation(cheep));
     }
 
 
@@ -112,10 +90,6 @@ class Program {
         DateTimeOffset now = DateTimeOffset.Now;
         long timestamp = now.ToUnixTimeSeconds();
 
-        var observationsTask = httpClient.GetFromJsonAsync<List<Cheep>>("/observations");
-        var observationsAwaiter = observationsTask.GetAwaiter();
-        var observations = observationsAwaiter.GetResult() ?? new List<Cheep>();
-
         if (!observations.Any(o => o.ID == id)) {
             //if no observation with the given ID exists on the service
             Console.WriteLine("No observations with ID: (" + id + ") currently exists");
@@ -123,39 +97,19 @@ class Program {
         }
 
         var cheep = new Cheep(author, id, comment, timestamp, string.Empty); //Cheep as a comment
+        UserInterface.PrintCommentAdded(_db.AddComment(cheep));
 
-        var postTask = httpClient.PostAsJsonAsync("/comment", cheep);
-        var postAwaiter = postTask.GetAwaiter();
-        postAwaiter.GetResult();
-
-        UserInterface.PrintCommentAdded(cheep);
     }
 
 
     // discussion() henter nu kommentarerne til en given observation fra web servicen (GET /comments?id=),
     // som allerede filtrerer server-side. Klienten skal derfor ikke længere filtrere selv.
     private static void discussion(int obsId){
-        var task = httpClient.GetFromJsonAsync<List<Cheep>>($"/comments?id={obsId}");
-        var awaiter = task.GetAwaiter();
-        var cheeps = awaiter.GetResult();
-
-        UserInterface.PrintObservations(cheeps ?? new List<Cheep>());
-    }
-    //db creates acces to the observation database
-    //cheeps reads all observations and keeps only those from the requested location
-    // the comparison ignores differences between uppercase and lowercase
-    //userintercase - displays the matching observation in the terminal
-
-    //NEW: readLocation() henter alle observationer fra web servicen (GET /observations) og filtrerer på
-    //location client-side.
-    private static void readLocation(string location) {
-        var task = httpClient.GetFromJsonAsync<List<Cheep>>("/observations");
-        var awaiter = task.GetAwaiter();
-        var cheeps = awaiter.GetResult();
-        var matches = (cheeps ?? new List<Cheep>()).Where(cheep => string.Equals(cheep.Location, location, StringComparison.OrdinalIgnoreCase));
-
-        UserInterface.PrintObservations(matches);
-
+        UserInterface.PrintObservations(_db.GetComments(obsId));
     }
 
+    private void ReadLocation(string location)
+    {
+        UserInterface.PrintObservations(_db.GetObservationsByLocation(location));
+    }
 }
