@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Bison.Razor.Models;
+using Bison.Razor.ModelsDTO;
 
 namespace Bison.Razor.DAL
 {
@@ -12,15 +13,20 @@ namespace Bison.Razor.DAL
         //create
         void InsertPost(Post post);
 
-        //read -> returns all posts
-       IEnumerable<T> GetPosts<T>(int page) where T : Post;
+       
+        IEnumerable<ObservationDto> GetObservations (int page);
 
-       //read -> returns posts by a certain author
-        IEnumerable<T> GetPostsByAuthor<T>(string author, int page) where T : Post;
-        //read -> retuans a single post
-        Post GetPost(int id);
-        
-        //update
+        IEnumerable<ObservationDto> GetObservationsByAuthor (string author, int page);
+        ObservationDto? GetObservationDetails(int id);
+        IEnumerable<CommentDto> GetComments (int observationId);
+        IEnumerable<ProposalDto> GetProposals (int observationId);
+
+     
+
+       // Finder den forfatter, der svarer til brugerens login-navn.
+        Author? GetAuthorByName(string name);
+
+         //update
         void UpdatePost(Post post);
 
         //delete
@@ -28,17 +34,11 @@ namespace Bison.Razor.DAL
 
         void Save();
 
-        Observation? GetObservationDetails(int id);
-        Taxon? GetTaxon(int id);
-        IEnumerable<Comment> GetComments(int ObservationId);
-        IEnumerable<Proposal> GetProposals(int ObservationId);
-        List<Observation> GetAllObservations();
-
-       // Finder den forfatter, der svarer til brugerens login-navn.
-        Author? GetAuthorByName(string name);
-
-        // Henter de taxoner, brugeren kan vælge i formularen.
-        IReadOnlyList<Taxon> GetTaxons();
+        
+       IEnumerable<T> GetPosts<T>(int page) where T : Post;
+       //read -> retuans a single post
+        Post GetPost(int id);
+       List<Observation> getAllObservations();
 
     }
 
