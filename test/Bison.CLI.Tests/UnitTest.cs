@@ -7,7 +7,7 @@ namespace Bison.CLI.Tests;
 
 public class UnitTest
 {
-    private readonly IDataRepository _db = Substitute.For<IDatabaseRepository>();
+    private readonly IDatabaseRepository _db = Substitute.For<IDatabaseRepository>();
     private readonly Program _program;
 
     public UnitTest()
