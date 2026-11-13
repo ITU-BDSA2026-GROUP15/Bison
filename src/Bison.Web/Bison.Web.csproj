@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bison.Core\Bison.Core.csproj" />
+    <ProjectReference Include="..\Bison.Infrastructure\Bison.Infrastructure.csproj" />
   </ItemGroup>
     
   <ItemGroup>
