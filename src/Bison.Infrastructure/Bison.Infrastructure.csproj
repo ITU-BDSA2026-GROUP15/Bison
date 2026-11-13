@@ -15,4 +15,8 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0" />
     </ItemGroup>
 
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
 </Project>
