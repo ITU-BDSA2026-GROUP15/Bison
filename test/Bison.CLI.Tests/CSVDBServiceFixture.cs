@@ -10,24 +10,25 @@ public class CSVDBServiceFixture : IDisposable
     public HttpClient Client { get; }
 
     private readonly Process process;
+    private readonly string tempDir = Directory.CreateTempSubdirectory("bison-test").FullName;
 
     public CSVDBServiceFixture()
     {
-        string projectPath = FindProjectPath();
 
         var startInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
             UseShellExecute = false,
             CreateNoWindow = true
         };
+
         startInfo.ArgumentList.Add("run");
         startInfo.ArgumentList.Add("--project");
-        startInfo.ArgumentList.Add(projectPath);
+        startInfo.ArgumentList.Add(FindProjectPath());
         startInfo.ArgumentList.Add("--urls");
         startInfo.ArgumentList.Add("http://localhost:5273");
+        startInfo.ArgumentList.Add("--DataDir");
+        startInfo.ArgumentList.Add(tempDir);
 
         process = Process.Start(startInfo)!;
 
@@ -85,10 +86,13 @@ public class CSVDBServiceFixture : IDisposable
         }
 
         process.Dispose();
+
+        try { Directory.Delete(tempDir, true); } catch { /* ligegyldigt */ }
+    
     }
 }
 
-[CollectionDefinition("Bison.CSVDBService service")]
+[CollectionDefinition("Webservice")]
 public class CSVDBServiceCollection : ICollectionFixture<CSVDBServiceFixture>
 {
 }

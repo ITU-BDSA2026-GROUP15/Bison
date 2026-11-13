@@ -18,7 +18,7 @@ class Program {
     private readonly IDatabaseRepository _db;
     public Program(IDatabaseRepository db)
     {
-        _db= db;
+        _db = db;
     }
 
     public static void Main(string[] args) { //args is what you write in the terminal after the program name, for example: dotnet run observe
@@ -29,7 +29,7 @@ class Program {
 
     }
 
-    public static void parseArguments(string[] args){
+    public void parseArguments(string[] args){
 
     //here we give the complete args array to commandlineparser
     //the only two types the parser can produce are either "ReadOptions" or "ObserveOptions"
@@ -73,22 +73,24 @@ class Program {
     //added location
 
     // observe() poster nu til web servicen (POST /observation) i stedet for at skrive til CSV-filen direkte.
-    internal static void observe(string observation, string location) {
+    internal void observe(string observation, string location) {
         string author = Environment.UserName;
         DateTimeOffset now = DateTimeOffset.Now;
         long timestamp = now.ToUnixTimeSeconds();
 
-        var newCheep = new Cheep(author, 0, observation, timestamp, location);
+        var cheep = new Cheep(author, 0, observation, timestamp, location);
 
         UserInterface.PrintObservationAdded(_db.AddObservation(cheep));
     }
 
 
     // comment() poster nu til web servicen (POST /comment) i stedet for at skrive til CSV-filen direkte.
-    internal static void comment(int id, string comment) {
+    internal void comment(int id, string comment) {
         string author = Environment.UserName;
         DateTimeOffset now = DateTimeOffset.Now;
         long timestamp = now.ToUnixTimeSeconds();
+
+        var observations = _db.GetObservations();
 
         if (!observations.Any(o => o.ID == id)) {
             //if no observation with the given ID exists on the service
@@ -104,7 +106,7 @@ class Program {
 
     // discussion() henter nu kommentarerne til en given observation fra web servicen (GET /comments?id=),
     // som allerede filtrerer server-side. Klienten skal derfor ikke længere filtrere selv.
-    private static void discussion(int obsId){
+    private void discussion(int obsId){
         UserInterface.PrintObservations(_db.GetComments(obsId));
     }
 
