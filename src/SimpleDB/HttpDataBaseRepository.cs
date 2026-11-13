@@ -1,9 +1,12 @@
-public HttpDataBaseRepository : IDatabaseRepository<Cheep>
+
+namespace SimpleDB;
+
+public class HttpDatabaseRepository : IDatabaseRepository
 {
     private readonly HttpClient _httpClient;
     
 
-    public HttpDataBaseRepository(HttpClient httpClient)
+    public HttpDatabaseRepository(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
@@ -22,17 +25,14 @@ public HttpDataBaseRepository : IDatabaseRepository<Cheep>
         
     }
     bool ObservationExists(int id)
-{
-        
+    {
+            
     }
     Cheep AddObservation(Cheep observation)
-{
-    
-}
+    {
+        
+    }
     void AddComment(Cheep comment){
         
-
-
-
-}
+    }
 }
