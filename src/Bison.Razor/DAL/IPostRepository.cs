@@ -22,6 +22,12 @@ namespace Bison.Razor.DAL
         IEnumerable<ProposalDto> GetProposals (int observationId);
 
      
+        Observation? GetObservationEntity(int id);
+        Taxon? GetTaxon(int id);
+        Author? GetAuthorByName (string name);
+        IReadOnlyList<Taxon>GetTaxons();
+
+
 
        // Finder den forfatter, der svarer til brugerens login-navn.
         Author? GetAuthorByName(string name);
