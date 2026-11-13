@@ -20,15 +20,16 @@ public class HttpDatabaseRepository : IDatabaseRepository
         var awaiter = task.GetAwaiter();
         var cheeps = awaiter.GetResult();
 
-        return UserInterface.PrintObservations(cheeps ?? new List<Cheep>());
+        return cheeps ?? new List<Cheep>();
     }
 
     public IEnumerable<Cheep> GetComments(int observationId)
     {
         var postTask = _httpClient.PostAsJsonAsync($"/comment?id={observationId}");
         var postAwaiter = postTask.GetAwaiter();
-        postAwaiter.GetResult();
-        return UserInterface.PrintCommentAdded(cheep);
+        var cheeps = postAwaiter.GetResult();
+
+        return cheeps;
     }
     
     public IEnumerable<Cheep> GetObservationsByLocation(string location)
@@ -36,7 +37,7 @@ public class HttpDatabaseRepository : IDatabaseRepository
         var cheeps = GetObservations();
         var matches = cheeps.Where(cheep => string.Equals(cheep.Location, location, StringComparison.OrdinalIgnoreCase));
 
-       return UserInterface.PrintObservations(matches);
+       return matches;
     }
     public bool ObservationExists(int id)
     {
@@ -54,10 +55,14 @@ public class HttpDatabaseRepository : IDatabaseRepository
 
         return storedCheep ?? observation;
     }
-    public void AddComment(Cheep comment){
+    public AddComment(Cheep comment){
 
         var postTask = _httpClient.PostAsJsonAsync("/comment", comment);
         var postAwaiter = postTask.GetAwaiter();
-        postAwaiter.GetResult();
+        var response = postAwaiter.GetResult();
+
+        var stored = response.Content.ReadFromJsonAsync<Cheep>().GetAwaiter().GetResult();
+
+        return stored ?? comment;
     }
 }
