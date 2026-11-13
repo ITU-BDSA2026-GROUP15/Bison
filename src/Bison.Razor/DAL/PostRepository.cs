@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Bison.Razor.Models;
+using Bison.Razor.ModelsDTO;
 
 //communicates with the database and returns psot objects determned by the generic type <T>
 
@@ -30,40 +31,30 @@ namespace Bison.Razor.DAL
         }
 
         //read
-        public IEnumerable<T> GetPosts<T>(int page) where T : Post
-        {
-            page = Math.Max(1, page);
-            int offset = (page - 1) * PageSize;
 
-            return _context.Posts.OfType<T>()
-                .Include(p => p.Author)
-                .OrderByDescending(p => p.TimeStamp)
-                .ThenByDescending(p => p.PostId)
-                .Skip(offset)
-                .Take(PageSize)
-                .ToList();
-        }
 
         public Post GetPost(int id)
         {
             return _context.Posts.Find(id);
         }
 
-        public IEnumerable<T> GetPostsByAuthor<T>(string author, int page) where T : Post
+        public IEnumerable<ObservationDto> GetObservations (int page)
         {
-            page = Math.Max(1, page);
-            int offset = (page - 1) * PageSize;
+            page =Math.Max(1, page);
+            int offset = (page-1) * PageSize;
 
-            return _context.Posts.OfType<T>()
-                .Include(p => p.Author)
-                .Where(p => p.Author.Name == author)
-                .OrderByDescending(p => p.TimeStamp)
-                .ThenByDescending(p => p.PostId)
+            return _context.Posts.OfType<Observation>()
+                .Include(o => o.Author)
+                .Include(o => o.Taxon)
+                .OrderByDescending(o => o.TimeStamp)
+                .ThenByDescending (o => o.PostId)
                 .Skip(offset)
                 .Take(PageSize)
+                .AsEnumerable()
+                .Select(ToObservationDto) //Mapper will be created later
                 .ToList();
-        }
 
+        }
 
         //update
         public void UpdatePost(Post post)
