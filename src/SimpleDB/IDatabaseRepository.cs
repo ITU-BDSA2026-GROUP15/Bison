@@ -2,6 +2,11 @@ namespace SimpleDB;
 
 public interface IDatabaseRepository<T>
 {
-    public IEnumerable<T> Read(string file, int? limit = null);
-    public void Store(string file, T record);
+    IEnumerable<Cheep> GetObservations();
+    IEnumerable<Cheep> GetComments(int observationId);
+    IEnumerable<Cheep> GetObservationsByLocation(string location);
+    bool ObservationExists(int id);
+    Cheep AddObservation(Cheep observation);
+    void AddComment(Cheep comment);
+
 }
