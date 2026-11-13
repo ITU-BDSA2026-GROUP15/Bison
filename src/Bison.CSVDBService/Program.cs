@@ -1,9 +1,5 @@
-using System.ComponentModel.Design;
-using Microsoft.VisualBasic;
 using SimpleDB;
 using Bison.Taxonomy;
-using System.Xml.XPath;
-
 //string propFile = "joined.csv";
 
 // indlæs joined.csv, identificer alle taxonIDer tilføj dem til en liste,
