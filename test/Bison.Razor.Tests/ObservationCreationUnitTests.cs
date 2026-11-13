@@ -1,5 +1,6 @@
-using Bison.Razor.Models;
-using Bison.Razor.DAL;
+using Bison.Core.Models;
+using Bison.Infrastructure.Repositories;
+using Bison.Infrastructure.Services;
 
 namespace Bison.Razor.Tests;
 
@@ -19,7 +20,7 @@ public class ObservationCreationUnitTest
         using var repository = new TestRepository(taxon, author);
         var service = new ObservationService(repository);
 
-        //act - forsøger at oprette en observation ud fra taxon og forfatteren, som repository kender til. 
+        //act - forsøger at oprette en observation ud fra taxon og forfatteren, som repository kender til.
 
         var created = service.TryCreateObservation( author.Name , author.Email,"Jeg så en solsort i haven",  taxon.TaxonId);
 
@@ -35,7 +36,7 @@ public class ObservationCreationUnitTest
         Assert.Same(author, observation.Author);
         Assert.Equal("Jeg så en solsort i haven", observation.Text);
         Assert.True(repository.SaveCalled);
-    }    
+    }
 
     [Fact]
     public void tryCreateObservationFromUnknownTaxon()
@@ -48,15 +49,15 @@ public class ObservationCreationUnitTest
         using var repository = new TestRepository(taxon, author);
         var service = new ObservationService(repository);
         //act - 999 er et ukendt taxon id
-        var created = service.TryCreateObservation( author.Name , author.Email,"Jeg så en fugl",  999); 
+        var created = service.TryCreateObservation( author.Name , author.Email,"Jeg så en fugl",  999);
 
 
 
 
-        //assert - AssertFalse tester om servicen returnerer false, 
+        //assert - AssertFalse tester om servicen returnerer false,
         // og at repository ikke modtager nogen observation og Save() ikke kaldes.
 
-        //Assert.Null tester om repository.InsertedPost er null, 
+        //Assert.Null tester om repository.InsertedPost er null,
         // hvilket betyder, at ingen observation blev oprettet.
         Assert.False(created,"Observation was not created successfully");
         Assert.Null(repository.InsertedPost);
@@ -103,7 +104,7 @@ public class ObservationCreationUnitTest
             SaveCalled = true;
         }
 
-        
+
         public void Dispose()
         {
             // Ingen ressourcer at frigive i denne testimplementering.

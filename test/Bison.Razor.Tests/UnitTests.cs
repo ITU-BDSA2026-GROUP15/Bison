@@ -1,3 +1,5 @@
+using Bison.Web;
+
 namespace Bison.Razor.Tests;
 
 public class UnitTests

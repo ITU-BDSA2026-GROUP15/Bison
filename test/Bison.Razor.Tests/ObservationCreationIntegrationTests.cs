@@ -1,5 +1,7 @@
-using Bison.Razor.DAL;
-using Bison.Razor.Models;
+using Bison.Core.Models;
+using Bison.Infrastructure.Data;
+using Bison.Infrastructure.Repositories;
+using Bison.Infrastructure.Services;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +11,7 @@ namespace Bison.Razor.Tests;
 
 public class ObservationCreationIntegrationTest
 {
-    
+
    [Fact] //fact gør at vi kan lave testmetoden uden parametre. Markerer metoden som en xUnit-test uden testdata.
     public void tryCreateObservationThatAppearsInPublicAndAuthorLists()
     {
@@ -23,7 +25,7 @@ public class ObservationCreationIntegrationTest
             .UseSqlite(connection)
             .Options;
 
-        
+
         using var writeContext = new BisonDBContext(options);
         writeContext.Database.EnsureCreated();
 
@@ -48,7 +50,7 @@ public class ObservationCreationIntegrationTest
 
 
         //act - Opret en observation for en forfatter, der endnu ikke findes.
-       
+
         var created = writeService.TryCreateObservation(authorName , authorEmail, observationText,  taxon.TaxonId);
 
 

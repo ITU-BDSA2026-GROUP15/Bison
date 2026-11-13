@@ -1,3 +1,5 @@
+using Bison.Web;
+
 namespace Bison.Razor.Tests;
 
 // ARRANGE sker i TestDatabase.cs. den er bygget af fixturen ud fra schema.sql + dump.sql.

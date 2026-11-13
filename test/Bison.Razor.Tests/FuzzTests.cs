@@ -1,6 +1,9 @@
 ﻿//using Bison.Core;
-using Bison.Razor.Models;
-using Bison.Razor.DAL;
+
+using Bison.Core.Models;
+using Bison.Infrastructure.Repositories;
+using Bison.Infrastructure.Services;
+
 namespace Bison.Razor.Tests;
 
 
@@ -48,7 +51,7 @@ public class FuzzTests
         //Assert
         Assert.Equal(expected, result);
     }
-    
+
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
@@ -56,10 +59,10 @@ public class FuzzTests
     public void GetComments_ReturnsExpectedViewModels(int seed)
     {
         // Arrange
-        
+
         var random = new Random(seed);
         const int observationId = 7;
-        
+
 
         string[] authors = { "Anne", "Theo", "Line", "Lærke", "Nicklas" };
         string[] messages = { "En hejre?", "A bird", "Flot observation!" };
@@ -91,7 +94,7 @@ public class FuzzTests
 
         var repository = new ObservationTestRepository(comments);
         var service = new ObservationService(repository);
-        
+
 
         // Act
         var result = service.GetComments(observationId);
@@ -129,11 +132,11 @@ public class FuzzTests
     public void Save() { }
     public Observation? GetObservationDetails(int id) => throw new NotImplementedException();
     public IEnumerable<Proposal> GetProposals(int ObservationId) => throw new NotImplementedException();
-    
+
     public Taxon? GetTaxon(int id) => throw new NotImplementedException();
 
     public List<Observation> GetAllObservations() => throw new NotImplementedException();
-    
+
 
     // Disse testklasser bruges til andre funktioner end oprettelse.
     public Author? GetAuthorByName(string name) =>
