@@ -1,12 +1,14 @@
+using System.Collections.Generic;
+
 namespace SimpleDB;
 
-public interface IDatabaseRepository<T>
+public interface IDatabaseRepository
 {
-    IEnumerable<Cheep> GetObservations();
-    IEnumerable<Cheep> GetComments(int observationId);
-    IEnumerable<Cheep> GetObservationsByLocation(string location);
-    bool ObservationExists(int id);
-    Cheep AddObservation(Cheep observation);
-    void AddComment(Cheep comment);
+    public IEnumerable<Cheep> GetObservations();
+    public IEnumerable<Cheep> GetComments(int observationId);
+    public IEnumerable<Cheep> GetObservationsByLocation(string location);
+    public bool ObservationExists(int id);
+    public Cheep AddObservation(Cheep observation);
+    public void AddComment(Cheep comment);
 
 }

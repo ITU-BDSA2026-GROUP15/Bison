@@ -6,7 +6,7 @@ using System.Globalization;
 using System.IO;
 using System;
 
-public sealed class CSVDatabase<T> : IDatabaseRepository<T>
+public sealed class CSVDatabase<T> 
 {
     private static CSVDatabase<T>? _instance;
 

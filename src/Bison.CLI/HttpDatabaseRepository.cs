@@ -1,3 +1,5 @@
+using System.Net.Http.Json;
+using SimpleDB;
 
 namespace SimpleDB;
 
@@ -21,7 +23,7 @@ public class HttpDatabaseRepository : IDatabaseRepository
         return UserInterface.PrintObservations(cheeps ?? new List<Cheep>());
     }
 
-    IEnumerable<Cheep> GetComments(int observationId)
+    public IEnumerable<Cheep> GetComments(int observationId)
     {
         var postTask = _httpClient.PostAsJsonAsync($"/comment?id={observationId}");
         var postAwaiter = postTask.GetAwaiter();
@@ -29,18 +31,18 @@ public class HttpDatabaseRepository : IDatabaseRepository
         return UserInterface.PrintCommentAdded(cheep);
     }
     
-    IEnumerable<Cheep> GetObservationsByLocation(string location)
+    public IEnumerable<Cheep> GetObservationsByLocation(string location)
     {
         var cheeps = GetObservations();
         var matches = cheeps.Where(cheep => string.Equals(cheep.Location, location, StringComparison.OrdinalIgnoreCase));
 
        return UserInterface.PrintObservations(matches);
     }
-    bool ObservationExists(int id)
+    public bool ObservationExists(int id)
     {
         return GetObservations().Any(cheep => cheep.ID == id);
     }
-    Cheep AddObservation(Cheep observation)
+    public Cheep AddObservation(Cheep observation)
     {
         var postTask = _httpClient.PostAsJsonAsync("/observation", observation);
         var postAwaiter = postTask.GetAwaiter();
@@ -52,7 +54,7 @@ public class HttpDatabaseRepository : IDatabaseRepository
 
         return storedCheep ?? observation;
     }
-    void AddComment(Cheep comment){
+    public void AddComment(Cheep comment){
 
         var postTask = _httpClient.PostAsJsonAsync("/comment", comment);
         var postAwaiter = postTask.GetAwaiter();
