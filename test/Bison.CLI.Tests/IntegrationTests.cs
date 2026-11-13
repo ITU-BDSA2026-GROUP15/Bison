@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Http.Json;
-using Microsoft.AspNetCore.Mvc.Testing;
 using SimpleDB;
 
 namespace Bison.Razor.Tests;
@@ -8,7 +7,7 @@ namespace Bison.Razor.Tests;
 // WebApplicationFactory<Program> kører Bison.Razor in-memory i testprocessen, uden en rigtig
 // port - i modsætning til Bison.CLI.Tests, som skal starte en rigtig proces for at teste den
 // fulde kæde CLI -> HTTP -> service. Her tester vi kun servicen isoleret.
-public class IntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+public class IntegrationTests : CSVDBServiceFixture
 {
     private readonly HttpClient client;
 

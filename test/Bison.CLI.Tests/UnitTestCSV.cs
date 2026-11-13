@@ -2,7 +2,7 @@ using SimpleDB;
 
 namespace Bison.CLI.Tests;
 
-public class IntegrationTest
+public class UnitTestCSV
 {
     private const string ObserveFile = "integrationTest.csv";
     [Fact]

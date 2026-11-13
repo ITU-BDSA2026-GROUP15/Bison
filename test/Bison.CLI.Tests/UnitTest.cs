@@ -23,7 +23,7 @@ public class UnitTest
         var expected = DateTimeOffset.FromUnixTimeSeconds(knownUnixTimestamp).ToLocalTime();
 
         // ACT
-        var actual = convertTime(knownUnixTimestamp);
+        var actual = UserInterface.convertTime(knownUnixTimestamp);
 
         // ASSERT
         Assert.Equal(expected, actual);
@@ -83,8 +83,8 @@ public class UnitTest
         string secondObservation = "Second test observation " + Guid.NewGuid();
 
         // ACT
-        program.observe(firstObservation, "ITU");
-        program.observe(secondObservation, "ITU");
+        _program.observe(firstObservation, "ITU");
+        _program.observe(secondObservation, "ITU");
 
         // ASSERT
         var first = stored.Single(o => o.Observation == firstObservation);
