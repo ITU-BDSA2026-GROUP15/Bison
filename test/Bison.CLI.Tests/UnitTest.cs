@@ -1,7 +1,9 @@
 using SimpleDB;
 using System.Net.Http.Json;
 using static UserInterface;
-using static Program;
+using Bison.CLI;
+using Microsoft.VisualBasic;
+using NSubstitute;
 
 namespace Bison.CLI.Tests;
 
@@ -11,6 +13,7 @@ namespace Bison.CLI.Tests;
 public class UnitTest
 {
     private readonly HttpClient client;
+    private readonly Program program = new Program(Substitute.For<IDatabaseRepository>());
 
     public UnitTest(CSVDBServiceFixture fixture)
     {
@@ -50,7 +53,7 @@ public class UnitTest
         try
         {
             // ACT
-            comment(nonExistingId, commentText);
+            program.comment(nonExistingId, commentText);
 
             // ASSERT
             string output = consoleOutput.ToString();
@@ -78,8 +81,8 @@ public class UnitTest
         string secondObservation = "Second test observation " + Guid.NewGuid();
 
         // ACT
-        observe(firstObservation, "ITU");
-        observe(secondObservation, "ITU");
+        program.observe(firstObservation, "ITU");
+        program.observe(secondObservation, "ITU");
 
         // ASSERT
         var after = client.GetFromJsonAsync<List<Cheep>>("/observations").GetAwaiter().GetResult() ?? new List<Cheep>();

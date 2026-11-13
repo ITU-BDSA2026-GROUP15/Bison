@@ -13,6 +13,8 @@ using CommandLine;
 using CsvHelper.Configuration.Attributes;
 using System.Data.Common;
 
+namespace Bison.CLI;
+
 class Program {
 
     private readonly IDatabaseRepository _db;
@@ -106,16 +108,16 @@ class Program {
 
     // discussion() henter nu kommentarerne til en given observation fra web servicen (GET /comments?id=),
     // som allerede filtrerer server-side. Klienten skal derfor ikke længere filtrere selv.
-    private void discussion(int obsId){
+    internal void discussion(int obsId){
         UserInterface.PrintObservations(_db.GetComments(obsId));
     }
 
-    private void read()
+    internal void read()
     {
         UserInterface.PrintObservations(_db.GetObservations());
     }
 
-    private void readLocation(string location)
+    internal void readLocation(string location)
     {
         UserInterface.PrintObservations(_db.GetObservationsByLocation(location));
     }
