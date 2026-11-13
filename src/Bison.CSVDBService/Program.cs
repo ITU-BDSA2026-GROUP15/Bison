@@ -70,7 +70,7 @@ app.MapPost("/proposal", (Prop proposal) => {
 
     // The taxon ID must exist in the taxonomy loaded at startup.
     if (!ProposalValidator.TaxonExists(taxonomy, proposal.TaxonID)) {
-        return Results.BadRequest("Invalid taxon ID");
+        return Results.BadRequest("Invalid observation ID");
     }
 
     // Store the proposal only after both IDs have been validated.

@@ -3,15 +3,15 @@ using System.Net.Http.Json;
 
 namespace Bison.CLI.Tests;
 
-// Starter Bison.Razor (web servicen) som en rigtig proces, én gang, delt mellem alle tests
+// Starter web servicen som en rigtig proces, én gang, delt mellem alle tests
 // i en collection (test-klasse).
-public class BisonRazorFixture : IDisposable
+public class CSVDBServiceFixture : IDisposable
 {
     public HttpClient Client { get; }
 
     private readonly Process process;
 
-    public BisonRazorFixture()
+    public CSVDBServiceFixture()
     {
         string projectPath = FindProjectPath();
 
@@ -57,7 +57,7 @@ public class BisonRazorFixture : IDisposable
             Thread.Sleep(500);
         }
 
-        throw new InvalidOperationException("Bison.Razor startede ikke inden for den forventede tid.");
+        throw new InvalidOperationException("The webservice did not launch in expected time frame.");
     }
 
     private static string FindProjectPath()
@@ -71,7 +71,7 @@ public class BisonRazorFixture : IDisposable
         if (dir is null)
             throw new InvalidOperationException("Kunne ikke finde solution-roden.");
 
-        return Path.Combine(dir.FullName, "src", "Bison.Razor", "Bison.Razor.csproj");
+        return Path.Combine(dir.FullName, "src", "Bison.CSVDBService", "Bison.CSVDBService.csproj");
     }
 
     public void Dispose()
@@ -88,7 +88,7 @@ public class BisonRazorFixture : IDisposable
     }
 }
 
-[CollectionDefinition("Bison.Razor service")]
-public class BisonRazorCollection : ICollectionFixture<BisonRazorFixture>
+[CollectionDefinition("Bison.CSVDBService service")]
+public class CSVDBServiceCollection : ICollectionFixture<CSVDBServiceFixture>
 {
 }

@@ -5,14 +5,14 @@ using static Program;
 
 namespace Bison.CLI.Tests;
 
-// [Collection(...)] sørger for, at BisonRazorFixture kun startes én gang og deles mellem
+// [Collection(...)] sørger for, at CSVDBServiceFixture kun startes én gang og deles mellem
 // alle tests i denne klasse, i stedet for at starte/stoppe web servicen for hver test.
-[Collection("Bison.Razor service")]
+[Collection("Webservice")]
 public class UnitTest
 {
     private readonly HttpClient client;
 
-    public UnitTest(BisonRazorFixture fixture)
+    public UnitTest(CSVDBServiceFixture fixture)
     {
         client = fixture.Client;
     }
