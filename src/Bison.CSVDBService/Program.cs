@@ -25,6 +25,9 @@ string propFile = $"{dataDir}/bison_propose_cli_db.csv";
 var cheepDb= CSVDatabase<Cheep>.Instance;
 var proposalDb = CSVDatabase<Prop>.Instance;
 
+//landing page - redirecting til observations
+app.MapGet("/", () => Results.Redirect("/observations"));
+
 // skal sende et kald til loggede observationer i stedet?? -> connecte dette til simpledb?
 app.MapGet("/observations", () => cheepDb.Read(obsFile));
 app.MapPost("/observation", (Cheep observation) => {
