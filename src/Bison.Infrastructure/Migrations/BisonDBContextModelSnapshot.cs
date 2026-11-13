@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Bison.Web.Migrations
+namespace Bison.Infrastructure.Migrations
 {
     [DbContext(typeof(BisonDBContext))]
     partial class BisonDBContextModelSnapshot : ModelSnapshot
