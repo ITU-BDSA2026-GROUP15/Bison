@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using SimpleDB;
 using Bison.Taxonomy;
 
-namespace Bison.Razor.Tests;
+namespace Bison.CLI.Tests;
 
 //Theory and Inlign data needs to be used here
-
-public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
-    // IClassFixture<WebApplicationFactory<Program>> Tells the Xunit to boot Razor once, in-memory and share the same instance
-    // instead of starting a fresh app per test,
+[Collection("Webservice")]
+public class FuzzTests 
 {
     private readonly HttpClient _client;
     private Random _random = new();
@@ -19,12 +16,10 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
 
     private readonly List<Cheep> _sentProposals = new();
 
-
-    public FuzzTests(WebApplicationFactory<Program> factory)
+    public FuzzTests(CSVDBServiceFixture fixture)
     {
-        _client = factory.CreateClient();
+        _client = fixture.Client;
     }
-
 
     private static readonly string[] sampleAuthors = { "Anne", "Theo", "line", "Lærke", "Nicklas" };
 
@@ -145,6 +140,15 @@ public class FuzzTests : IClassFixture<WebApplicationFactory<Program>>
                 var (comment, referenceRealObservation) = GenerateRandomComment();
 
                 var response = await _client.PostAsJsonAsync("/comment", comment);
+
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+if (!response.IsSuccessStatusCode)
+{
+    throw new Exception(
+        $"Request failed: {(int)response.StatusCode} " +
+        $"{response.StatusCode}. Response: {responseBody}");
+}
 
                 //Work is needed before we can continue here - since /comments does not validate ID.
                 //The CLI method comment() does, but we need to make this a possibility for /comments
