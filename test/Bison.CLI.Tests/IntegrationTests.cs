@@ -1,19 +1,21 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using SimpleDB;
 
-namespace Bison.Razor.Tests;
+namespace Bison.CLI.Tests;
 
 // WebApplicationFactory<Program> kører Bison.Razor in-memory i testprocessen, uden en rigtig
 // port - i modsætning til Bison.CLI.Tests, som skal starte en rigtig proces for at teste den
 // fulde kæde CLI -> HTTP -> service. Her tester vi kun servicen isoleret.
-public class IntegrationTests : CSVDBServiceFixture
+[Collection("Webservice")]
+public class IntegrationTests 
 {
     private readonly HttpClient client;
 
-    public IntegrationTests(WebApplicationFactory<Program> factory)
+    public IntegrationTests(CSVDBServiceFixture fixture)
     {
-        client = factory.CreateClient();
+        client = fixture.Client;
     }
 
     [Fact]
