@@ -1,6 +1,3 @@
-using System.ComponentModel.Design;
-using System.Net.Http.Json;
-using SimpleDB;
 
 namespace SimpleDB;
 

@@ -1,5 +1,3 @@
-using System;
-using SimpleDB;
 
 public static class UserInterface
 {
