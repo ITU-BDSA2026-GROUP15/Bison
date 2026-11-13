@@ -1,3 +1,4 @@
+using System.ComponentModel.Design;
 using System.Net.Http.Json;
 using SimpleDB;
 
@@ -25,11 +26,11 @@ public class HttpDatabaseRepository : IDatabaseRepository
 
     public IEnumerable<Cheep> GetComments(int observationId)
     {
-        var postTask = _httpClient.PostAsJsonAsync($"/comment?id={observationId}");
+        var postTask = _httpClient.GetFromJsonAsync<List<Cheep>>($"/comment?id={observationId}");
         var postAwaiter = postTask.GetAwaiter();
         var cheeps = postAwaiter.GetResult();
 
-        return cheeps;
+        return cheeps ?? new List<Cheep>();
     }
     
     public IEnumerable<Cheep> GetObservationsByLocation(string location)
@@ -55,7 +56,7 @@ public class HttpDatabaseRepository : IDatabaseRepository
 
         return storedCheep ?? observation;
     }
-    public AddComment(Cheep comment){
+    public Cheep AddComment(Cheep comment){
 
         var postTask = _httpClient.PostAsJsonAsync("/comment", comment);
         var postAwaiter = postTask.GetAwaiter();

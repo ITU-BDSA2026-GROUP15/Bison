@@ -110,7 +110,12 @@ class Program {
         UserInterface.PrintObservations(_db.GetComments(obsId));
     }
 
-    private void ReadLocation(string location)
+    private void read()
+    {
+        UserInterface.PrintObservations(_db.GetObservations());
+    }
+
+    private void readLocation(string location)
     {
         UserInterface.PrintObservations(_db.GetObservationsByLocation(location));
     }

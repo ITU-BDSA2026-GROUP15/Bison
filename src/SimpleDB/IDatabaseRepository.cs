@@ -9,6 +9,6 @@ public interface IDatabaseRepository
     public IEnumerable<Cheep> GetObservationsByLocation(string location);
     public bool ObservationExists(int id);
     public Cheep AddObservation(Cheep observation);
-    public void AddComment(Cheep comment);
+    public Cheep AddComment(Cheep comment);
 
 }
