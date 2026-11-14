@@ -1,6 +1,4 @@
-//import the CommandLineParser library, which is used to parse command line arguments
-  using CommandLine;
-
+using CommandLine;
 //marks the class as the definition of the observe command,
 //and provides a help text for the command
 [Verb("comment", HelpText = "Add a new comment.")]

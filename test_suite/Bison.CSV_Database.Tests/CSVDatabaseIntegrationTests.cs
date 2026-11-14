@@ -39,7 +39,7 @@ public class UnitTestCSV
     }
 
     [Fact]
-    public void nonExistingFileReturnsEmptyResultWhenRead()
+    public void NonExistingFileReturnsEmptyResultWhenRead()
     {
         // ARRANGE
         string nonExistingFilePath = "this_file_does_not_exist.csv";

@@ -1,6 +1,5 @@
-using Bison.Taxonomy;
 using SimpleDB;
-
+using Bison.Taxonomy;
 public static class ProposalValidator
 {
     // Returns true when the proposal's observation ID matches an existing observation.
