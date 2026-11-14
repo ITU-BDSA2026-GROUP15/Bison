@@ -1,10 +1,14 @@
 using Bison.Infrastructure.Data;   
 using Microsoft.Data.Sqlite;      
 using Microsoft.EntityFrameworkCore; 
+using Bison.Web;                                       
+using Microsoft.AspNetCore.Mvc.Testing;                   
+using Microsoft.AspNetCore.TestHost;                      
+using Microsoft.Extensions.DependencyInjection;           
+using Microsoft.Extensions.DependencyInjection.Extensions; 
 
 namespace Bison.Razor.Tests;
 
-// Én fælles in-memory testdatabase. Lever så længe objektet lever.
 public class InMemoryDb : IDisposable
 {
     private readonly SqliteConnection _connection;
@@ -16,7 +20,7 @@ public class InMemoryDb : IDisposable
         _connection = new SqliteConnection("Data Source=:memory:");
         _connection.Open();
 
-        // Vi giver EF selve forbindelsen (ikke strengen), så alle contexts deler samme database.
+        // Vi giver EF selve forbindelsen, så alle contexts deler samme database.
         Options = new DbContextOptionsBuilder<BisonDBContext>()
             .UseSqlite(_connection)
             .Options;
@@ -29,5 +33,18 @@ public class InMemoryDb : IDisposable
 
     public SqliteConnection Connection => _connection; // til TestWebFactory
 
-    public void Dispose() => _connection.Dispose(); // lukker = databasen forsvinder
+    public void Dispose() => _connection.Dispose(); // lukker databasen 
+
+    // Starter webappen in-memory. Skal bruges for at kunne gøre ApiTests.cs uafhængig af forældede hjælpeklasser
+    public WebApplicationFactory<Program> CreateWebApp() =>
+        new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
+            builder.ConfigureTestServices(services =>
+            {
+                // Fjern appens egen database-registrering
+                services.RemoveAll<BisonDBContext>();
+                services.RemoveAll<DbContextOptions<BisonDBContext>>();
+
+                // registrér en database, der bruger vores åbne in-memory-forbindelse.
+                services.AddDbContext<BisonDBContext>(o => o.UseSqlite(_connection));
+            }));
 }
