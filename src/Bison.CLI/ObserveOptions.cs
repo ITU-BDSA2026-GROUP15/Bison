@@ -1,3 +1,5 @@
+using CommandLine;
+
 //marks the class as the definition of the observe command,
 //and provides a help text for the command
 [Verb("observe", HelpText = "Add a new observation.")]

@@ -1,4 +1,6 @@
-﻿
+﻿using SimpleDB;
+using CommandLine;
+
 namespace Bison.CLI;
 
 class Program {

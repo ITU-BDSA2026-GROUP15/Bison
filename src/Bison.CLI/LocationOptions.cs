@@ -1,3 +1,4 @@
+using CommandLine;
 
 //defindes location as the command so it can be used in the terminal
 [Verb("location",HelpText ="Show observation from the location")]

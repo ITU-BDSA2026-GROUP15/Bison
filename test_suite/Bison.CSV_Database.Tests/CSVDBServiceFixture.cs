@@ -1,8 +1,6 @@
 using System.Diagnostics;
 using System.Net.Http.Json;
 
-namespace Bison.CLI.Tests;
-
 // Starter web servicen som en rigtig proces, én gang, delt mellem alle tests
 // i en collection (test-klasse).
 public class CSVDBServiceFixture : IDisposable

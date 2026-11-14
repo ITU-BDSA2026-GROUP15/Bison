@@ -7,9 +7,9 @@
     <Project Path="src/Bison.CSVDBService/Bison.CSVDBService.csproj" />
   </Folder>
   <Folder Name="/test_suite/">
-    <Project Path="test/Bison.CLI.Tests/Bison.CLI.Tests.csproj" />
-    <Project Path="test/Bison.Razor.Tests/Bison.Razor.Tests.csproj" />
-    <Project Path="test/SimpleDB.Tests/SimpleDB.Tests.csproj" />
-    <Project Path="test/Bison.CSV_Database.Tests/Bison.CSV_Database.Tests.csproj" />
+    <Project Path="test_suite/Bison.CLI.Tests/Bison.CLI.Tests.csproj" />
+    <Project Path="test_suite/Bison.Razor.Tests/Bison.Razor.Tests.csproj" />
+    <Project Path="test_suite/SimpleDB.Tests/SimpleDB.Tests.csproj" />
+    <Project Path="test_suite/Bison.CSV_Database.Tests/Bison.CSV_Database.Tests.csproj" />
   </Folder>
 </Solution>
