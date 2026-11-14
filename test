@@ -1,0 +1,10 @@
+[33mb82eb11[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mverifying_library_imports_evalution[m[33m)[m Corrected the imports so the project builds, now onto fixing the dependencies of test classes, so they all run and pass
+[33m01b6900[m[33m ([m[1;31morigin/verifying_library_imports_evalution[m[33m)[m Refactored folder structure
+[33m6cd4e43[m Final changes to using directives has been made before moving on to tests
+[33m2eede35[m Removed unnecessary using statements from CSVDBService
+[33mb05b711[m removed import statements from Bison.CLI that was not needed
+[33m5c0640b[m[33m ([m[1;31morigin/bison_cli[m[33m, [m[1;32mbison_cli[m[33m)[m Merge pull request #106 from ITU-BDSA2026-GROUP15/w4_verification_2.0
+[33m6829165[m[33m ([m[1;31morigin/w4_verification_2.0[m[33m, [m[1;32mw4_verification_2.0[m[33m)[m new test to verufy taxons chain has been implemented
+[33m9d164d8[m Merge pull request #105 from ITU-BDSA2026-GROUP15/w4_verification_2.0
+[33me46a5cf[m Compile bug is now fixed, but tests now fails and still needs to fit proper structure
+[33m2aa3807[m Refactored entire test structure, to get better overview and identify tests easily

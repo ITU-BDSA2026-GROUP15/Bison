@@ -18,8 +18,8 @@ public class CSVDBServiceFixture : IDisposable
             FileName = "dotnet",
             UseShellExecute = false,
             CreateNoWindow = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true
+            RedirectStandardOutput = false,
+            RedirectStandardError = false
         };
 
         startInfo.ArgumentList.Add("run");
@@ -47,6 +47,12 @@ public class CSVDBServiceFixture : IDisposable
 
         for (int attempt = 0; attempt < maxAttempts; attempt++)
         {
+            if (process.HasExited)
+            {
+                throw new InvalidOperationException(
+                    $"Webservice stopped unexpectedly:\n{process.StandardError.ReadToEnd()}");
+            }
+
             try
             {
                 var response = Client.GetAsync("/observations").GetAwaiter().GetResult();
@@ -54,11 +60,7 @@ public class CSVDBServiceFixture : IDisposable
                 {
                     return;
                 }
-                if (!response.IsSuccessStatusCode)
-                {
-                    var body = response.Content.ReadAsStringAsync()
-                        .GetAwaiter().GetResult();
-                }
+        
             }
             catch (HttpRequestException)
             {
@@ -68,7 +70,8 @@ public class CSVDBServiceFixture : IDisposable
             Thread.Sleep(500);
         }
 
-        throw new InvalidOperationException("The webservice did not launch in expected time frame.");
+        throw new InvalidOperationException(
+        $"Webservice did not launch.\n{process.StandardError.ReadToEnd()}");
     }
 
     private static string FindProjectPath()
@@ -102,7 +105,4 @@ public class CSVDBServiceFixture : IDisposable
     }
 }
 
-[CollectionDefinition("Webservice")]
-public class CSVDBServiceCollection : ICollectionFixture<CSVDBServiceFixture>
-{
-}
+
