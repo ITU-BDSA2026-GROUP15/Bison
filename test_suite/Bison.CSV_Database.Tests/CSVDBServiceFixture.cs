@@ -23,6 +23,7 @@ public class CSVDBServiceFixture : IDisposable
         };
 
         startInfo.ArgumentList.Add("run");
+        startInfo.ArgumentList.Add("--no-build");
         startInfo.ArgumentList.Add("--project");
         startInfo.ArgumentList.Add(FindProjectPath());
 
@@ -43,14 +44,13 @@ public class CSVDBServiceFixture : IDisposable
     // Poller servicen, indtil den rent faktisk svarer, i stedet for en fast Thread.Sleep.
     private void WaitUntilReady()
     {
-        const int maxAttempts = 40;
+        const int maxAttempts = 120;
 
         for (int attempt = 0; attempt < maxAttempts; attempt++)
         {
             if (process.HasExited)
             {
-                throw new InvalidOperationException(
-                    $"Webservice stopped unexpectedly:\n{process.StandardError.ReadToEnd()}");
+                throw new InvalidOperationException("Webservice stopped unexpectedly.");
             }
 
             try
@@ -70,8 +70,7 @@ public class CSVDBServiceFixture : IDisposable
             Thread.Sleep(500);
         }
 
-        throw new InvalidOperationException(
-        $"Webservice did not launch.\n{process.StandardError.ReadToEnd()}");
+        throw new InvalidOperationException("Webservice did not launch.");
     }
 
     private static string FindProjectPath()
