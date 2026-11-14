@@ -1,87 +1,67 @@
 using System.Text.RegularExpressions;
 using Bison.Core.Models;
 using Bison.Infrastructure.Data;
-using Bison.Web;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.EntityFrameworkCore;
+
 namespace Bison.Razor.Tests;
 
-// IDisposable gør, at xUnit kalder Dispose efter hver test.
-public class PaginationTests : IDisposable
+// IClassFixture gør, at alle tests i klassen deler én in-memory database og én webapp.
+// Det er sikkert, fordi testene kun læser data.
+public class PaginationTests : IClassFixture<InMemoryDb>
 {
-    private readonly string _dbPath;
-    private readonly WebApplicationFactory<Program> _factory;
     private readonly HttpClient _client;
 
-    public PaginationTests()
+    public PaginationTests(InMemoryDb db)
     {
-        // Et unikt filnavn giver hver test sin egen database.
-        _dbPath = Path.Combine(
-            Path.GetTempPath(),
-            $"bison-pagination-{Guid.NewGuid()}.db");
-
-        // Åbner testdatabasen. SQLite opretter filen, hvis den ikke findes.
-        // Pooling=False lukker denne forbindelse helt efter brug.
-       var options = new DbContextOptionsBuilder<BisonDBContext>()
-    .UseSqlite($"Data Source={_dbPath};Pooling=False")
-    .Options;
-
-using (var context = new BisonDBContext(options))
-{
-    context.Database.Migrate();
-
-    var peter = new Author
-    {
-        Name = "Peter",
-        Email = "peter@example.test"
-    };
-
-    var paul = new Author
-    {
-        Name = "Paul",
-        Email = "paul@example.test"
-    };
-
-    var taxon = new Taxon
-    {
-        dwc_TaxonID = "test-taxon",
-        VernacularName = "Testfugl"
-    };
-
-    for (int id = 1; id <= 69; id++)
-    {
-        context.Observations.Add(new Observation
+        // Testdata skal ind FØR appen starter. Program.cs seeder kun databasen,
+        // hvis der ikke allerede findes forfattere og posts.
+        using (var context = db.CreateContext())
         {
-            PostId = id,
-            Author = id <= 65 ? peter : paul,
-            Taxon = taxon,
-            Text = $"PAGETEST_{id:D3}",
-            TimeStamp = new DateTime(2026, 1, 1)
-        });
-    }
-
-    context.SaveChanges();
-}
-        // Opretter en testversion af webappen.
-        _factory = new WebApplicationFactory<Program>()
-            .WithWebHostBuilder(builder =>
+            // Constructoren kører for hver test, men databasen deles.
+            // Derfor seeder vi kun, hvis databasen er tom.
+            if (!context.Authors.Any())
             {
-                builder.ConfigureServices(services =>
-                {
-                    // Lader webappen bruge EF Core-testdatabasen.
-                    services.RemoveAll<BisonDBContext>();
-                    services.RemoveAll<DbContextOptions<BisonDBContext>>();
-                    services.AddDbContext<BisonDBContext>(options =>
-                        options.UseSqlite($"Data Source={_dbPath};Pooling=False"));
-
-                });
-            });
+                SeedData(context);
+            }
+        }
 
         // Klienten sender HTTP-kald til testappen uden en rigtig netværksport.
-        _client = _factory.CreateClient();
+        _client = db.CreateWebApp().CreateClient();
+    }
+
+    // Lægger 69 observationer ind: 65 fra Peter og 4 fra Paul.
+    private static void SeedData(BisonDBContext context)
+    {
+        var peter = new Author
+        {
+            Name = "Peter",
+            Email = "peter@example.test"
+        };
+
+        var paul = new Author
+        {
+            Name = "Paul",
+            Email = "paul@example.test"
+        };
+
+        var taxon = new Taxon
+        {
+            dwc_TaxonID = "test-taxon",
+            VernacularName = "Testfugl"
+        };
+
+        for (int id = 1; id <= 69; id++)
+        {
+            context.Observations.Add(new Observation
+            {
+                PostId = id,
+                Author = id <= 65 ? peter : paul,
+                Taxon = taxon,
+                Text = $"PAGETEST_{id:D3}",
+                TimeStamp = new DateTime(2026, 1, 1)
+            });
+        }
+
+        context.SaveChanges();
     }
 
     // Henter en side og returnerer numrene fra testobservationernes tekster.
@@ -165,20 +145,5 @@ using (var context = new BisonDBContext(options))
     {
         // En forfatter uden observationer skal give en tom side uden fejl.
         Assert.Empty(await GetIds("/obs/Unknown"));
-    }
-
-    public void Dispose()
-    {
-        // Lukker klienten og testappen efter testen.
-        _client.Dispose();
-        _factory.Dispose();
-
-        // Frigiver gemte SQLite-forbindelser til denne testdatabase.
-        using var poolConnection = new SqliteConnection(
-            $"Data Source={_dbPath}");
-        SqliteConnection.ClearPool(poolConnection);
-
-        // Sletter kun den midlertidige database, som testen oprettede.
-        File.Delete(_dbPath);
     }
 }
