@@ -1,8 +1,6 @@
-using Bison.Core.Models;
-using Bison.Infrastructure.Data;
-
 namespace Bison.Razor.Tests;
 
+// Testdata (Johan og Yuki) kommer fra InMemoryDb.SeedJohanAndYuki().
 public class ApiTests : IClassFixture<InMemoryDb>
 {
     // En HttpClient, der taler direkte med den in-memory app.
@@ -12,58 +10,10 @@ public class ApiTests : IClassFixture<InMemoryDb>
     {
         // Testdata skal ind FØR appen starter. Program.cs seeder kun databasen,
         // hvis der ikke allerede findes forfattere og posts.
-        using (var context = db.CreateContext())
-        {
-            // Fixturen deles af alle tests i klassen, men constructoren kører for hver test.
-            // Derfor seeder vi kun, hvis databasen er tom.
-            if (!context.Authors.Any())
-            {
-                SeedData(context);
-            }
-        }
+        db.SeedJohanAndYuki();
 
         // CreateClient() starter appen.
         _client = db.CreateWebApp().CreateClient();
-    }
-
-    // Lægger de kendte testdata ind, som testene nedenfor forventer.
-    private static void SeedData(BisonDBContext context)
-    {
-        var johan = new Author
-        {
-            Name = "Johan",
-            Email = "johan@example.test"
-        };
-
-        var yuki = new Author
-        {
-            Name = "Yuki",
-            Email = "yuki@example.test"
-        };
-
-        var taxon = new Taxon
-        {
-            dwc_TaxonID = "test-taxon",
-            VernacularName = "Testfugl"
-        };
-
-        context.Observations.AddRange(
-            new Observation
-            {
-                Author = johan,
-                Taxon = taxon,
-                Text = "Great Egret on the pond at the edge of town. Nests in colonies, often in trees near water.",
-                TimeStamp = new DateTime(2026, 1, 2, 12, 0, 0)
-            },
-            new Observation
-            {
-                Author = yuki,
-                Taxon = taxon,
-                Text = "A Least Bittern resting on a sandbank. Stays within cover almost all the time.",
-                TimeStamp = new DateTime(2026, 1, 1, 12, 0, 0)
-            });
-
-        context.SaveChanges();
     }
 
     [Fact]

@@ -1,5 +1,6 @@
-using Bison.Infrastructure.Data;   
-using Microsoft.Data.Sqlite;      
+using Bison.Core.Models;
+using Bison.Infrastructure.Data;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore; 
 using Bison.Web;                                       
 using Microsoft.AspNetCore.Mvc.Testing;                   
@@ -32,7 +33,53 @@ public class InMemoryDb : IDisposable
 
     public BisonDBContext CreateContext() => new BisonDBContext(Options);
 
-    
+    // Fælles testdata for ApiTests og IntegrationTests: Johan og Yuki med én observation hver.
+    // Ændres teksterne her, skal asserts i begge testklasser også rettes.
+    // Skal kaldes FØR CreateWebApp(), ellers seeder Program.cs sine egne data.
+    public void SeedJohanAndYuki()
+    {
+        using var context = CreateContext();
+
+        // Fixturen deles af alle tests i en klasse, men constructoren kører for hver test.
+        // Derfor seeder vi kun, hvis databasen er tom.
+        if (context.Authors.Any()) return;
+
+        var johan = new Author
+        {
+            Name = "Johan",
+            Email = "johan@example.test"
+        };
+
+        var yuki = new Author
+        {
+            Name = "Yuki",
+            Email = "yuki@example.test"
+        };
+
+        var taxon = new Taxon
+        {
+            dwc_TaxonID = "test-taxon",
+            VernacularName = "Testfugl"
+        };
+
+        context.Observations.AddRange(
+            new Observation
+            {
+                Author = johan,
+                Taxon = taxon,
+                Text = "Great Egret on the pond at the edge of town. Nests in colonies, often in trees near water.",
+                TimeStamp = new DateTime(2026, 1, 2, 12, 0, 0)
+            },
+            new Observation
+            {
+                Author = yuki,
+                Taxon = taxon,
+                Text = "A Least Bittern resting on a sandbank. Stays within cover almost all the time.",
+                TimeStamp = new DateTime(2026, 1, 1, 12, 0, 0)
+            });
+
+        context.SaveChanges();
+    }
 
     // Starter webappen in-memory. Skal bruges for at kunne gøre ApiTests.cs og PaginationTests.cs uafhængig af forældede hjælpeklasser
    public WebApplicationFactory<Program> CreateWebApp()
