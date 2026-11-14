@@ -30,6 +30,20 @@ public class UnitTest
     }
 
     [Fact]
+    public void ObserveCallsAddObservationTest()
+    {
+        //ARRANGE
+        _db.AddObservation(Arg.Any<Cheep>()).Returns(ci => ci.Arg<Cheep>());
+
+        //ACT
+        _program.observe("saw a bison", "ITU");
+
+        //ASSERT
+        _db.Received(1).AddObservation(Arg.Is<Cheep>(c =>
+            c.Observation == "saw a bison" && c.Location == "ITU"));
+    }
+
+    [Fact]
     public void NonexistingObservationTest()
     {
         // ARRANGE
