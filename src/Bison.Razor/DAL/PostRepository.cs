@@ -120,13 +120,48 @@ namespace Bison.Razor.DAL
 
         //Implementation of GetObservationDetails, getComments, GetProposals
         // from interface methods.
-        public Observation? GetObservationDetails(int id)
+        public Observation? GetObservationEntity(int id)
         {
             return _context.Posts.OfType<Observation>()
                 .Include(o => o.Author)
                 .Include(o => o.Taxon)
                 .FirstOrDefault(o => o.PostId == id);
         }
+
+        public ObservationDto? GetObservationDetails (int id)
+        {
+            var o = GetObservationEntity(id);
+            if(o is null) return null;
+
+            var dto = ToObservationEntity(id);
+            dto.Comments = GetComments(id).ToList();
+            dto.Proposals = GetProposals(id).ToList();
+
+            return dto;
+
+        }
+        public IEnumerable<CommentDto> GetComments (int observationId)
+        {
+            return _context.Posts.OfType<Comment>()
+                .Include (c => c.Author)
+                .Where (c=> c.ObservationId => observationId)
+                .AsEnumerable()
+                .Select(ToCommentDto)
+                .ToList();
+        }
+
+        public IEnumerable<ProposalDto> GetProposals (int observationId)
+        {
+            return _context.Posts.OfType<Proposal>()
+                .Include(p=> p.Author)
+                .Include(p => p.Taxon)
+                .Where(p => p.ObservationId => observationId)
+                .AsEnumerable()
+                .Select(ToProposalDto)
+                .ToList();
+        }
+
+
 
         public Taxon? GetTaxon(int id)
         {
@@ -181,6 +216,23 @@ namespace Bison.Razor.DAL
                 .OrderBy(taxon => taxon.VernacularName ?? taxon.dwc_TaxonID)
                 .ThenBy(taxon => taxon.TaxonId)
                 .ToList();
+        }
+
+
+        private static ObservationDto ToObservationDto (Observation o) => new ObservationDto
+        {
+            Id = o.PostId,
+            Text= o.Text,
+            TimeStamp= o.TimeStamp.ToString("yyyy-mm-dd"),
+            AuthorName = o.Author.Name,
+            DanishVernacularName = o.Taxon?.VernacularName ?? "",
+            PictureUrl = o.PictureUrl
+
+        };
+
+        private static CommentDto ToCommentDto (Comment c) => new CommentDto
+        {
+            
         }
     }
 }
