@@ -20,12 +20,12 @@ public interface IObservationService
     ObservationDto? GetObservationDetails (
         int id);
 
-    List<ObservationDto> GetProposals (int id, int page =1);
+    List<ProposalDto> GetProposals (int id, int page =1);
 
-    List<ObservationDto> GetComments (int id, int page =1);
+    List<CommentDto> GetComments (int id, int page =1);
     
     
-    IReadOnlyList<Taxon> GetTaxon();
+    IReadOnlyList<Taxon> GetTaxons();
 
     // Forsøger at gemme en observation for den angivne forfatter.
     // E-mailen bruges, hvis forfatteren skal oprettes.
