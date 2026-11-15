@@ -24,13 +24,13 @@ namespace Bison.Razor.DAL
      
         Observation? GetObservationEntity(int id);
         Taxon? GetTaxon(int id);
+        // Finder den forfatter, der svarer til brugerens login-navn.
         Author? GetAuthorByName (string name);
         IReadOnlyList<Taxon>GetTaxons();
 
 
 
-       // Finder den forfatter, der svarer til brugerens login-navn.
-        Author? GetAuthorByName(string name);
+
 
          //update
         void UpdatePost(Post post);
@@ -40,11 +40,10 @@ namespace Bison.Razor.DAL
 
         void Save();
 
-        
-       IEnumerable<T> GetPosts<T>(int page) where T : Post;
+    
        //read -> retuans a single post
         Post GetPost(int id);
-       List<Observation> getAllObservations();
+       List<Observation> GetAllObservations();
 
     }
 
