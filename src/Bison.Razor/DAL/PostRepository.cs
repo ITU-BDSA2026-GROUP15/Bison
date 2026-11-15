@@ -56,7 +56,7 @@ namespace Bison.Razor.DAL
 
         }
 
-        public IEnumerable<ObservationsDto> GetObservationByAuthor (string author, int page)
+        public IEnumerable<ObservationDto> GetObservationByAuthor (string author, int page)
         {
             page = Math.Max(1, page);
             int offset = (page-1)* PageSize;
@@ -133,7 +133,7 @@ namespace Bison.Razor.DAL
             var o = GetObservationEntity(id);
             if(o is null) return null;
 
-            var dto = ToObservationEntity(id);
+            var dto = ToObservationDto(o);
             dto.Comments = GetComments(id).ToList();
             dto.Proposals = GetProposals(id).ToList();
 
@@ -144,7 +144,7 @@ namespace Bison.Razor.DAL
         {
             return _context.Posts.OfType<Comment>()
                 .Include (c => c.Author)
-                .Where (c=> c.ObservationId => observationId)
+                .Where (c=> c.ObservationId == observationId)
                 .AsEnumerable()
                 .Select(ToCommentDto)
                 .ToList();
@@ -155,7 +155,7 @@ namespace Bison.Razor.DAL
             return _context.Posts.OfType<Proposal>()
                 .Include(p=> p.Author)
                 .Include(p => p.Taxon)
-                .Where(p => p.ObservationId => observationId)
+                .Where(p => p.ObservationId == observationId)
                 .AsEnumerable()
                 .Select(ToProposalDto)
                 .ToList();
@@ -169,24 +169,6 @@ namespace Bison.Razor.DAL
                 .FirstOrDefault(o => o.TaxonId == id);
         }
 
-        public IEnumerable<Comment> GetComments(int observationId)
-        {
-            return _context.Posts.OfType<Comment>()
-                .Include (c => c.Author)
-                .Where (c => c.ObservationId == observationId)
-                .ToList();
-
-        }
-
-        public IEnumerable<Proposal> GetProposals(int observationId)
-        {
-            return _context.Posts.OfType<Proposal>()
-                .Include(p => p.Author)
-                .Include(p => p.Taxon)
-                .Where(p => p.ObservationId == observationId)
-                .ToList();
-
-        }
 
         public List<Observation> GetAllObservations()
         {
@@ -223,7 +205,7 @@ namespace Bison.Razor.DAL
         {
             Id = o.PostId,
             Text= o.Text,
-            TimeStamp= o.TimeStamp.ToString("yyyy-mm-dd"),
+            TimeStamp= o.TimeStamp.ToString("yyyy-MM-dd"),
             AuthorName = o.Author.Name,
             DanishVernacularName = o.Taxon?.VernacularName ?? "",
             PictureUrl = o.PictureUrl
@@ -232,8 +214,22 @@ namespace Bison.Razor.DAL
 
         private static CommentDto ToCommentDto (Comment c) => new CommentDto
         {
-            
-        }
+            Id = c.PostId,
+            Text = c.Text,
+            TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd"),
+            AuthorName = c.Author.Name,
+
+        };
+
+        private static ProposalDto ToProposalDto (Proposal p) => new ProposalDto
+        {
+            Id = p.PostId,
+            Text = p.Text,
+            TimeStamp = p.TimeStamp.ToString("yyyy-MM-dd"),
+            AuthorName = p.Author.Name,
+            DanishVernacularName = p.Taxon?.VernacularName ?? "",
+        };
+
     }
 }
 
