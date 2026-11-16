@@ -1,11 +1,12 @@
 using Bison.Core.Models;
+using Bison.Core.ModelsDTO;
 using Bison.Infrastructure.DafnyWrapper;
 using Bison.Infrastructure.Repositories;
 
 namespace Bison.Infrastructure.Services;
 
 public interface IFilterService{
-    public List<ObservationViewModel> GetObservationsFromTaxon (int taxonId, int page = 1);
+    public List<ObservationDto> GetObservationsFromTaxon (int taxonId, int page = 1);
 }
 
 public class FilterService : IFilterService
@@ -21,14 +22,14 @@ public class FilterService : IFilterService
 
     private const int PageSize = 32;
 
-    public List<ObservationViewModel> GetObservationsFromTaxon(int taxonId, int page = 1)
+    public List<ObservationDto> GetObservationsFromTaxon(int taxonId, int page = 1)
     {
         page = Math.Max(1, page);
 
         var root = _repo.GetTaxon(taxonId);
         if (root is null)
         {
-            return new List<ObservationViewModel>();
+            return new List<ObservationDto>();
         }
 
         //wrapping an observation to a DafnyObservation
@@ -46,7 +47,7 @@ public class FilterService : IFilterService
         return result.Elements
             .Skip((page-1) * PageSize)
             .Take(PageSize)
-            .Select(daf => ObservationService.ToViewModel(daf.Observation))
+            .Select(daf => DtoMapper.ToObservationDto(daf.Observation))
             .ToList();
     }
 }
