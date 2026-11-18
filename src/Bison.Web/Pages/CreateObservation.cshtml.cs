@@ -15,11 +15,12 @@ public class CreateObservationModel : PageModel
     private readonly IObservationService _service;
     private readonly IPictureStorage _pictureStorage;
 
-    public CreateObservationModel(IObservationService service)
+    public CreateObservationModel(IObservationService service,  IPictureStorage pictureStorage)
     {
         _service = service;
+        _pictureStorage = pictureStorage;
     }
-    
+
     // Razor Pages læser værdierne fra formularen.
     [BindProperty]
     [Required(ErrorMessage = "Write what you observed.")]
