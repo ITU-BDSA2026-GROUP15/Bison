@@ -7,7 +7,7 @@ namespace Bison.Razor.Tests;
 public class TestDatabase : IDisposable
 {
     // Stien til denne instans' egen testdatabase (unik temp-fil).
-    // Public, så TestWebFactory og testene kan lave en DBFacade, der peger på den.
+    
     public string DbPath { get; }
 
     public TestDatabase()

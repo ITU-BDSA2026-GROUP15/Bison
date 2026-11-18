@@ -8,13 +8,12 @@ namespace Bison.Razor.Tests;
 // Ændrer eller tilføjer vi i schema og/eller dump, skal disse tests også rettes.
 public class IntegrationTests : IClassFixture<TestDatabase>
 {
-    // Den DBFacade, testene kalder - peger på testdatabasen i stedet for bison.db.
+    
     private readonly TestWebFactory _factory;
 
     public IntegrationTests(TestWebFactory factory)
     {
-        // Ingen DI-container her: vi laver selv DBFacade og giver den testdatabasens sti.
-        _factory=factory;
+        _factory= factory;
     }
 
     [Fact]
