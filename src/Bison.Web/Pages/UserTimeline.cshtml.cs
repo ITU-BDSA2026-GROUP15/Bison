@@ -1,4 +1,5 @@
 ﻿using Bison.Core.Models;
+using Bison.Core.ModelsDTO;
 using Bison.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,7 +9,11 @@ namespace Bison.Web.Pages;
 public class UserTimelineModel : PageModel
 {
     private readonly IObservationService _service;
-    public List<ObservationViewModel> Observations { get; set; }
+
+    public List<ObservationDto> Observations { get; set; } = new();
+
+
+    
     // Angiver, om den indloggede bruger ser sin egen oversigt.
     public bool IsOwnTimeline { get; private set; }
 

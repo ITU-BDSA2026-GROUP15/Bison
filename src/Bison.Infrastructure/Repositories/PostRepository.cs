@@ -49,7 +49,7 @@ namespace Bison.Infrastructure.Repositories
                 .Skip(offset)
                 .Take(PageSize)
                 .AsEnumerable()
-                .Select(ToObservationDto) //Mapper will be created later
+                .Select(DtoMapper.ToObservationDto) //Mapper will be created later
                 .ToList();
 
         }
@@ -68,7 +68,7 @@ namespace Bison.Infrastructure.Repositories
                 .Skip(offset)
                 .Take(PageSize)
                 .AsEnumerable()
-                .Select(ToObservationDto) //For later
+                .Select(DtoMapper.ToObservationDto) //For later
                 .ToList();
 
 
@@ -131,7 +131,7 @@ namespace Bison.Infrastructure.Repositories
             var o = GetObservationEntity(id);
             if(o is null) return null;
 
-            var dto = ToObservationDto(o);
+            var dto = DtoMapper.ToObservationDto(o);
             dto.Comments = GetComments(id).ToList();
             dto.Proposals = GetProposals(id).ToList();
 
@@ -144,7 +144,7 @@ namespace Bison.Infrastructure.Repositories
                 .Include (c => c.Author)
                 .Where (c=> c.ObservationId == observationId)
                 .AsEnumerable()
-                .Select(ToCommentDto)
+                .Select(DtoMapper.ToCommentDto)
                 .ToList();
         }
 
@@ -155,7 +155,7 @@ namespace Bison.Infrastructure.Repositories
                 .Include(p => p.Taxon)
                 .Where(p => p.ObservationId == observationId)
                 .AsEnumerable()
-                .Select(ToProposalDto)
+                .Select(DtoMapper.ToProposalDto)
                 .ToList();
         }
 
@@ -198,35 +198,6 @@ namespace Bison.Infrastructure.Repositories
                 .ToList();
         }
 
-
-        private static ObservationDto ToObservationDto (Observation o) => new ObservationDto
-        {
-            Id = o.PostId,
-            Text= o.Text,
-            TimeStamp= o.TimeStamp.ToString("yyyy-MM-dd"),
-            AuthorName = o.Author.Name,
-            DanishVernacularName = o.Taxon?.VernacularName ?? "",
-            PictureUrl = o.PictureUrl
-
-        };
-
-        private static CommentDto ToCommentDto (Comment c) => new CommentDto
-        {
-            Id = c.PostId,
-            Text = c.Text,
-            TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd"),
-            AuthorName = c.Author.Name,
-
-        };
-
-        private static ProposalDto ToProposalDto (Proposal p) => new ProposalDto
-        {
-            Id = p.PostId,
-            Text = p.Text,
-            TimeStamp = p.TimeStamp.ToString("yyyy-MM-dd"),
-            AuthorName = p.Author.Name,
-            DanishVernacularName = p.Taxon?.VernacularName ?? "",
-        };
 
     }
 }
