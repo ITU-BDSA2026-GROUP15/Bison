@@ -4,7 +4,7 @@
     <h3>What did you see, @(User.Identity?.Name)?</h3>
 
     @* Share sender tekst og taxon til CreateObservationModel.OnPost(). *@
-    <form method="post" asp-page="/CreateObservation">
+    <form method="post" asp-page="/CreateObservation" enctype="multipart/form-data">
         <div asp-validation-summary="All"></div>
 
         <label for="observation-text">Observation</label>
