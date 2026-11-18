@@ -20,8 +20,8 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore Bison.sln
     - name: Build
-      run: dotnet build --no-restore #already called restore, no need to do it again
+      run: dotnet build Bison.sln --no-restore #already called restore, no need to do it again
     - name: Test
-      run: dotnet test --no-build --verbosity normal #see reasoning above
+      run: dotnet test Bison.sln --no-build --verbosity normal #see reasoning above
