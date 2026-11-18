@@ -24,7 +24,14 @@
                 Text = taxon.VernacularName ?? taxon.dwc_TaxonID
             }),
             "Choose a taxon",
-            new { id = "observation-taxon", required = "required" })
+            new
+            {
+                id = "observation-taxon", required = "required"
+
+            })
+
+        <label for="observation-picture">Add picture (optional)</label>
+        <input type="file" id="observation-picture" name="Picture" accept="image/*" />
 
         <input type="submit" value="Share" />
     </form>
