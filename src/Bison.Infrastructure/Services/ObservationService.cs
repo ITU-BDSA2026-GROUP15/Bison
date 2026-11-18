@@ -45,10 +45,10 @@ public interface IObservationService
 
 public class ObservationService : IObservationService
 {
-    // DBFacade håndterer adgangen til SQLite-databasen.
+    
     private readonly IPostRepository _repo;
 
-    // Modtager DBFacade gennem dependency injection.
+    
     public ObservationService(IPostRepository repo)
     {
         _repo = repo;

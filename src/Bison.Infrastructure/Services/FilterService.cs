@@ -11,10 +11,9 @@ public interface IFilterService{
 
 public class FilterService : IFilterService
 {
-    // DBFacade håndterer adgangen til SQLite-databasen.
+    
     private readonly IPostRepository _repo;
 
-    // Modtager DBFacade gennem dependency injection.
     public FilterService(IPostRepository repo)
     {
         _repo = repo;

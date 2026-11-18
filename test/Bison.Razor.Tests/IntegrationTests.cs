@@ -1,4 +1,5 @@
-using Bison.Web;
+using Bison.Infrastructure.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bison.Razor.Tests;
 
@@ -8,34 +9,41 @@ namespace Bison.Razor.Tests;
 public class IntegrationTests : IClassFixture<TestDatabase>
 {
     // Den DBFacade, testene kalder - peger på testdatabasen i stedet for bison.db.
-    private readonly DBFacade _db;
+    private readonly TestWebFactory _factory;
 
-    public IntegrationTests(TestDatabase testDb)
+    public IntegrationTests(TestWebFactory factory)
     {
         // Ingen DI-container her: vi laver selv DBFacade og giver den testdatabasens sti.
-        _db = new DBFacade(testDb.DbPath);
+        _factory=factory;
     }
 
     [Fact]
     public void GetObservations_ReturnsObservationsFromDatabase()
     {
-        // ACT
-        var observations = _db.GetObservations();
+        // Arrange
+        using var scope = _factory.Services.CreateScope();
+
+        var repository = scope.ServiceProvider.GetRequiredService<IPostRepository>();
+
+        var observations = repository.GetObservations(1);
 
         // ASSERT
-        Assert.Contains(observations, o => o.Author == "Yuki" &&
-            o.Message == "A Least Bittern resting on a sandbank. Stays within cover almost all the time.");
+        Assert.Contains(observations, o => o.AuthorName == "Yuki" &&
+            o.Text == "A Least Bittern resting on a sandbank. Stays within cover almost all the time.");
     }
 
     [Fact]
     public void GetObservationsFromAuthor_ReturnsOnlyThatAuthor()
     {
+        using var scope = _factory.Services.CreateScope();
+        var repo = scope.ServiceProvider.GetRequiredService<IPostRepository>();
         // ACT
-        var observations = _db.GetObservationsFromAuthor("Yuki");
+    
+        var observations = repo.GetObservationsByAuthor("yuki", 1);
 
         // ASSERT
         // Alle observationer skal være Yukis.
         Assert.NotEmpty(observations);
-        Assert.All(observations, o => Assert.Equal("Yuki", o.Author));
+        Assert.All(observations, o => Assert.Equal("Yuki", o.AuthorName));
     }
 }
