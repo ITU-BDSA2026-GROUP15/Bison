@@ -13,12 +13,13 @@ namespace Bison.Web.Pages;
 public class CreateObservationModel : PageModel
 {
     private readonly IObservationService _service;
+    private readonly IPictureStorage _pictureStorage;
 
     public CreateObservationModel(IObservationService service)
     {
         _service = service;
     }
-
+    
     // Razor Pages læser værdierne fra formularen.
     [BindProperty]
     [Required(ErrorMessage = "Write what you observed.")]
