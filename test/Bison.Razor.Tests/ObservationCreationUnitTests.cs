@@ -22,7 +22,7 @@ public class ObservationCreationUnitTest
 
         //act - forsøger at oprette en observation ud fra taxon og forfatteren, som repository kender til.
 
-        var created = service.TryCreateObservation( author.Name , author.Email,"Jeg så en solsort i haven",  taxon.TaxonId);
+        var created = service.TryCreateObservation( author.Name , author.Email,"Jeg så en solsort i haven",  taxon.TaxonId, null);
 
 
         //assert - forventer, at servicen returnerer true og sender en
@@ -49,7 +49,7 @@ public class ObservationCreationUnitTest
         using var repository = new TestRepository(taxon, author);
         var service = new ObservationService(repository);
         //act - 999 er et ukendt taxon id
-        var created = service.TryCreateObservation( author.Name , author.Email,"Jeg så en fugl",  999);
+        var created = service.TryCreateObservation( author.Name , author.Email,"Jeg så en fugl",  999, null);
 
 
 

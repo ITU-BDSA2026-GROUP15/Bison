@@ -1,12 +1,11 @@
 using Bison.Core.Models;
 using Bison.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Http;
 
 namespace Bison.Infrastructure.Services;
 
 // Indeholder de oplysninger om en observation, som vises på siden.
 //translates between Repo and ObservationViewModel
-public record ObservationViewModel(string Author, string Message, string Timestamp, IFormFile? PictureUrl = null);
+public record ObservationViewModel(string Author, string Message, string Timestamp, string? PictureUrl = null);
 
 public interface IObservationService
 {
