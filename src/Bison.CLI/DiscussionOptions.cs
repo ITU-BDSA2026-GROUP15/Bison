@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using CommandLine;
-
 //marks the class as the definition of the read command.
 //The helpText describes what the command does.
 [Verb("discussion", HelpText ="Read and print the discussions (comments) from the database.")]

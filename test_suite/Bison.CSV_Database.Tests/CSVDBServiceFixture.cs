@@ -1,8 +1,6 @@
 using System.Diagnostics;
 using System.Net.Http.Json;
 
-namespace Bison.CLI.Tests;
-
 // Starter web servicen som en rigtig proces, én gang, delt mellem alle tests
 // i en collection (test-klasse).
 public class CSVDBServiceFixture : IDisposable
@@ -20,11 +18,12 @@ public class CSVDBServiceFixture : IDisposable
             FileName = "dotnet",
             UseShellExecute = false,
             CreateNoWindow = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true
+            RedirectStandardOutput = false,
+            RedirectStandardError = false
         };
 
         startInfo.ArgumentList.Add("run");
+        startInfo.ArgumentList.Add("--no-build");
         startInfo.ArgumentList.Add("--project");
         startInfo.ArgumentList.Add(FindProjectPath());
 
@@ -45,10 +44,15 @@ public class CSVDBServiceFixture : IDisposable
     // Poller servicen, indtil den rent faktisk svarer, i stedet for en fast Thread.Sleep.
     private void WaitUntilReady()
     {
-        const int maxAttempts = 40;
+        const int maxAttempts = 120;
 
         for (int attempt = 0; attempt < maxAttempts; attempt++)
         {
+            if (process.HasExited)
+            {
+                throw new InvalidOperationException("Webservice stopped unexpectedly.");
+            }
+
             try
             {
                 var response = Client.GetAsync("/observations").GetAwaiter().GetResult();
@@ -56,11 +60,7 @@ public class CSVDBServiceFixture : IDisposable
                 {
                     return;
                 }
-                if (!response.IsSuccessStatusCode)
-                {
-                    var body = response.Content.ReadAsStringAsync()
-                        .GetAwaiter().GetResult();
-                }
+        
             }
             catch (HttpRequestException)
             {
@@ -70,7 +70,7 @@ public class CSVDBServiceFixture : IDisposable
             Thread.Sleep(500);
         }
 
-        throw new InvalidOperationException("The webservice did not launch in expected time frame.");
+        throw new InvalidOperationException("Webservice did not launch.");
     }
 
     private static string FindProjectPath()
@@ -104,7 +104,4 @@ public class CSVDBServiceFixture : IDisposable
     }
 }
 
-[CollectionDefinition("Webservice")]
-public class CSVDBServiceCollection : ICollectionFixture<CSVDBServiceFixture>
-{
-}
+

@@ -1,6 +1,4 @@
-using System;
 using SimpleDB;
-
 public static class UserInterface
 {
     public static void PrintObservations(IEnumerable<Cheep> cheeps)
