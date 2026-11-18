@@ -12,8 +12,6 @@ public class UserTimelineModel : PageModel
 
     public List<ObservationDto> Observations { get; set; } = new();
 
-
-    
     // Angiver, om den indloggede bruger ser sin egen oversigt.
     public bool IsOwnTimeline { get; private set; }
 
@@ -26,9 +24,9 @@ public class UserTimelineModel : PageModel
         _service = service;
     }
     //[FromQuery] læser page fra URL’en, fra starten på 1.
-    public ActionResult OnGet(string author, [FromQuery]int page = 1)
+    public IActionResult OnGet(string author, [FromQuery]int page = 1)
     {
-        Observations = _service.GetObservationsFromAuthor(author, page);
+        Observations = _service.GetObservationsFromAuthor(author, Math.Max(1,page));
 
         // Sammenlign login-navnet med forfatteren i URL'en.
         IsOwnTimeline = User.Identity?.IsAuthenticated == true &&
