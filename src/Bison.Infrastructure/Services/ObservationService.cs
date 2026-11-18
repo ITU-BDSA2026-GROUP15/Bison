@@ -1,11 +1,12 @@
 using Bison.Core.Models;
 using Bison.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Http;
 
 namespace Bison.Infrastructure.Services;
 
 // Indeholder de oplysninger om en observation, som vises på siden.
 //translates between Repo and ObservationViewModel
-public record ObservationViewModel(string Author, string Message, string Timestamp, string? PictureUrl = null);
+public record ObservationViewModel(string Author, string Message, string Timestamp, IFormFile? PictureUrl = null);
 
 public interface IObservationService
 {
@@ -33,7 +34,7 @@ public interface IObservationService
     // Returnerer true, når observationen er gemt, og false,
     // hvis forfatternavnet eller teksten mangler, eller taxonet ikke findes.
     bool TryCreateObservation(
-        string authorName, string email, string text, int taxonId);
+        string authorName, string email, string text, int taxonId,  string? pictureUrl);
 
     bool TryCreateComment(
         string authorName, string email, string text, int observationID);
@@ -109,7 +110,7 @@ public class ObservationService : IObservationService
     }
 
     public bool TryCreateObservation(
-        string authorName, string email, string text, int taxonId)
+        string authorName, string email, string text, int taxonId, string? pictureUrl)
     {
         // En observation skal have en forfatter og en tekst.
         // IsNullOrWhiteSpace fanger også tekst, der kun består af mellemrum.
@@ -139,6 +140,7 @@ public class ObservationService : IObservationService
         {
             Author = author,
             Taxon = taxon,
+            PictureUrl = pictureUrl,
 
             // Fjern mellemrum før og efter teksten.
             Text = text.Trim(),

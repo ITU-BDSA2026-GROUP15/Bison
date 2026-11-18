@@ -30,6 +30,9 @@ public class CreateObservationModel : PageModel
     [Range(1, int.MaxValue, ErrorMessage = "Choose a taxon.")]
     public int TaxonId { get; set; }
 
+    [BindProperty]
+    public IFormFile? Picture { get; set; }
+
     public IReadOnlyList<Taxon> Taxons { get; private set; } =
         Array.Empty<Taxon>();
 
@@ -38,7 +41,7 @@ public class CreateObservationModel : PageModel
         Taxons = _service.GetTaxons();
     }
 
-    public IActionResult OnPost()
+    public async Task<IActionResult> OnPostAsync()
     {
         // Hent forfatteren fra den indloggede bruger.
         var authorName = User.Identity?.Name;
@@ -51,7 +54,20 @@ public class CreateObservationModel : PageModel
 
         var email = User.FindFirstValue(ClaimTypes.Email) ?? "";
 
-        if (!_service.TryCreateObservation(authorName, email, Text, TaxonId))
+        string? pictureUrl = null;
+
+        if (Picture != null)
+        {
+            if (!_pictureStorage.IsValid(Picture))
+            {
+                ModelState.AddModelError(nameof(Picture), "The picture must be JPEG, PNG, WebP or HEIC and at most 5 MB");
+                return ShowForm();
+            }
+
+            pictureUrl = await _pictureStorage.SaveAsync(Picture);
+        }
+
+        if (!_service.TryCreateObservation(authorName, email, Text, TaxonId, pictureUrl))
         {
             ModelState.AddModelError(
                 string.Empty, "Enter an observation and choose a valid taxon.");
