@@ -190,6 +190,10 @@ div.page div.observationbox input[type="submit"] {
   margin-left: 5px;
 }
 
+div.page div.observationbox label {
+    display: block;
+}
+
 div.message {
   list-style: none;
   margin: 10px 10px 0 10px;
