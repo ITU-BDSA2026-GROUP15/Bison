@@ -25,7 +25,7 @@ public class HttpDatabaseRepository : IDatabaseRepository
 
     public IEnumerable<Cheep> GetComments(int observationId)
     {
-        var postTask = _httpClient.GetFromJsonAsync<List<Cheep>>($"/comment?id={observationId}");
+        var postTask = _httpClient.GetFromJsonAsync<List<Cheep>>($"/comments?id={observationId}"); //tidligere var comment men nu fleretal. For at får discussion til at ramme webservicens læserute
         var postAwaiter = postTask.GetAwaiter();
         var cheeps = postAwaiter.GetResult();
 

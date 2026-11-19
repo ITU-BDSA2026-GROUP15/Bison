@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Bison.Taxonomy\Taxonomy.csproj" />
+   <ProjectReference Include="../../src/Bison.Taxonomy/Bison.Taxonomy.csproj" />
     <ProjectReference Include="..\..\src\SimpleDB\SimpleDB.csproj" />
     <ProjectReference Include="..\..\src\Bison.CSVDBService\Bison.CSVDBService.csproj" />
   </ItemGroup>
