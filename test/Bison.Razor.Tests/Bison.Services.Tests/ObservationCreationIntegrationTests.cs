@@ -45,8 +45,8 @@ public class ObservationCreationIntegrationTest
         var authorObservation = Assert.Single(
             readService.GetObservationsFromAuthor(authorName));
 
-        Assert.Equal(authorName, publicObservation.Author);
-        Assert.Equal(observationText, publicObservation.Message);
+        Assert.Equal(authorName, publicObservation.AuthorName);
+        Assert.Equal(observationText, publicObservation.Text);
         Assert.Equal(publicObservation, authorObservation);
     }
 }

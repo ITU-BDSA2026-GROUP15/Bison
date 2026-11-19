@@ -1,4 +1,5 @@
 using Bison.Core.Models;
+using Bison.Core.ModelsDTO;
 using Bison.Infrastructure.Repositories;
 
 namespace Bison.Razor.Tests;
@@ -52,24 +53,30 @@ internal sealed class TestRepository : IPostRepository
         }
 
           // Disse metoder er kun med for at implementere resten af interfacet, NotImplemtedException derfor.
-        public IEnumerable<T> GetPosts<T>(int page) where T : Post =>
-            throw new NotImplementedException();
+        public IEnumerable<ObservationDto> GetObservations(int page) =>
+        throw new NotImplementedException();
 
-        public IEnumerable<T> GetPostsByAuthor<T>(string author, int page)
-            where T : Post =>
+        public IEnumerable<ObservationDto> GetObservationsByAuthor(string author, int page) =>
+        throw new NotImplementedException();
+
+        public ObservationDto? GetObservationDetails(int id) 
+            => throw new NotImplementedException();
+        
+        public IEnumerable <CommentDto> GetComments( int ObservationId) =>
+             throw new NotImplementedException();
+
+        public IEnumerable <ProposalDto> GetProposals(int ObservationId) =>
             throw new NotImplementedException();
+    
+        public Observation? GetObservationEntity(int id)
+    {
+        return _o is not null && id == _o.PostId ? _o: null;
+    }
 
         public Post GetPost(int id) => throw new NotImplementedException();
         public void UpdatePost(Post post) => throw new NotImplementedException();
         public void DeletePost(int id) => throw new NotImplementedException();
-        public Observation? GetObservationDetails(int id)
-        {
-            return _o is not null && id == _o.PostId ? _o : null;
-        }
-
-        public IEnumerable<Comment> GetComments(int observationId) => throw new NotImplementedException();
-
-        public IEnumerable<Proposal> GetProposals(int observationId) => throw new NotImplementedException();
+        
 
         public List<Observation> GetAllObservations() => throw new NotImplementedException();
 
