@@ -1,14 +1,19 @@
 namespace Bison.Razor.Tests;
 
-public class ApiTests : IClassFixture<TestWebFactory>
+// Testdata (Johan og Yuki) kommer fra InMemoryDb.SeedJohanAndYuki().
+public class ApiTests : IClassFixture<InMemoryDb>
 {
     // En HttpClient, der taler direkte med den in-memory app.
     private readonly HttpClient _client;
 
-    public ApiTests(TestWebFactory factory)
+    public ApiTests(InMemoryDb db)
     {
+        // Testdata skal ind FØR appen starter. Program.cs seeder kun databasen,
+        // hvis der ikke allerede findes forfattere og posts.
+        db.SeedJohanAndYuki();
+
         // CreateClient() starter appen.
-        _client = factory.CreateClient();
+        _client = db.CreateWebApp().CreateClient();
     }
 
     [Fact]

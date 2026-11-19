@@ -1,34 +1,18 @@
 using Bison.Core.Models;
-using Bison.Infrastructure.Data;
 using Bison.Infrastructure.Repositories;
 using Bison.Infrastructure.Services;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 
 namespace Bison.Razor.Tests;
 
-
-
 public class ObservationCreationIntegrationTest
 {
-
-   [Fact] //fact gør at vi kan lave testmetoden uden parametre. Markerer metoden som en xUnit-test uden testdata.
+    [Fact] //fact gør at vi kan lave testmetoden uden parametre. Markerer metoden som en xUnit-test uden testdata.
     public void tryCreateObservationThatAppearsInPublicAndAuthorLists()
     {
-        //arrange Databasen i hukommelsen lever, så længe forbindelsen er åben.
-
-        using var connection = new SqliteConnection("Data Source=:memory:");
-        connection.Open();
-
-
-        var options = new DbContextOptionsBuilder<BisonDBContext>()
-            .UseSqlite(connection)
-            .Options;
-
-
-        using var writeContext = new BisonDBContext(options);
-        writeContext.Database.EnsureCreated();
-
+        //arrange - InMemoryDb giver en tom, isoleret database med tabellerne oprettet.
+        // Testen skriver data, så den får sin egen database.
+        using var db = new InMemoryDb();
+        using var writeContext = db.CreateContext();
 
         var taxon = new Taxon
         {
@@ -42,23 +26,18 @@ public class ObservationCreationIntegrationTest
         using var writeRepository = new PostRepository(writeContext);
         var writeService = new ObservationService(writeRepository);
 
-
-
         const string authorName = "Anne";
         const string authorEmail = "anne@example.test";
         const string observationText = "Jeg så en solsort i haven";
 
-
         //act - Opret en observation for en forfatter, der endnu ikke findes.
-
         var created = writeService.TryCreateObservation(authorName , authorEmail, observationText,  taxon.TaxonId);
-
 
         // Assert: Læs tilbage med en ny context på samme database,
         // så vi kontrollerer det, der faktisk blev gemt.
         Assert.True(created);
 
-        using var readContext = new BisonDBContext(options);
+        using var readContext = db.CreateContext();
         using var readRepository = new PostRepository(readContext);
         var readService = new ObservationService(readRepository);
 
@@ -70,5 +49,4 @@ public class ObservationCreationIntegrationTest
         Assert.Equal(observationText, publicObservation.Message);
         Assert.Equal(publicObservation, authorObservation);
     }
-
 }

@@ -1,48 +1,52 @@
 using Bison.Infrastructure.Repositories;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Bison.Razor.Tests;
 
-// ARRANGE sker i TestDatabase.cs. den er bygget af fixturen ud fra schema.sql + dump.sql.
-// Derfor behøver vi ikke at ARRANGE for hver test. Vi kan ACT og ASSERT ud fra den eksisterende test-database. 
-// Ændrer eller tilføjer vi i schema og/eller dump, skal disse tests også rettes.
-public class IntegrationTests : IClassFixture<TestDatabase>
+// Integrationstests af PostRepository mod en rigtig (in-memory) SQLite-database.
+// ARRANGE sker i InMemoryDb.SeedJohanAndYuki(): testene forventer, at Yuki og Johan hver har én observation.
+// Johans observation sikrer, at filtreringen på forfatter faktisk bliver testet.
+// Ændrer vi i SeedJohanAndYuki, skal disse tests også rettes.
+// IntegrationTests.cs bruger ikke længere TestDatabase eller Dbfacade.
+public class IntegrationTests : IClassFixture<InMemoryDb>, IDisposable
 {
-    
-    private readonly TestWebFactory _factory;
+    // Den DBFacade, testene kalder - peger på testdatabasen i stedet for bison.db.
+    private readonly PostRepository _repo;
 
-    public IntegrationTests(TestWebFactory factory)
+    public IntegrationTests(InMemoryDb testDb)
     {
-        _factory= factory;
+        // Ingen DI-container her: vi laver selv DBFacade og giver den testdatabasens sti.
+       testDb.SeedJohanAndYuki();
+
+       _repo=new PostRepository(testDb.CreateContext());
     }
 
     [Fact]
     public void GetObservations_ReturnsObservationsFromDatabase()
     {
-        // Arrange
-        using var scope = _factory.Services.CreateScope();
-
-        var repository = scope.ServiceProvider.GetRequiredService<IPostRepository>();
-
-        var observations = repository.GetObservations(1);
+        // ACT
+        var observations = _repo.GetObservations(1);
 
         // ASSERT
-        Assert.Contains(observations, o => o.AuthorName == "Yuki" &&
-            o.Text == "A Least Bittern resting on a sandbank. Stays within cover almost all the time.");
+        Assert.Contains(observations, o => 
+        o.AuthorName == "Yuki" &&
+        o.Text == "A Least Bittern resting on a sandbank. Stays within cover almost all the time.");
     }
 
     [Fact]
     public void GetObservationsFromAuthor_ReturnsOnlyThatAuthor()
     {
-        using var scope = _factory.Services.CreateScope();
-        var repo = scope.ServiceProvider.GetRequiredService<IPostRepository>();
-        // ACT
-    
-        var observations = repo.GetObservationsByAuthor("yuki", 1);
+        var observations = _repo.GetObservationsByAuthor("Yuki", 1);
 
         // ASSERT
         // Alle observationer skal være Yukis.
         Assert.NotEmpty(observations);
         Assert.All(observations, o => Assert.Equal("Yuki", o.AuthorName));
     }
+
+
+public void Dispose()
+    {
+        _repo.Dispose();
+    }
+
 }
