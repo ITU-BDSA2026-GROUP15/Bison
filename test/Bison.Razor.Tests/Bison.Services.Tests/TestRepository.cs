@@ -7,7 +7,7 @@ internal sealed class TestRepository : IPostRepository
         private readonly Taxon _taxon;
         private readonly Author _author;
 
-        private readonly Observation _o;
+        private readonly Observation? _o;
 
         public TestRepository(Taxon taxon, Author author, Observation? o=null)
         {
@@ -64,7 +64,7 @@ internal sealed class TestRepository : IPostRepository
         public void DeletePost(int id) => throw new NotImplementedException();
         public Observation? GetObservationDetails(int id)
         {
-            return _o is not null && id == _o.Id ? _o : null;
+            return _o is not null && id == _o.PostId ? _o : null;
         }
 
         public IEnumerable<Comment> GetComments(int observationId) => throw new NotImplementedException();

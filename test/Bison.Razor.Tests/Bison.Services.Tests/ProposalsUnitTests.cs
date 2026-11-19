@@ -2,6 +2,8 @@ using System.Reflection;
 using Bison.Core.Models;
 using Bison.Infrastructure.Services;
 
+namespace Bison.Razor.Tests;
+
 public class ProposalsUnitTests
 {
     [Fact]
@@ -16,7 +18,7 @@ public class ProposalsUnitTests
         // create an observation we can test proposals on
         var o = new Observation
         {
-            Id = 1, 
+           PostId= 1, 
             Author = author,
             Taxon = taxon,
             Text = "Jeg så en solsort i haven",
@@ -29,7 +31,7 @@ public class ProposalsUnitTests
 
         // act
         // try to create a proposal based on the observation above
-        var proposal = service.TryCreateProposal(author.Name, author.Email, "PROPOSAL TEST", o.Id, taxon.TaxonId);
+        var proposal = service.TryCreateProposal(author.Name, author.Email, "PROPOSAL TEST", o.PostId,taxon.TaxonId);
 
         // assert
         // expect the service to return true and send a proposal
@@ -58,7 +60,7 @@ public class ProposalsUnitTests
         // 999 is an invalid taxon-id
     var o = new Observation
         {
-            Id = 1,
+           PostId= 1,
             Author = author,
             Taxon = taxon,
             Text = "Jeg så en fugl",
@@ -71,7 +73,7 @@ public class ProposalsUnitTests
 
         // act
         // taxonID = 999 is invalid 
-        var proposal = service.TryCreateProposal(author.Name, author.Email, "PROPOSAL TEST", o.Id, 999);
+        var proposal = service.TryCreateProposal(author.Name, author.Email, "PROPOSAL TEST", o.PostId,999);
 
         // assert
         Assert.False(proposal,"Proposal was not created successfully");
@@ -92,7 +94,7 @@ public class ProposalsUnitTests
         // create an observation we can test proposals on
         var o = new Observation
         {
-            Id = 1, 
+           PostId= 1, 
             Author = author,
             Taxon = taxon,
             Text = "Jeg så en solsort i haven",
@@ -104,7 +106,7 @@ public class ProposalsUnitTests
         var service = new ObservationService(repository);
 
         // act
-        // observation with id = 2 does not exist in the testing service 
+        // observation withPostId= 2 does not exist in the testing service 
         var proposal = service.TryCreateProposal(author.Name, author.Email, "PROPOSAL TEST", 2, taxon.TaxonId);
 
         // assert
@@ -125,7 +127,7 @@ public class ProposalsUnitTests
         // create an observation we can test proposals on
         var o = new Observation
         {
-            Id = 1, 
+           PostId= 1, 
             Author = author,
             Taxon = taxon,
             Text = "Jeg så en solsort i haven",
@@ -138,7 +140,7 @@ public class ProposalsUnitTests
 
         // act
         // leaving author empty
-        var proposal = service.TryCreateProposal(" ", author.Email, "PROPOSAL TEST", o.Id, taxon.TaxonId);
+        var proposal = service.TryCreateProposal(" ", author.Email, "PROPOSAL TEST", o.PostId,taxon.TaxonId);
 
         // assert
         Assert.False(proposal,"Proposal was not created successfully");
@@ -158,7 +160,7 @@ public class ProposalsUnitTests
         // create an observation we can test proposals on
         var o = new Observation
         {
-            Id = 1, 
+           PostId= 1, 
             Author = author,
             Taxon = taxon,
             Text = "Jeg så en solsort i haven",
@@ -171,7 +173,7 @@ public class ProposalsUnitTests
 
         // act
         // leaving text empty
-        var proposal = service.TryCreateProposal(author.Name, author.Email, " ", o.Id, taxon.TaxonId);
+        var proposal = service.TryCreateProposal(author.Name, author.Email, " ", o.PostId,taxon.TaxonId);
 
         // assert
         Assert.False(proposal,"Proposal was not created successfully");
@@ -191,7 +193,7 @@ public class ProposalsUnitTests
         // create an observation we can test proposals on
         var o = new Observation
         {
-            Id = -1, 
+           PostId= -1, 
             Author = author,
             Taxon = taxon,
             Text = "Jeg så en solsort i haven",
@@ -203,7 +205,7 @@ public class ProposalsUnitTests
         var service = new ObservationService(repository);
 
         // act
-        var proposal = service.TryCreateProposal(author.Name, author.Email, "PROPOSAL TEST", o.Id, taxon.TaxonId);
+        var proposal = service.TryCreateProposal(author.Name, author.Email, "PROPOSAL TEST", o.PostId,taxon.TaxonId);
 
         // assert
         Assert.False(proposal,"Proposal was not created successfully");
@@ -223,7 +225,7 @@ public class ProposalsUnitTests
         // create an observation we can test proposals on
         var o = new Observation
         {
-            Id = 1, 
+           PostId= 1, 
             Author = author,
             Taxon = taxon,
             Text = "Jeg så en solsort i haven",
@@ -235,7 +237,7 @@ public class ProposalsUnitTests
         var service = new ObservationService(repository);
 
         // act
-        var proposal = service.TryCreateProposal(author.Name, author.Email, "PROPOSAL TEST", o.Id, taxon.TaxonId);
+        var proposal = service.TryCreateProposal(author.Name, author.Email, "PROPOSAL TEST", o.PostId,taxon.TaxonId);
 
         // assert
         Assert.False(proposal,"Proposal was not created successfully");
@@ -255,7 +257,7 @@ public class ProposalsUnitTests
         // create an observation we can test proposals on
         var o = new Observation
         {
-            Id = 1, 
+           PostId= 1, 
             Author = author,
             Taxon = taxon,
             Text = "Jeg så en solsort i haven",
@@ -267,7 +269,7 @@ public class ProposalsUnitTests
         var service = new ObservationService(repository);
 
         // act
-        var proposal = service.TryCreateProposal(author.Name, author.Email, "PROPOSAL TEST", o.Id, taxon);
+        var proposal = service.TryCreateProposal(author.Name, author.Email, "PROPOSAL TEST", o.PostId, taxon.TaxonId);
 
         // assert
         //same betyder, at det er den samme instans af objektet, som vi forventer.
@@ -291,7 +293,7 @@ public class ProposalsUnitTests
         // create an observation we can test proposals on
         var o = new Observation
         {
-            Id = 1, 
+           PostId= 1, 
             Author = author,
             Taxon = taxon,
             Text = "Jeg så en solsort i haven",
@@ -303,7 +305,7 @@ public class ProposalsUnitTests
         var service = new ObservationService(repository);
 
         // act
-        var proposal = service.TryCreateProposal("Line", "Line@test.dk", "PROPOSAL TEST", o.Id, taxon.TaxonId);
+        var proposal = service.TryCreateProposal("Line", "Line@test.dk", "PROPOSAL TEST", o.PostId,taxon.TaxonId);
 
         // assert
         //same betyder, at det er den samme instans af objektet, som vi forventer.
@@ -328,7 +330,7 @@ public class ProposalsUnitTests
         // create an observation we can test proposals on
         var o = new Observation
         {
-            Id = 1, 
+           PostId= 1, 
             Author = author,
             Taxon = taxon,
             Text = "Jeg så en solsort i haven",
@@ -341,7 +343,7 @@ public class ProposalsUnitTests
 
         // act
         // added white space to text
-        var proposal = service.TryCreateProposal(author.Name, author.Email, "PROPOSAL TEST       ", o.Id, taxon.TaxonId);
+        var proposal = service.TryCreateProposal(author.Name, author.Email, "PROPOSAL TEST       ", o.PostId, taxon.TaxonId);
 
         // assert
         Assert.True(proposal,"Proposal was created successfully");
