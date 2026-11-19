@@ -1,4 +1,6 @@
 using System.Reflection;
+using Bison.Core.Models;
+using Bison.Infrastructure.Services;
 
 public class ProposalsUnitTests
 {

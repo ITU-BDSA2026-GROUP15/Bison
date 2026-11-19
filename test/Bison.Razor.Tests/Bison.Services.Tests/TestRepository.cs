@@ -7,13 +7,13 @@ internal sealed class TestRepository : IPostRepository
         private readonly Taxon _taxon;
         private readonly Author _author;
 
-        private readonly Observation _observation;
+        private readonly Observation _o;
 
-        public TestRepository(Taxon taxon, Author author, Observation? observation=null)
+        public TestRepository(Taxon taxon, Author author, Observation? o=null)
         {
             _taxon = taxon;
             _author = author;
-            _observation = observation
+            _o = o;
         }
 
         //creates a post and returns it, so we can check if the post was created correctly
@@ -75,6 +75,3 @@ internal sealed class TestRepository : IPostRepository
 
         public IReadOnlyList<Taxon> GetTaxons() =>throw new NotImplementedException();
     }
-
-
-}
