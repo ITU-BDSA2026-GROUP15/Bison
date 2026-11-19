@@ -19,7 +19,7 @@ public static class DtoMapper
         {
             Id = c.PostId,
             Text = c.Text,
-            TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd"),
+            TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd HH:mm"),
             AuthorName = c.Author.Name,
 
         };
@@ -28,7 +28,7 @@ public static class DtoMapper
         {
             Id = p.PostId,
             Text = p.Text,
-            TimeStamp = p.TimeStamp.ToString("yyyy-MM-dd"),
+            TimeStamp = p.TimeStamp.ToString("yyyy-MM-dd HH:mm"),
             AuthorName = p.Author.Name,
             DanishVernacularName = p.Taxon?.VernacularName ?? "",
         };
