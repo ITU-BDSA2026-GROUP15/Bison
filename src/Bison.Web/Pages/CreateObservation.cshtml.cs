@@ -33,6 +33,10 @@ public class CreateObservationModel : PageModel
     [BindProperty]
     public IFormFile? Picture { get; set; }
 
+    // Den Creative Commons-licens, brugeren har valgt til billedet.
+    [BindProperty]
+    public string? License { get; set; }
+
     public IReadOnlyList<Taxon> Taxons { get; private set; } =
         Array.Empty<Taxon>();
 
@@ -55,6 +59,7 @@ public class CreateObservationModel : PageModel
         var email = User.FindFirstValue(ClaimTypes.Email) ?? "";
 
         string? pictureUrl = null;
+        string? license = null;
 
         if (Picture != null)
         {
@@ -64,10 +69,17 @@ public class CreateObservationModel : PageModel
                 return ShowForm();
             }
 
+            if (string.IsNullOrWhiteSpace(License))
+            {
+                ModelState.AddModelError(nameof(License), "Choose a license for the picture.");
+                return ShowForm();
+            }
+
+            license = License;
             pictureUrl = await _pictureStorage.SaveAsync(Picture);
         }
 
-        if (!_service.TryCreateObservation(authorName, email, Text, TaxonId, pictureUrl, null))
+        if (!_service.TryCreateObservation(authorName, email, Text, TaxonId, pictureUrl, license))
         {
             ModelState.AddModelError(
                 string.Empty, "Enter an observation and choose a valid taxon.");
