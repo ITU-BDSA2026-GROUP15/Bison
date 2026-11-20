@@ -44,6 +44,10 @@
                     @if (obs.PictureUrl != null)
                     {
                         <img class="observation-picture" src=@obs.PictureUrl alt="Picture of the observed animal">
+                        @if (obs.License != null)
+                        {
+                            <partial name="_PictureLicense" model="obs.License" />
+                        }
                     }
                 </li>
             }
