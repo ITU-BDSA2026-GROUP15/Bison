@@ -67,7 +67,7 @@ public class CreateObservationModel : PageModel
             pictureUrl = await _pictureStorage.SaveAsync(Picture);
         }
 
-        if (!_service.TryCreateObservation(authorName, email, Text, TaxonId, pictureUrl))
+        if (!_service.TryCreateObservation(authorName, email, Text, TaxonId, pictureUrl, null))
         {
             ModelState.AddModelError(
                 string.Empty, "Enter an observation and choose a valid taxon.");

@@ -5,7 +5,7 @@ namespace Bison.Infrastructure.Services;
 
 // Indeholder de oplysninger om en observation, som vises på siden.
 //translates between Repo and ObservationViewModel
-public record ObservationViewModel(string Author, string Message, string Timestamp, string? PictureUrl = null);
+public record ObservationViewModel(string Author, string Message, string Timestamp, string? PictureUrl = null, string? License = null);
 
 public interface IObservationService
 {
@@ -31,9 +31,10 @@ public interface IObservationService
     // E-mailen bruges, hvis forfatteren skal oprettes.
     // taxonId identificerer det taxon, brugeren har valgt.
     // Returnerer true, når observationen er gemt, og false,
-    // hvis forfatternavnet eller teksten mangler, eller taxonet ikke findes.
+    // hvis forfatternavnet eller teksten mangler, taxonet ikke findes,
+    // eller der er et billede uden licens.
     bool TryCreateObservation(
-        string authorName, string email, string text, int taxonId,  string? pictureUrl);
+        string authorName, string email, string text, int taxonId,  string? pictureUrl, string? license);
 
     bool TryCreateComment(
         string authorName, string email, string text, int observationID);
@@ -88,7 +89,7 @@ public class ObservationService : IObservationService
 
     public static ObservationViewModel ToViewModel(Observation o)
     {
-        return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"), o.PictureUrl);
+        return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"), o.PictureUrl, o.License);
     }
     private static ObservationViewModel ToProposalViewModel(Proposal o)
     {
@@ -109,7 +110,7 @@ public class ObservationService : IObservationService
     }
 
     public bool TryCreateObservation(
-        string authorName, string email, string text, int taxonId, string? pictureUrl)
+        string authorName, string email, string text, int taxonId, string? pictureUrl, string? license)
     {
         // En observation skal have en forfatter og en tekst.
         // IsNullOrWhiteSpace fanger også tekst, der kun består af mellemrum.
@@ -118,6 +119,10 @@ public class ObservationService : IObservationService
         {
             return false;
         }
+
+        // Et billede skal have en licens.
+        if (pictureUrl != null && string.IsNullOrWhiteSpace(license))
+            return false;
 
         // Slå det valgte taxon op. Et indsendt ID kan være ugyldigt,
         // selvom brugeren normalt vælger det fra en dropdown.
@@ -140,6 +145,7 @@ public class ObservationService : IObservationService
             Author = author,
             Taxon = taxon,
             PictureUrl = pictureUrl,
+            License = license,
 
             // Fjern mellemrum før og efter teksten.
             Text = text.Trim(),
