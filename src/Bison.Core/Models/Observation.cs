@@ -12,6 +12,9 @@ public class Observation : Post {
     // Optional URL to a picture, if the user wants to add it to the observation. Null if not.
     public string? PictureUrl { get; set; }
 
+    // Creative Commons-licensen for billedet. Null hvis der ikke er et billede.
+    public string? License { get; set; }
+
     // Contains the comments on this observation.
     // Contains the proposed taxon identifications for this observation.
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();
