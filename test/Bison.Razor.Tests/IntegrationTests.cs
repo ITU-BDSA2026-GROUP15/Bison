@@ -1,4 +1,3 @@
-using Bison.Core.Models;
 using Bison.Infrastructure.Repositories;
 
 namespace Bison.Razor.Tests;
@@ -10,44 +9,44 @@ namespace Bison.Razor.Tests;
 // IntegrationTests.cs bruger ikke længere TestDatabase eller Dbfacade.
 public class IntegrationTests : IClassFixture<InMemoryDb>, IDisposable
 {
-    // Det repository, testene kalder - peger på in-memory databasen.
+    // Den DBFacade, testene kalder - peger på testdatabasen i stedet for bison.db.
     private readonly PostRepository _repo;
 
-    public IntegrationTests(InMemoryDb db)
+    public IntegrationTests(InMemoryDb testDb)
     {
-        // Seeder kun første gang, da databasen deles af hele klassen.
-        db.SeedJohanAndYuki();
+        // Ingen DI-container her: vi laver selv DBFacade og giver den testdatabasens sti.
+       testDb.SeedJohanAndYuki();
 
-        // Ingen DI-container her: vi laver selv repository'et med en frisk context.
-        _repo = new PostRepository(db.CreateContext());
+       _repo=new PostRepository(testDb.CreateContext());
     }
 
     [Fact]
     public void GetObservations_ReturnsObservationsFromDatabase()
     {
         // ACT
-        var observations = _repo.GetPosts<Observation>(1);
+        var observations = _repo.GetObservations(1);
 
         // ASSERT
-        Assert.Contains(observations, o => o.Author.Name == "Yuki" &&
-            o.Text == "A Least Bittern resting on a sandbank. Stays within cover almost all the time.");
+        Assert.Contains(observations, o => 
+        o.AuthorName == "Yuki" &&
+        o.Text == "A Least Bittern resting on a sandbank. Stays within cover almost all the time.");
     }
 
     [Fact]
     public void GetObservationsFromAuthor_ReturnsOnlyThatAuthor()
     {
-        // ACT
-        var observations = _repo.GetPostsByAuthor<Observation>("Yuki", 1);
+        var observations = _repo.GetObservationsByAuthor("Yuki", 1);
 
         // ASSERT
         // Alle observationer skal være Yukis.
         Assert.NotEmpty(observations);
-        Assert.All(observations, o => Assert.Equal("Yuki", o.Author.Name));
+        Assert.All(observations, o => Assert.Equal("Yuki", o.AuthorName));
     }
 
-    // Lukker repository'ets context. Selve forbindelsen lukkes af InMemoryDb.
-    public void Dispose()
+
+public void Dispose()
     {
         _repo.Dispose();
     }
+
 }
