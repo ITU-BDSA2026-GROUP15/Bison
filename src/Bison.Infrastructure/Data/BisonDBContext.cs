@@ -19,7 +19,7 @@ namespace Bison.Infrastructure.Data
         public DbSet<Taxon> Taxons { get; set; } = null;
 
         //Giver adgang til at hente, tilføje og fjerne likes via EF Core.
-        public Dbset<ObservationLike> ObservationLikes => Set<ObservationLikes>();
+        public DbSet<ObservationLike> ObservationLikes => Set<ObservationLike>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

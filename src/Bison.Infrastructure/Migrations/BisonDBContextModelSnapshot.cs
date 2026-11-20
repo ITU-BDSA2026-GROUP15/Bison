@@ -15,7 +15,96 @@ namespace Bison.Infrastructure.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.33");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.34");
+
+            modelBuilder.Entity("Bison.Core.Models.Author", b =>
+                {
+                    b.Property<int>("AuthorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("AuthorId");
+
+                    b.ToTable("Authors");
+                });
+
+            modelBuilder.Entity("Bison.Core.Models.ObservationLike", b =>
+                {
+                    b.Property<int>("ObservationId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ObservationId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ObservationLikes");
+                });
+
+            modelBuilder.Entity("Bison.Core.Models.Post", b =>
+                {
+                    b.Property<int>("PostId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PostType")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("PostId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("Posts");
+
+                    b.HasDiscriminator<string>("PostType").HasValue("Post");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Bison.Core.Models.Taxon", b =>
+                {
+                    b.Property<int>("TaxonId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("VernacularName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("dwc_TaxonID")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("TaxonId");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Taxons");
+                });
 
             modelBuilder.Entity("Bison.Infrastructure.Data.ApplicationUser", b =>
                 {
@@ -79,80 +168,6 @@ namespace Bison.Infrastructure.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Bison.Core.Models.Author", b =>
-                {
-                    b.Property<int>("AuthorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("AuthorId");
-
-                    b.ToTable("Authors");
-                });
-
-            modelBuilder.Entity("Bison.Core.Models.Post", b =>
-                {
-                    b.Property<int>("PostId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("PostType")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("TimeStamp")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("PostId");
-
-                    b.HasIndex("AuthorId");
-
-                    b.ToTable("Posts");
-
-                    b.HasDiscriminator<string>("PostType").HasValue("Post");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Bison.Core.Models.Taxon", b =>
-                {
-                    b.Property<int>("TaxonId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("VernacularName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("dwc_TaxonID")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("TaxonId");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("Taxons");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -338,6 +353,23 @@ namespace Bison.Infrastructure.Migrations
                         });
 
                     b.HasDiscriminator().HasValue("Proposal");
+                });
+
+            modelBuilder.Entity("Bison.Core.Models.ObservationLike", b =>
+                {
+                    b.HasOne("Bison.Core.Models.Observation", "Observation")
+                        .WithMany()
+                        .HasForeignKey("ObservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bison.Infrastructure.Data.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Observation");
                 });
 
             modelBuilder.Entity("Bison.Core.Models.Post", b =>
