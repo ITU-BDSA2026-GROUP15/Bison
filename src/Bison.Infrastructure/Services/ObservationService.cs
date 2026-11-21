@@ -5,7 +5,10 @@ namespace Bison.Infrastructure.Services;
 
 // Indeholder de oplysninger om en observation, som vises på siden.
 //translates between Repo and ObservationViewModel
-public record ObservationViewModel(string Author, string Message, string Timestamp, string? PictureUrl = null);
+public record ObservationViewModel(string Author, string Message, string Timestamp, string? PictureUrl = null)
+{
+    public int Id{get;init;}//init; betyder, at værdien må sættes, når objektet oprettes.
+}
 
 public interface IObservationService
 {
@@ -88,7 +91,10 @@ public class ObservationService : IObservationService
 
     public static ObservationViewModel ToViewModel(Observation o)
     {
-        return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"), o.PictureUrl);
+        return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"), o.PictureUrl)
+        {
+            Id= o.PostId
+        };
     }
     private static ObservationViewModel ToProposalViewModel(Proposal o)
     {
@@ -99,6 +105,8 @@ public class ObservationService : IObservationService
     {
         return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
     }
+
+    
 
 
     public IReadOnlyList<Taxon> GetTaxons()

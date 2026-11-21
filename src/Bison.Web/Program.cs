@@ -21,7 +21,7 @@ builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 builder.Services.AddScoped<IFilterService, FilterService>();
 
-builder.Services.AddScoped<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
+builder.Services.AddScoped<ObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
 builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade
 
 //when a page asks for a IPictureStorage, it gets a LocalPictureStorage in wwwroot/uploads
@@ -58,7 +58,7 @@ if (!string.IsNullOrEmpty(gitHubClientId) && !string.IsNullOrEmpty(gitHubClientS
             o.CallbackPath = "/signin-github";
         });
 }
-
+builder.Services.AddScoped<ObservationLikeService>();
 var app = builder.Build(); //building the webapplication itself (metadata)
 
 using (var scope = app.Services.CreateScope())

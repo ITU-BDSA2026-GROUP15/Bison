@@ -2,6 +2,7 @@
 using Bison.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+//using Bison.Application.Interfaces; does not work for the implementation for the async
 
 
 namespace Bison.Web.Pages;
@@ -28,15 +29,17 @@ public class PublicModel : PageModel
     public IReadOnlyList<Taxon> Taxons { get; private set; } =
         Array.Empty<Taxon>();
 
-    public PublicModel(IObservationService service, IFilterService filterService)
+    public PublicModel(IObservationService service, IFilterService filterService, ObservationLikeService likeService)
     {
         _service = service;
         _filterService = filterService;
+        _likeService = likeService;
     }
+    private readonly ObservationLikeService _likeService;
 
     //Razor-siden til at læse sidetallet fra URL’en og sende det videre.
     //[FromQuery] læser page fra URL’en,
-    public ActionResult OnGet([FromQuery] int page=1, [FromQuery] int? taxonId = null){
+    public async Task<IActionResult> OnGet([FromQuery] int page=1, [FromQuery] int? taxonId = null){
         CurrentPage = Math.Max(1, page);
         CurrentTaxonId = taxonId;
 
