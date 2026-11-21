@@ -33,6 +33,20 @@
         <label for="observation-picture">Add picture (optional)</label>
         <input type="file" id="observation-picture" name="Picture" accept="image/*" />
 
+        @* Licensen er påkrævet, når der er valgt et billede. Tjekkes i CreateObservationModel.OnPostAsync(). *@
+        <label for="observation-license">License for the picture (required if you add a picture)</label>
+        @Html.DropDownList(
+            "License",
+            new[] { "CC BY 4.0", "CC BY-SA 4.0", "CC BY-NC 4.0", "CC BY-NC-SA 4.0",
+                    "CC BY-ND 4.0", "CC BY-NC-ND 4.0", "CC0 1.0" }
+                .Select(license => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                {
+                    Value = license,
+                    Text = license
+                }),
+            "Choose a license",
+            new { id = "observation-license" })
+
         <input type="submit" value="Share" />
     </form>
 </div>

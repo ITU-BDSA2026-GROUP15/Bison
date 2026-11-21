@@ -31,7 +31,7 @@ public class ObservationCreationIntegrationTest
         const string observationText = "Jeg så en solsort i haven";
 
         //act - Opret en observation for en forfatter, der endnu ikke findes.
-        var created = writeService.TryCreateObservation(authorName , authorEmail, observationText,  taxon.TaxonId, null);
+        var created = writeService.TryCreateObservation(authorName , authorEmail, observationText,  taxon.TaxonId, null, null);
 
         // Assert: Læs tilbage med en ny context på samme database,
         // så vi kontrollerer det, der faktisk blev gemt.

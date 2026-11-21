@@ -14,6 +14,8 @@ public class ObservationDto
 
     public string? PictureUrl { get; set; }
 
+    public string? License { get; set; }
+
     public List<CommentDto> Comments { get; set; } = new();
 
     public List<ProposalDto> Proposals { get; set; } = new();
