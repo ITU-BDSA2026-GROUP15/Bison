@@ -1,30 +1,34 @@
-using Bison.Core.Models;
+using System.Net;
+using System.Linq;
 using Bison.Infrastructure.Repositories;
-
-namespace Bison.Infrastructure.Services;
+using Bison.Core.Models;
+using Bison.Core.ModelsDTO;
 
 // Indeholder de oplysninger om en observation, som vises på siden.
 //translates between Repo and ObservationViewModel
 public record ObservationViewModel(string Author, string Message, string Timestamp, string? PictureUrl = null, string? License = null);
 
+
 public interface IObservationService
 {
     // Henter en side med observationer. Standard er side 1.
 
-    public List<ObservationViewModel> GetObservations (int page = 1);
+    List<ObservationDto> GetObservations (int page = 1);
 
     // Henter en side med observationer fra en bestemt forfatter.
-    public List<ObservationViewModel> GetObservationsFromAuthor(
+    List<ObservationDto> GetObservationsFromAuthor(
         string author, int page = 1);
 
-    public List<ObservationViewModel> GetObservationDetails (
-        int id, int page = 1);
 
-    public List<ObservationViewModel> GetProposals (int id, int page =1);
 
-    public List<ObservationViewModel> GetComments (int id, int page =1);
+    ObservationDto? GetObservationDetails (
+        int id);
 
-    // Henter de taxoner, brugeren kan vælge i observationsformularen.
+    List<ProposalDto> GetProposals (int id, int page =1);
+
+    List<CommentDto> GetComments (int id, int page =1);
+    
+    
     IReadOnlyList<Taxon> GetTaxons();
 
     // Forsøger at gemme en observation for den angivne forfatter.
@@ -46,68 +50,47 @@ public interface IObservationService
 
 public class ObservationService : IObservationService
 {
-    // DBFacade håndterer adgangen til SQLite-databasen.
+    
     private readonly IPostRepository _repo;
 
-    // Modtager DBFacade gennem dependency injection.
+    
     public ObservationService(IPostRepository repo)
     {
         _repo = repo;
     }
 
-    public List<ObservationViewModel> GetObservations(int page = 1)
-    {
+    public List<ObservationDto> GetObservations(int page = 1)
+    
         // Sender sidetallet videre til databasekoden.
-        return _repo.GetPosts<Observation>(page).Select(ToViewModel).ToList();
-    }
+        => _repo.GetObservations(page).ToList();
+    
 
-    public List<ObservationViewModel> GetObservationsFromAuthor(string author, int page=1)
-    {
-        return _repo.GetPostsByAuthor<Observation>(author, page).Select(ToViewModel).ToList();
-    }
+  public List<ObservationDto> GetObservationsFromAuthor(string author, int page=1)
+    
+        => _repo.GetObservationsByAuthor(author,page).ToList();
+    
 // now the getObservationDetails have and the entity -> viewModel conversion
-    public List<ObservationViewModel> GetObservationDetails (int id, int page){
+       public ObservationDto? GetObservationDetails (int id)
+    
+      => _repo.GetObservationDetails(id);
 
-        var observation = _repo.GetObservationDetails(id);
-        return observation is null
-            ? new List<ObservationViewModel>()
-            : new List<ObservationViewModel> { ToViewModel(observation) };
+    
 
-    }
+     public List<ProposalDto> GetProposals (int id, int page = 1)
 
-    public List<ObservationViewModel> GetProposals (
-        int id, int page = 1)
-    {
-        return _repo.GetProposals(id).Select(ToProposalViewModel).ToList();
-    }
-
-    public List<ObservationViewModel> GetComments (
-        int id, int page = 1)
-    {
-        return _repo.GetComments(id).Select(ToCommentViewModel).ToList();
-    }
-
-    public static ObservationViewModel ToViewModel(Observation o)
-    {
-        return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"), o.PictureUrl, o.License);
-    }
-    private static ObservationViewModel ToProposalViewModel(Proposal o)
-    {
-        return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
-    }
-
-    private static ObservationViewModel ToCommentViewModel(Comment o)
-    {
-        return new ObservationViewModel(o.Author.Name, o.Text, o.TimeStamp.ToString("g"));
-    }
+        => _repo.GetProposals(id).ToList();
 
 
+     public List<CommentDto> GetComments (int id, int page = 1)
+
+        => _repo.GetComments(id).ToList();
+
+    
     public IReadOnlyList<Taxon> GetTaxons()
     {
-        // Hent de taxoner, som brugeren kan vælge i observationsformularen.
-        // Repositoryet står for at læse dem fra databasen.
         return _repo.GetTaxons();
     }
+
 
     public bool TryCreateObservation(
         string authorName, string email, string text, int taxonId, string? pictureUrl, string? license)
@@ -177,7 +160,7 @@ public class ObservationService : IObservationService
 
         // Slå den tilknytted observation op. Et indsendt ID kan være ugyldigt,
         // selvom brugeren normalt vælger det fra en dropdown.
-        var obs = _repo.GetObservationDetails(observationId);
+        var obs = _repo.GetObservationEntity(observationId);
         if (obs is null)
             return false;
 
@@ -230,7 +213,7 @@ public class ObservationService : IObservationService
         if (taxon is null)
             return false;
 
-        var obs = _repo.GetObservationDetails(observationId);
+        var obs = _repo.GetObservationEntity(observationId);
         if (obs is null)
             return false;
 

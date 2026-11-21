@@ -21,8 +21,6 @@ builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 builder.Services.AddScoped<IFilterService, FilterService>();
 
-builder.Services.AddScoped<IObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
-builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade
 
 //when a page asks for a IPictureStorage, it gets a LocalPictureStorage in wwwroot/uploads
 builder.Services.AddScoped<IObservationService, ObservationService>();

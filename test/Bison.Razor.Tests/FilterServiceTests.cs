@@ -88,8 +88,8 @@ public class FilterServiceTests
 
         // Kontrollerer, at resultatet indeholder den forventede observation.
         // Message er viewmodellens navn for observationens Text.
-        Assert.Equal("En and ved søen", actual.Message);
-        Assert.Equal("Anne", actual.Author);
+        Assert.Equal("En and ved søen", actual.Text);
+        Assert.Equal("Anne", actual.AuthorName);
     }
 
     // Tester, at observationer fra en undergruppe også kommer med i resultatet.
@@ -171,6 +171,6 @@ public class FilterServiceTests
         var actual = Assert.Single(result);
 
         // Kontrollerer, at observationen fra undertaxonet er med.
-        Assert.Equal("En and ved søen", actual.Message);
+        Assert.Equal("En and ved søen", actual.Text);
     }
 }

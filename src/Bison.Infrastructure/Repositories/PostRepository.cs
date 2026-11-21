@@ -1,6 +1,7 @@
 using Bison.Core.Models;
 using Bison.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Bison.Core.ModelsDTO;
 
 //communicates with the database and returns psot objects determned by the generic type <T>
 
@@ -28,40 +29,50 @@ namespace Bison.Infrastructure.Repositories
         }
 
         //read
-        public IEnumerable<T> GetPosts<T>(int page) where T : Post
-        {
-            page = Math.Max(1, page);
-            int offset = (page - 1) * PageSize;
 
-            return _context.Posts.OfType<T>()
-                .Include(p => p.Author)
-                .OrderByDescending(p => p.TimeStamp)
-                .ThenByDescending(p => p.PostId)
-                .Skip(offset)
-                .Take(PageSize)
-                .ToList();
-        }
 
         public Post GetPost(int id)
         {
             return _context.Posts.Find(id);
         }
 
-        public IEnumerable<T> GetPostsByAuthor<T>(string author, int page) where T : Post
+        public IEnumerable<ObservationDto> GetObservations (int page)
         {
-            page = Math.Max(1, page);
-            int offset = (page - 1) * PageSize;
+            page =Math.Max(1, page);
+            int offset = (page-1) * PageSize;
 
-            return _context.Posts.OfType<T>()
-                .Include(p => p.Author)
-                .Where(p => p.Author.Name == author)
-                .OrderByDescending(p => p.TimeStamp)
-                .ThenByDescending(p => p.PostId)
+            return _context.Posts.OfType<Observation>()
+                .Include(o => o.Author)
+                .Include(o => o.Taxon)
+                .OrderByDescending(o => o.TimeStamp)
+                .ThenByDescending (o => o.PostId)
                 .Skip(offset)
                 .Take(PageSize)
+                .AsEnumerable()
+                .Select(DtoMapper.ToObservationDto) //Mapper will be created later
                 .ToList();
+
         }
 
+        public IEnumerable<ObservationDto> GetObservationsByAuthor (string author, int page)
+        {
+            page = Math.Max(1, page);
+            int offset = (page-1)* PageSize;
+
+            return _context.Posts.OfType<Observation>()
+                .Include(o => o.Author)
+                .Include(o => o.Taxon)
+                .Where(o => o.Author.Name == author)
+                .OrderByDescending(o=> o.TimeStamp)
+                .ThenByDescending(o => o.PostId)
+                .Skip(offset)
+                .Take(PageSize)
+                .AsEnumerable()
+                .Select(DtoMapper.ToObservationDto) //For later
+                .ToList();
+
+
+        }
 
         //update
         public void UpdatePost(Post post)
@@ -107,7 +118,7 @@ namespace Bison.Infrastructure.Repositories
 
         //Implementation of GetObservationDetails, getComments, GetProposals
         // from interface methods.
-        public Observation? GetObservationDetails(int id)
+        public Observation? GetObservationEntity(int id)
         {
             return _context.Posts.OfType<Observation>()
                 .Include(o => o.Author)
@@ -115,30 +126,47 @@ namespace Bison.Infrastructure.Repositories
                 .FirstOrDefault(o => o.PostId == id);
         }
 
+        public ObservationDto? GetObservationDetails (int id)
+        {
+            var o = GetObservationEntity(id);
+            if(o is null) return null;
+
+            var dto = DtoMapper.ToObservationDto(o);
+            dto.Comments = GetComments(id).ToList();
+            dto.Proposals = GetProposals(id).ToList();
+
+            return dto;
+
+        }
+        public IEnumerable<CommentDto> GetComments (int observationId)
+        {
+            return _context.Posts.OfType<Comment>()
+                .Include (c => c.Author)
+                .Where (c=> c.ObservationId == observationId)
+                .AsEnumerable()
+                .Select(DtoMapper.ToCommentDto)
+                .ToList();
+        }
+
+        public IEnumerable<ProposalDto> GetProposals (int observationId)
+        {
+            return _context.Posts.OfType<Proposal>()
+                .Include(p=> p.Author)
+                .Include(p => p.Taxon)
+                .Where(p => p.ObservationId == observationId)
+                .AsEnumerable()
+                .Select(DtoMapper.ToProposalDto)
+                .ToList();
+        }
+
+
+
         public Taxon? GetTaxon(int id)
         {
             return _context.Taxons.OfType<Taxon>()
                 .FirstOrDefault(o => o.TaxonId == id);
         }
 
-        public IEnumerable<Comment> GetComments(int observationId)
-        {
-            return _context.Posts.OfType<Comment>()
-                .Include (c => c.Author)
-                .Where (c => c.ObservationId == observationId)
-                .ToList();
-
-        }
-
-        public IEnumerable<Proposal> GetProposals(int observationId)
-        {
-            return _context.Posts.OfType<Proposal>()
-                .Include(p => p.Author)
-                .Include(p => p.Taxon)
-                .Where(p => p.ObservationId == observationId)
-                .ToList();
-
-        }
 
         public List<Observation> GetAllObservations()
         {
@@ -169,6 +197,8 @@ namespace Bison.Infrastructure.Repositories
                 .ThenBy(taxon => taxon.TaxonId)
                 .ToList();
         }
+
+
     }
 }
 

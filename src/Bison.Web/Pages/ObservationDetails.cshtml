@@ -14,18 +14,18 @@
     <h2> Details for observation #@routeName</h2>
 
     @*show all observations and list them for the author*@
-    @if (Model.ObservationDetails.Any())
+    @if (Model.ObservationDetails != null)
     {
-        var ob = Model.ObservationDetails[0];
+        var ob = Model.ObservationDetails;
 
         @*THE OBSERVATION*@
         <div class ="observation">
             <p>
                 <strong>
-                    <a href="/obs/@ob.Author">@ob.Author</a>
+                    <a href="/obs/@ob.AuthorName">@ob.AuthorName</a>
                 </strong>
-                @ob.Message
-                <small>&mdash; @ob.Timestamp</small>
+                @ob.Text
+                <small>&mdash; @ob.TimeStamp</small>
             </p>
             @if (ob.PictureUrl != null)
             {
@@ -54,9 +54,9 @@
                 @foreach (var comment in Model.Comments)
                 {
                     <li>
-                        <strong>@comment.Author</strong>
-                        @comment.Message
-                        <small>&mdash; @comment.Timestamp</small>
+                        <strong>@comment.AuthorName</strong>
+                        @comment.Text
+                        <small>&mdash; @comment.TimeStamp</small>
                     </li>
                 }
                 </ul>
@@ -84,9 +84,9 @@
                 @foreach (var proposal in Model.Proposals)
                 {
                     <li>
-                        <strong>@proposal.Author</strong>
-                        @proposal.Message
-                        <small>&mdash; @proposal.Timestamp</small>
+                        <strong>@proposal.AuthorName</strong>
+                        @proposal.Text
+                        <small>&mdash; @proposal.TimeStamp</small>
                     </li>
                 }
                 </ul>

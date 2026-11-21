@@ -35,11 +35,11 @@
                     <p>
                         @* now we display the observations and generates a page /obs/author *@
                         <strong>
-                            <a href="/obs/@obs.Author">@obs.Author</a>
+                            <a href="/obs/@obs.AuthorName">@obs.AuthorName</a>
                         </strong>
                         @*  display the message belonging to the current observation *@
-                        @obs.Message
-                        <small>&mdash; @obs.Timestamp</small>
+                        @obs.Text
+                        <small>&mdash; @obs.TimeStamp</small>
                     </p>
                     @if (obs.PictureUrl != null)
                     {
