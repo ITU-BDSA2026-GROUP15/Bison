@@ -2,7 +2,7 @@
 using Bison.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Systems.Security.Claims;
+using System.Security.Claims;
 using Bison.Core.ModelsDTO;
 //using Bison.Application.Interfaces; does not work for the implementation for the async
 
@@ -26,7 +26,7 @@ public class PublicModel : PageModel
 
     //likeStatuses Indeholder antal likes og brugerens like-status for hver observation med likes.
     // Opslaget bruger observationens ID som nøgle.
-    public Dictionary<int,ObsercationLikeDto> likeStatuses {get; private set;} = new();
+    public Dictionary<int,ObservationLikeDto> LikeStatuses {get; private set;} = new();
 
     public int CurrentPage {get; set;} = 1;
     public int? CurrentTaxonId {get; set;}
@@ -45,7 +45,8 @@ public class PublicModel : PageModel
 
     //Razor-siden til at læse sidetallet fra URL’en og sende det videre.
     //[FromQuery] læser page fra URL’en,
-    public async Task<IActionResult> OnGet([FromQuery] int page=1, [FromQuery] int? taxonId = null){
+    public async Task<IActionResult> OnGet([FromQuery] int page=1, [FromQuery] int? taxonId = null)
+    {
         CurrentPage = Math.Max(1, page);
         CurrentTaxonId = taxonId;
 
