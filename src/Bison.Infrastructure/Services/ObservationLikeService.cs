@@ -2,6 +2,8 @@ using Bison.Core.ModelsDTO;
 using Bison.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
+using Bison.Core.Models;
+
 namespace Bison.Infrastructure.Services;
 
 // Henter de oplysninger, forsiden skal bruge til at vise likes.
@@ -43,5 +45,36 @@ public class ObservationLikeService
 
             // Kør forespørgslen, og brug observationens ID som nøgle i opslaget.
             .ToDictionaryAsync(dto => dto.ObservationId);
+    }
+    public async Task<bool> setLikeAsync(int observationId, string userId, bool isLiked)
+{
+    // Tjek, at ID'et peger på en eksisterende observation.
+    var observationExists = await _context.Observations
+        .AnyAsync(observation => observation.PostId == observationId);
+
+    if (!observationExists)
+    {
+        return false;
+    }
+
+    // Find brugerens eget like ved hjælp af den sammensatte nøgle.
+    var existingLike = await _context.ObservationLikes
+        .FindAsync(observationId, userId);
+
+    if (isLiked && existingLike is null)
+    {
+        _context.ObservationLikes.Add(new ObservationLike
+        {
+            ObservationId = observationId,
+            UserId = userId
+        });
+    }
+    else if (!isLiked && existingLike is not null)
+    {
+        _context.ObservationLikes.Remove(existingLike);
+    }
+
+    await _context.SaveChangesAsync();
+    return true;
     }
 }
