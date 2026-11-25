@@ -1,4 +1,5 @@
 using Bison.Core.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Bison.Infrastructure.Data;
 
@@ -526,6 +527,28 @@ public static class DbInitializer
             bisonContext.Authors.AddRange(authors);
             bisonContext.Posts.AddRange(posts);
             bisonContext.SaveChanges();
+        }
+    }
+
+    // Opretter Eduard og Debasmita som hardcoded brugere
+    public static async Task SeedUsersAsync(UserManager<ApplicationUser> userManager)
+    {
+        await CreateUserAsync(userManager, "edka@itu.dk", "123456");
+        await CreateUserAsync(userManager, "debloh@itu.dk", "password");
+    }
+
+    private static async Task CreateUserAsync(
+        UserManager<ApplicationUser> userManager, string email, string password)
+    {
+        // Brugeren findes allerede, så der er ikke noget at gøre.
+        if (await userManager.FindByEmailAsync(email) != null) return;
+
+        var result = await userManager.CreateAsync(
+            new ApplicationUser { UserName = email, Email = email }, password);
+
+        if (!result.Succeeded)
+        {
+            throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
         }
     }
 }
