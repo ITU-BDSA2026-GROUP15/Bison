@@ -76,7 +76,7 @@ public class PublicModel : PageModel
 
     // Kaldes, når formularen med asp-page-handler="Like" sendes.
     // isLiked er den ønskede tilstand: true for Like, false for Unlike.
-   public async Task<IActionResult> OnPostLikeAsync (int observationId, bool IsLiked, int currentPage=1, int? taxonId=null ){
+   public async Task<IActionResult> OnPostLikeAsync (int observationId, bool isLiked, int currentPage=1, int? taxonId=null ){
         
         // Hent brugerens ID fra den aktuelle login-session.
         // Så kan brugeren kun ændre sit eget like.
