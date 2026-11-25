@@ -52,6 +52,20 @@
                     }
                     <small>@likeCount like</small>
 
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        var isLiked = status?.IsLikedByCurrentUser == true;
+
+                        <form method="post" asp-page="/Public" asp-page-handler="Like">
+                            <input type="hidden" name="observationId" value="@obs.Id" />
+                            <input type="hidden" name="isLiked" value="@(isLiked ? "false" : "true")" />
+                            <input type="hidden" name="currentPage" value="@Model.CurrentPage" />
+                            <input type="hidden" name="taxonId" value="@Model.CurrentTaxonId" />
+
+                            <button type="submit">@(isLiked ? "♥ Unlike" : "♡ Like")</button>
+                        </form>
+                    }
+
                 </li>
             }
         </ul>
