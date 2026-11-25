@@ -24,6 +24,8 @@ public class PublicModel : PageModel
     private readonly IFilterService _filterService;
     public List<ObservationViewModel> Observations { get; set; } = new();
 
+    //likeStatuses Indeholder antal likes og brugerens like-status for hver observation med likes.
+    // Opslaget bruger observationens ID som nøgle.
     public Dictionary<int,ObsercationLikeDto> likeStatuses {get; private set;} = new();
 
     public int CurrentPage {get; set;} = 1;
