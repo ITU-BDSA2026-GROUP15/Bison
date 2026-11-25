@@ -59,7 +59,10 @@ public class PublicModel : PageModel
         {
             Taxons = _service.GetTaxons();
         }
-        GetLikeStatusAsync();
+        var observationIds = Observations.Select(observation => observation.Id).ToArray();
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        LikeStatuses = await _likeService.GetLikeStatusesAsync(observationIds, currentUserId);
 
         return Page();
     }
