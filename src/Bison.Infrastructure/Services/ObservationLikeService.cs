@@ -46,35 +46,44 @@ public class ObservationLikeService
             // Kør forespørgslen, og brug observationens ID som nøgle i opslaget.
             .ToDictionaryAsync(dto => dto.ObservationId);
     }
+    // isLiked er den ønskede tilstand efter klikket:
+    // true betyder, at liket skal være gemt, og false betyder, at det skal fjernes.
     public async Task<bool> setLikeAsync(int observationId, string userId, bool isLiked)
 {
     // Tjek, at ID'et peger på en eksisterende observation.
+    // AnyAsync tjekker, om observationen findes, uden at hente hele objektet.
     var observationExists = await _context.Observations
         .AnyAsync(observation => observation.PostId == observationId);
 
     if (!observationExists)
     {
+         // Giv den kaldende kode besked om, at observationen ikke findes.
         return false;
     }
-
+    // Slå liket op med den sammensatte primærnøgle.
+    // Rækkefølgen skal matche BisonDBContext: ObservationId først, UserId bagefter.
     // Find brugerens eget like ved hjælp af den sammensatte nøgle.
     var existingLike = await _context.ObservationLikes
         .FindAsync(observationId, userId);
 
     if (isLiked && existingLike is null)
     {
+        // Brugeren vil like observationen og har endnu ikke liket den.
         _context.ObservationLikes.Add(new ObservationLike
         {
             ObservationId = observationId,
             UserId = userId
         });
     }
+    // Brugeren vil fjerne sit like. Markér det eksisterende like til sletning.
     else if (!isLiked && existingLike is not null)
     {
         _context.ObservationLikes.Remove(existingLike);
     }
-
+    // Hvis liket allerede har den ønskede tilstand, er der intet at ændre.
+    // Ellers skriver SaveChangesAsync tilføjelsen eller sletningen til databasen.
     await _context.SaveChangesAsync();
+    // Observationen findes, og liket har nu den ønskede tilstand.
     return true;
     }
 }
