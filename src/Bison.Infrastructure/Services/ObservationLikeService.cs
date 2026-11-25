@@ -48,7 +48,7 @@ public class ObservationLikeService
     }
     // isLiked er den ønskede tilstand efter klikket:
     // true betyder, at liket skal være gemt, og false betyder, at det skal fjernes.
-    public async Task<bool> setLikeAsync(int observationId, string userId, bool isLiked)
+    public async Task<bool> SetLikeAsync(int observationId, string userId, bool isLiked)
 {
     // Tjek, at ID'et peger på en eksisterende observation.
     // AnyAsync tjekker, om observationen findes, uden at hente hele objektet.
