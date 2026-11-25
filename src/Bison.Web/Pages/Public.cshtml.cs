@@ -85,7 +85,7 @@ public class PublicModel : PageModel
         // Håndhæv login på serveren, også hvis nogen sender en POST direkte.
         if(User.Identity?.IsAuthenticated != true||userId is null)
         {
-            return Challange();
+            return Challenge();
         }
 
         if (!ModelState.IsVaild)
