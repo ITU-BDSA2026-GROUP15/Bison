@@ -88,7 +88,7 @@ public class PublicModel : PageModel
             return Challenge();
         }
 
-        if (!ModelState.IsVaild)
+        if (!ModelState.IsValid)
         {
             return BadRequest();
         }
