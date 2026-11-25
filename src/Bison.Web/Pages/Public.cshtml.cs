@@ -2,6 +2,8 @@
 using Bison.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Systems.Security.Claims;
+using Bison.Core.ModelsDTO;
 //using Bison.Application.Interfaces; does not work for the implementation for the async
 
 
@@ -21,6 +23,8 @@ public class PublicModel : PageModel
 
     private readonly IFilterService _filterService;
     public List<ObservationViewModel> Observations { get; set; } = new();
+
+    public Dictionary<int,ObsercationLikeDto> likeStatuses {get; private set;} = new();
 
     public int CurrentPage {get; set;} = 1;
     public int? CurrentTaxonId {get; set;}
@@ -53,7 +57,7 @@ public class PublicModel : PageModel
         {
             Taxons = _service.GetTaxons();
         }
-
+        GetLikeStatusAsync();
 
         return Page();
     }
