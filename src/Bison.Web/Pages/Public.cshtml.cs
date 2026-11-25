@@ -59,9 +59,13 @@ public class PublicModel : PageModel
         {
             Taxons = _service.GetTaxons();
         }
+        // Saml ID'erne på de observationer, der vises på den aktuelle side.
         var observationIds = Observations.Select(observation => observation.Id).ToArray();
+
+        // Hent brugerens ID fra login-sessionen. For en gæst er værdien null.
         var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+        // Hent antal likes og brugerens like-status, før forsiden vises.
         LikeStatuses = await _likeService.GetLikeStatusesAsync(observationIds, currentUserId);
 
         return Page();
