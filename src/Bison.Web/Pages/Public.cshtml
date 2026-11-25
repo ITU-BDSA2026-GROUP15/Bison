@@ -45,6 +45,13 @@
                     {
                         <img class="observation-picture" src=@obs.PictureUrl alt="Picture of the observed animal">
                     }
+
+                    @{
+                    // Slå observationens like-antal op. Vis 0, hvis den endnu ikke har likes.
+                    var likeCount = Model.LikeStatuses.TryGetValue(obs.Id, out var status) ? status.LikeCount : 0;
+                    }
+                    <small>@likeCount like</small>
+
                 </li>
             }
         </ul>
