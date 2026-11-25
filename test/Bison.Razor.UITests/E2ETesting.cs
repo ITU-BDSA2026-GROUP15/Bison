@@ -6,6 +6,14 @@ namespace Bison.Razor.UITests;
 public class ObservationCreationTests : BisonPageTest
 {
 
+    //this test verifies that the user can: 
+    //Log in.
+    // Open the observation creation form.
+    // Create an observation.
+    // See the observation in their own timeline.
+    // See the observation in the public observations list.
+    // Navigate away and return to their timeline and still see the observation.
+
     [SetUp]
     
     public async Task LogIn()
@@ -34,9 +42,12 @@ public class ObservationCreationTests : BisonPageTest
             new() { Name = "Share", Exact = true }).ClickAsync();
 
         // Assert: observation appears in the author's timeline
+        
         var authorObservation = Page.GetByText(
             observationText,
             new() { Exact = true });
+
+        await Expect(authorObservation).ToBeVisibleAsync();
 
         // Act: navigate to public observations
         await Page.GetByRole(AriaRole.Link,
@@ -44,8 +55,22 @@ public class ObservationCreationTests : BisonPageTest
 
         // Assert: observation also appears in the public list
         var publicObservation = Page.GetByText(
-            observationText,
+         observationText,
             new() { Exact = true });
+
+        await Expect(publicObservation).ToBeVisibleAsync();
+
+
+        // Navigate back to the author's timeline by using the author's email
+        // as the URL parameter. This performs a fresh page load.
+
+        await Page.GotoAsync($"/UserTimeline?author={Uri.EscapeDataString(TestUserEmail)}");
+
+        // Assert: Verify that the observation is still present after navigating
+        // away from the timeline and loading it again, confirming it was persisted.
+        await Expect(
+            Page.GetByText(observationText, new() { Exact = true })
+            ).ToBeVisibleAsync();
     }
 
 }
