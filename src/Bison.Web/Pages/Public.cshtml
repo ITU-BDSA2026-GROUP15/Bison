@@ -50,7 +50,7 @@
                     // Slå observationens like-antal op. Vis 0, hvis den endnu ikke har likes.
                     var likeCount = Model.LikeStatuses.TryGetValue(obs.Id, out var status) ? status.LikeCount : 0;
                     }
-                    <small>@likeCount like</small>
+                    <small>@likeCount likes</small>
 
                     @if (User.Identity?.IsAuthenticated == true)
                     {
