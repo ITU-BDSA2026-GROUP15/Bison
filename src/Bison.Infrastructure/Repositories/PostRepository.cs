@@ -73,9 +73,9 @@ namespace Bison.Infrastructure.Repositories
 
 
         }
-        IEnumerable<ObservationDto> GetFavouriteObservations (String userId)
+        public IEnumerable<ObservationDto> GetFavouriteObservations (String userId)
         {
-            return _context.Post.OfType<Observation>()
+            return _context.Posts.OfType<Observation>()
                 .Where(Observation=> _context.ObservationLikes.Any(
                     Like=>Like.ObservationId== Observation.PostId && 
                     Like.UserId ==userId))
@@ -84,7 +84,7 @@ namespace Bison.Infrastructure.Repositories
                 .OrderByDescending(observation=>observation.TimeStamp)
                 .ThenByDescending(observation=>observation.PostId)
                 .AsEnumerable()
-                .Select(Dtomapper.ToObservationDto)
+                .Select(DtoMapper.ToObservationDto)
                 .ToList();
 
         }

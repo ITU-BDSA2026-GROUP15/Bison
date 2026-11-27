@@ -94,9 +94,8 @@ public class ObservationService : IObservationService
         => _repo.GetComments(id).ToList();
 
     
-    public List<ObservationDto> GetFavouriteObservations (string userId)
-    
-        =>_repo.GetObservations(userId).ToList();
+    public List<ObservationDto> GetFavouriteObservations(string userId)
+        => _repo.GetFavouriteObservations(userId).ToList();
         
     public IReadOnlyList<Taxon> GetTaxons()
     {

@@ -1,12 +1,9 @@
-using Bison.Core.Models;
 using Bison.Core.ModelsDTO;
 using Bison.Infrastructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
-using System.Reflection.Metadata;
-using System.Threading.Channels;
-using AspNetCore.Authorization;
 //using Bison.Application.Interfaces; does not work for the implementation for the async
 
 
@@ -30,12 +27,12 @@ public class FavouriteModel : PageModel
 
         if (currentUserId != null)
         {
-            return Challenge;
+            return Challenge();
         }
 
-        Observations = _service.getFavouriteObservations(currentUserId);
+        Observations = _service.GetFavouriteObservations(currentUserId);
 
-        await _service.AddLikeStatusAsync(Observations, currentUserId);
+        await _service.AddLikeStatusesAsync(Observations, currentUserId);
         return Page();
 
     }
@@ -45,7 +42,7 @@ public class FavouriteModel : PageModel
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if(userId != null)
         {
-            return Challenge;
+            return Challenge();
         }
 
         var success = await _service.SetLikeAsync(
@@ -56,6 +53,6 @@ public class FavouriteModel : PageModel
         {
             return NotFound();
         }
-        return RedirectToPage;
+        return RedirectToPage();
     }
 }
