@@ -21,38 +21,34 @@ public class FavouriteModel : PageModel
         _service =service;
     }
 
-    public async Task<IActionResult> OnGet()
-    {
-        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    public async Task<IActionResult> OnGetAsync()
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        if (currentUserId != null)
-        {
-            return Challenge();
-        }
+    if (userId == null)
+        return Challenge();
 
-        Observations = _service.GetFavouriteObservations(currentUserId);
+    Observations = _service.GetFavouriteObservations(userId);
 
-        await _service.AddLikeStatusesAsync(Observations, currentUserId);
-        return Page();
+    await _service.AddLikeStatusesAsync(Observations, userId);
 
-    }
+    return Page();
+}
 
-    public async Task<IActionResult> OnPostLikeAsync(int observationId, bool isLiked)
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if(userId != null)
-        {
-            return Challenge();
-        }
+    public async Task<IActionResult> OnPostLikeAsync(
+    int observationId, bool isLiked)
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        var success = await _service.SetLikeAsync(
-            observationId, userId, isLiked
-        );
+    if (userId == null)
+        return Challenge();
 
-        if (!success)
-        {
-            return NotFound();
-        }
-        return RedirectToPage();
-    }
+    var success = await _service.SetLikeAsync(
+        observationId, userId, isLiked);
+
+    if (!success)
+        return NotFound();
+
+    return RedirectToPage();
+}
 }
