@@ -85,3 +85,19 @@
         <em>There are no observations so far.</em>
     }
 </div>
+
+<div> 
+    
+<h2> My Favourite </h2>
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <partial name="_ObservationForm" model="Model.Taxons" />
+    } 
+    
+    
+
+
+
+
+ </div>
