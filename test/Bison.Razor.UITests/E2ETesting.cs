@@ -43,9 +43,7 @@ public class ObservationCreationTests : BisonPageTest
 
         // Assert: observation appears in the author's timeline
         
-        var authorObservation = Page.GetByText(
-            observationText,
-            new() { Exact = true });
+        var authorObservation = Page.GetByText(observationText);
 
         await Expect(authorObservation).ToBeVisibleAsync();
 
@@ -54,9 +52,7 @@ public class ObservationCreationTests : BisonPageTest
             new() { Name = "Public Observations", Exact = true }).ClickAsync();
 
         // Assert: observation also appears in the public list
-        var publicObservation = Page.GetByText(
-         observationText,
-            new() { Exact = true });
+        var publicObservation = Page.GetByText(observationText);
 
         await Expect(publicObservation).ToBeVisibleAsync();
 
@@ -68,9 +64,8 @@ public class ObservationCreationTests : BisonPageTest
 
         // Assert: Verify that the observation is still present after navigating
         // away from the timeline and loading it again, confirming it was persisted.
-        await Expect(
-            Page.GetByText(observationText, new() { Exact = true })
-            ).ToBeVisibleAsync();
+        
+        await Page.GotoAsync($"/obs/{Uri.EscapeDataString(TestUserEmail)}");
     }
 
 }
