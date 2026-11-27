@@ -1,10 +1,15 @@
 # Bison Project Report
 
 ITU BDSA 2026 Group 15
+
 Anne Kjær Vestbo, akjn@itu.dk, github: anne-boop-74
+
 Jon Theodor Tärnberg, jota@itu.dk, github: JonTheo1999
+
 Line Alma Breitenstein Nissen, laln@itu.dk, github: librni
+
 Lærke Vestergaard Roest, lroe@itu.dk, github: laeveroest
+
 Nicklas Christian Gyldendal Reeves Stefansen, ncst@itu.dk, github: nicklasreeves
 
 ## 1 Design and Architecture of Bison
