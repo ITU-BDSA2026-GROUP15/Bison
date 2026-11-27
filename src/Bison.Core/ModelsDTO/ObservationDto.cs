@@ -19,4 +19,8 @@ public class ObservationDto
     public List<CommentDto> Comments { get; set; } = new();
 
     public List<ProposalDto> Proposals { get; set; } = new();
+
+    public int LikeCount { get; set; }
+
+    public bool IsLikedByCurrentUser { get; set; }  
 }

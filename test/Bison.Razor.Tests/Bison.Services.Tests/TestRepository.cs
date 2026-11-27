@@ -34,7 +34,18 @@ internal sealed class TestRepository : IPostRepository
             return name == _author.Name ? _author : null;
         }
 
+        public Task<Dictionary<int, (int LikeCount, bool IsLikedByCurrentUser)>>
+            GetLikeStatusesAsync(int[] observationIds, string? currentUserId)
+        {
+            return Task.FromResult(
+                new Dictionary<int, (int LikeCount, bool IsLikedByCurrentUser)>());
+        }
 
+        public Task<bool> SetLikeAsync(
+            int observationId, string userId, bool isLiked)
+        {    
+            return Task.FromResult(false);
+        }
         public void InsertPost(Post post)
         {
             // Gemmer den indsatte post til senere kontrol.

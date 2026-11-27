@@ -36,6 +36,12 @@ namespace Bison.Infrastructure.Repositories
         //delete
         void DeletePost(int post);
 
+        Task<Dictionary<int, (int LikeCount, bool IsLikedByCurrentUser)>> GetLikeStatusesAsync(
+            int[] observationIds,
+            string? currentUserId);
+
+        Task<bool> SetLikeAsync(int observationId, string userId, bool isLiked);
+
         void Save();
 
     

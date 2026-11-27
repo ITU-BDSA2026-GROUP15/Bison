@@ -79,7 +79,7 @@ public class ProposalTests
 
             return Enumerable.Empty<ProposalDto>();
         }
-    
+
 
         // Implement other methods from IPostRepository as needed, throwing NotImplementedException for unneeded methods.
         public IEnumerable<ObservationDto> GetObservations(int page) =>
@@ -106,6 +106,18 @@ public class ProposalTests
         public IReadOnlyList<Taxon> GetTaxons() =>
             throw new NotImplementedException();
 
+        public Task<Dictionary<int, (int LikeCount, bool IsLikedByCurrentUser)>>
+            GetLikeStatusesAsync(int[] observationIds, string? currentUserId)
+        {
+            return Task.FromResult(
+                new Dictionary<int, (int LikeCount, bool IsLikedByCurrentUser)>());
+        }
+
+        public Task<bool> SetLikeAsync(
+            int observationId, string userId, bool isLiked)
+        {
+            return Task.FromResult(false);
+        }
         public void InsertPost(Post post) =>
             throw new NotImplementedException();
 

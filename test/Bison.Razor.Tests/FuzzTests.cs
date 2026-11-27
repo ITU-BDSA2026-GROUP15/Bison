@@ -160,6 +160,18 @@ public class FuzzTests
     public Post GetPost(int id) =>
             throw new NotImplementedException();
 
+    public Task<Dictionary<int, (int LikeCount, bool IsLikedByCurrentUser)>>
+    GetLikeStatusesAsync(int[] observationIds, string? currentUserId)
+{
+    return Task.FromResult(
+        new Dictionary<int, (int LikeCount, bool IsLikedByCurrentUser)>());
+}
+
+    public Task<bool> SetLikeAsync(
+        int observationId, string userId, bool isLiked)
+    {
+    return Task.FromResult(false);
+    }
     public void DeletePost(int post)
     => throw new NotImplementedException();
     public void Dispose() { }

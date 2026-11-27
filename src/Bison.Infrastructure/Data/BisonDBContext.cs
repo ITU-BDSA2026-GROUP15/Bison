@@ -18,7 +18,8 @@ namespace Bison.Infrastructure.Data
         public DbSet<Author> Authors { get; set; } = null;
         public DbSet<Taxon> Taxons { get; set; } = null;
 
-
+        //Giver adgang til at hente, tilføje og fjerne likes via EF Core.
+        public DbSet<ObservationLike> ObservationLikes => Set<ObservationLike>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -72,6 +73,21 @@ namespace Bison.Infrastructure.Data
                 .HasForeignKey(c => c.ObservationId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+           var likes = modelBuilder.Entity<ObservationLike>();
+
+            //one user can only like the same observations once.
+           likes.HasKey(like=> new{like.ObservationId, like.UserId});
+
+           //observationId points to the observation:
+           likes.HasOne(like=>like.Observation)
+           .WithMany()
+           .HasForeignKey(like => like.ObservationId);
+
+
+          //userId points to one user:
+            likes.HasOne<ApplicationUser>()
+            .WithMany()
+            .HasForeignKey(like => like.UserId);
 
         }
 

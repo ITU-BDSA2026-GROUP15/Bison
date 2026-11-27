@@ -11,7 +11,7 @@ public record ObservationViewModel(string Author, string Message, string Timesta
 
 public interface IObservationService
 {
-    // Henter en side med observationer. Standard er side 1.
+    // Henter en side med observationer. Standard er side 1
 
     List<ObservationDto> GetObservations (int page = 1);
 
@@ -46,6 +46,14 @@ public interface IObservationService
     bool TryCreateProposal(
         string authorName, string email, string text, int observationId, int taxonId);
 
+    Task AddLikeStatusesAsync(
+        List<ObservationDto> observations,
+        string? currentUserId);
+
+     Task<bool> SetLikeAsync(
+        int observationId,
+        string userId,
+        bool isLiked);
 }
 
 public class ObservationService : IObservationService
@@ -92,6 +100,38 @@ public class ObservationService : IObservationService
     }
 
 
+    public async Task AddLikeStatusesAsync(
+    List<ObservationDto> observations,
+    string? currentUserId)
+{
+    var observationIds = observations
+        .Select(observation => observation.Id)
+        .ToArray();
+
+    var likeStatuses = await _repo.GetLikeStatusesAsync(
+        observationIds, currentUserId);
+
+    foreach (var observation in observations)
+    {
+        observation.LikeCount = 0;
+        observation.IsLikedByCurrentUser = false;
+
+        if (likeStatuses.TryGetValue(observation.Id, out var status))
+        {
+            observation.LikeCount = status.LikeCount;
+            observation.IsLikedByCurrentUser = status.IsLikedByCurrentUser;
+        }
+    }
+}
+
+public async Task<bool> SetLikeAsync(
+    int observationId,
+    string userId,
+    bool isLiked)
+{
+    return await _repo.SetLikeAsync(observationId, userId, isLiked);
+}
+    
     public bool TryCreateObservation(
         string authorName, string email, string text, int taxonId, string? pictureUrl, string? license)
     {
