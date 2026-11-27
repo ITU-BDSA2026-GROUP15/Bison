@@ -28,7 +28,7 @@ public interface IObservationService
 
     List<CommentDto> GetComments (int id, int page =1);
     
-    
+    List<ObservationDto> GetFavouriteObservations(string userId);
     IReadOnlyList<Taxon> GetTaxons();
 
     // Forsøger at gemme en observation for den angivne forfatter.
@@ -94,6 +94,10 @@ public class ObservationService : IObservationService
         => _repo.GetComments(id).ToList();
 
     
+    public List<ObservationDto> GetFavouriteObservations (string userId)
+    
+        =>_repo.GetObservations(userId).ToList();
+        
     public IReadOnlyList<Taxon> GetTaxons()
     {
         return _repo.GetTaxons();

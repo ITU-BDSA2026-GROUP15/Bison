@@ -1,14 +1,72 @@
 @page "/obs"
 
+@model Bison.Web.Pages.PublicModel
+@{
+    // ViewData is used to pass information from Razor page to layout, meaning the title of the browser is now Bison
+    ViewData["Title"] = "Bison";
 
-<h2> My Favourite </h2>
+    // basic template for layout of a website
+    Layout = "Shared/_Layout";
+}
 
-    @if (User.Identity?.IsAuthenticated == true)
+<div>
+<h2> My Favourites </h2>
+
+    @if (Model.Observations.Any())
     {
-        <partial name="_ObservationForm" model="Model.Taxons" />
-    } 
-    
-    var isLiked = 
+        <ul class="observations">
+
+            @foreach (var obs in Model.Observations)
+            {
+                
+            
+
+            <li>
+                <p>
+                 <strong>
+                            <a href="/obs/@obs.AuthorName">@obs.AuthorName</a>
+                </strong>
+
+                @*  display the message belonging to the current observation *@
+                        @obs.Text
+                        <small>&mdash; @obs.TimeStamp</small>
+            </p>
+                @if (obs.PictureUrl != null)
+                    {
+                        <img class="observation-picture" src=@obs.PictureUrl alt="Picture of the observed animal">
+                        @if (obs.License != null)
+                        {
+                            <partial name="_PictureLicense" model="obs.License" />
+                        }
+                    }
+                    
+                    <small>@obs.LikeCount likes</small>
+
+
+                        <form method="post" asp-page="/Public" asp-page-handler="Like">
+                            <input type="hidden" name="observationId" value="@obs.Id" />
+                            <input type="hidden" name="isLiked" value="false" />
+                        
+
+                        <button type="submit"> "♥ Unlike" )
+
+                        </button>
+                    
+                     </form>
+
+                       
+                
+
+
+        </li>
+        }
+    </ul>
+}
+else
+{
+    <p> You haven't added any favourites</p>
+}
+</div>
     
 
 

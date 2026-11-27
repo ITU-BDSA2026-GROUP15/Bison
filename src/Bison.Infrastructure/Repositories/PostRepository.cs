@@ -73,6 +73,21 @@ namespace Bison.Infrastructure.Repositories
 
 
         }
+        IEnumerable<ObservationDto> GetFavouriteObservations (String userId)
+        {
+            return _context.Post.OfType<Observation>()
+                .Where(Observation=> _context.ObservationLikes.Any(
+                    Like=>Like.ObservationId== Observation.PostId && 
+                    Like.UserId ==userId))
+                .Include(observation=> observation.Author)
+                .Include(observation=>observation.Taxon)
+                .OrderByDescending(observation=>observation.TimeStamp)
+                .ThenByDescending(observation=>observation.PostId)
+                .AsEnumerable()
+                .Select(Dtomapper.ToObservationDto)
+                .ToList();
+
+        }
 
         //update
         public void UpdatePost(Post post)
