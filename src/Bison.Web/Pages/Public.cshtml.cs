@@ -60,11 +60,10 @@ public class PublicModel : PageModel
         {
             Taxons = _service.GetTaxons();
         }
-        // Saml ID'erne på de observationer, der vises på den aktuelle side.
-        var observationIds = Observations.Select(observation => observation.Id).ToArray();
-
         // Hent brugerens ID fra login-sessionen. For en gæst er værdien null.
         var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        await _service.AddLikeStatusesAsync(Observations, currentUserId);
 
         return Page();
     }
@@ -91,6 +90,7 @@ public class PublicModel : PageModel
         // Vent på, at servicen har gemt eller fjernet liket i databasen.
         var success = await _service.SetLikeAsync(
             observationId, userId, isLiked);
+
 
         // Servicen returnerer false, hvis observationen ikke findes.
         if (!success)
