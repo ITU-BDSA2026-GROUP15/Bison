@@ -56,7 +56,7 @@ if (!string.IsNullOrEmpty(gitHubClientId) && !string.IsNullOrEmpty(gitHubClientS
             o.CallbackPath = "/signin-github";
         });
 }
-builder.Services.AddScoped<ObservationLikeService>();
+
 var app = builder.Build(); //building the webapplication itself (metadata)
 
 using (var scope = app.Services.CreateScope())
