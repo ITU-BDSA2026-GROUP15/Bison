@@ -4,7 +4,6 @@ using Bison.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
-using Bison.Core.ModelsDTO;
 using System.Reflection.Metadata;
 using System.Threading.Channels;
 //using Bison.Application.Interfaces; does not work for the implementation for the async
@@ -92,7 +91,7 @@ public class PublicModel : PageModel
         // Vent på, at servicen har gemt eller fjernet liket i databasen.
         var success = await _service.SetLikeAsync(
             observationId, userId, isLiked);
-            
+
         // Servicen returnerer false, hvis observationen ikke findes.
         if (!success)
         {
