@@ -2,6 +2,10 @@
 using Bison.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
+using Bison.Core.ModelsDTO;
+using System.Reflection.Metadata;
+using System.Threading.Channels;
 //using Bison.Application.Interfaces; does not work for the implementation for the async
 
 
@@ -22,6 +26,10 @@ public class PublicModel : PageModel
     private readonly IFilterService _filterService;
     public List<ObservationViewModel> Observations { get; set; } = new();
 
+    //likeStatuses Indeholder antal likes og brugerens like-status for hver observation med likes.
+    // Opslaget bruger observationens ID som nøgle.
+    public Dictionary<int,ObservationLikeDto> LikeStatuses {get; private set;} = new();
+
     public int CurrentPage {get; set;} = 1;
     public int? CurrentTaxonId {get; set;}
 
@@ -39,7 +47,8 @@ public class PublicModel : PageModel
 
     //Razor-siden til at læse sidetallet fra URL’en og sende det videre.
     //[FromQuery] læser page fra URL’en,
-    public async Task<IActionResult> OnGet([FromQuery] int page=1, [FromQuery] int? taxonId = null){
+    public async Task<IActionResult> OnGet([FromQuery] int page=1, [FromQuery] int? taxonId = null)
+    {
         CurrentPage = Math.Max(1, page);
         CurrentTaxonId = taxonId;
 
@@ -53,8 +62,59 @@ public class PublicModel : PageModel
         {
             Taxons = _service.GetTaxons();
         }
+        // Saml ID'erne på de observationer, der vises på den aktuelle side.
+        var observationIds = Observations.Select(observation => observation.Id).ToArray();
 
+        // Hent brugerens ID fra login-sessionen. For en gæst er værdien null.
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        // Hent antal likes og brugerens like-status, før forsiden vises.
+        LikeStatuses = await _likeService.GetLikeStatusesAsync(observationIds, currentUserId);
 
         return Page();
+    }
+
+    // Kaldes, når formularen med asp-page-handler="Like" sendes.
+    // isLiked er den ønskede tilstand: true for Like, false for Unlike.
+   public async Task<IActionResult> OnPostLikeAsync (int observationId, bool isLiked, int currentPage=1, int? taxonId=null ){
+        
+        // Hent brugerens ID fra den aktuelle login-session.
+        // Så kan brugeren kun ændre sit eget like.
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        // Håndhæv login på serveren, også hvis nogen sender en POST direkte.
+        if(User.Identity?.IsAuthenticated != true||userId is null)
+        {
+            return Challenge();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        // Vent på, at servicen har gemt eller fjernet liket i databasen.
+        var success = await _likeService.SetLikeAsync(observationId, userId, isLiked);
+
+        // Servicen returnerer false, hvis observationen ikke findes.
+        if (!success)
+        {
+            return NotFound();
+        }
+
+        // Gå tilbage til samme side i listen. Sidetallet skal mindst være 1.
+        var url = $"{Url.Content("~/obs")}?page={Math.Max(1, currentPage)}";
+
+
+        // Behold det valgte taxonfilter, hvis brugeren havde et aktivt filter.
+        if (taxonId.HasValue)
+        {
+        url += $"&taxonId={taxonId.Value}";
+        }
+
+        // Browseren henter listen igen med GET, så tælleren opdateres.
+        // En genindlæsning gentager dermed ikke POST-kaldet.
+        return LocalRedirect(url);
+
     }
 }
