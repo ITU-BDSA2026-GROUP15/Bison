@@ -21,8 +21,6 @@ builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 builder.Services.AddScoped<IFilterService, FilterService>();
 
-builder.Services.AddScoped<ObservationService, ObservationService>(); // hvis man kalder dette med en interface giver den en instance as observationservice.
-builder.Services.AddSingleton(new DBFacade(dbPath)); //vis den kalder den med en dbfacade
 
 //when a page asks for a IPictureStorage, it gets a LocalPictureStorage in wwwroot/uploads
 builder.Services.AddScoped<IObservationService, ObservationService>();
@@ -68,9 +66,7 @@ using (var scope = app.Services.CreateScope())
     DbInitializer.SeedDatabase(context);
 
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-    await CreateUser (userManager, "edka@itu.dk", "123456");
-    await CreateUser (userManager, "debloh@itu.dk", "password");
-
+    await DbInitializer.SeedUsersAsync(userManager);
 }
 
 app.UseStaticFiles(); // kobler browseren til filerne i wwwroot -> altså css styling osv så det ikke bare er tekst
@@ -80,17 +76,6 @@ app.UseAuthorization(); //hvad personen der er logget ind må gøre, altså hvil
 app.MapRazorPages(); // kobler URL til razor pages
 
 app.Run();
-
-static async Task CreateUser(UserManager<ApplicationUser> userManager, string email, string password)
-{
-   if (await userManager.FindByEmailAsync(email) != null) return;
-
-   var result = await userManager.CreateAsync(new ApplicationUser { UserName = email, Email = email }, password);
-if (!result.Succeeded)
-{
-    throw new Exception( string.Join(", ", result.Errors.Select(e => e.Description)));
-}
-}
 
 // Gør den (ellers implicit genererede) Program-klasse offentlig og tilgængelig, så
 // WebApplicationFactory<Program> kan bruges fra Bison.Web.Tests til at køre servicen in-memory.

@@ -1,4 +1,5 @@
 ﻿using Bison.Core.Models;
+using Bison.Core.ModelsDTO;
 using Bison.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,7 +14,6 @@ namespace Bison.Web.Pages;
 /*
 the class Public has
 - a IObservationService_service readonly - meaning the interface of the observation for/from the server.
-- a list of the Observationsviewmodel, both set and get.
 - the PublicModel(IObservationService service) takes a Service
 
 all of this is made for the pagemodel, how it should look
@@ -53,8 +53,8 @@ public class PublicModel : PageModel
         CurrentTaxonId = taxonId;
 
         Observations = taxonId.HasValue
-            ? _filterService.GetObservationsFromTaxon(taxonId.Value, page)
-            : _service.GetObservations(page);
+            ? _filterService.GetObservationsFromTaxon(taxonId.Value, CurrentPage)
+            : _service.GetObservations(CurrentPage);
 
         // Hent taxonerne til formularens dropdown, hvis brugeren er logget ind.
         // Besøgende får ikke vist formularen, så for dem forbliver listen tom.

@@ -1,6 +1,7 @@
 //using Bison.Core;
 
 using Bison.Core.Models;
+using Bison.Core.ModelsDTO;
 using Bison.Infrastructure.Repositories;
 using Bison.Infrastructure.Services;
 
@@ -32,24 +33,21 @@ public class ProposalTests
 
         var actual = Assert.Single(result);
 
-        Assert.Equal("Anne", actual.Author);
-        Assert.Equal("A bird", actual.Message);
-        Assert.Equal(timestamp.ToString("g"), actual.Timestamp);
+        Assert.Equal("Anne", actual.AuthorName);
+        Assert.Equal("A bird", actual.Text);
+        Assert.Equal("2026-01-01 12:00", actual.TimeStamp);
 
     }
 
     [Fact]
     public void GetProposal_returningEmptyListForNonExistingObservation()
     {
-        //Arrange
-        var timestamp = new DateTime(2026, 1, 1, 12, 0, 0);
-
-        var proposal = new Proposal
-        {
+       var proposal = new Proposal
+         {
             ObservationId = 7,
             Author = new Author { Name = "Anne" },
             Text = "A bird",
-            TimeStamp = timestamp,
+            TimeStamp = new DateTime(2026, 1, 1, 12, 0, 0),
         };
         var repository = new ProposalTestRepository(proposal);
         var service = new ObservationService(repository);
@@ -72,37 +70,61 @@ public class ProposalTests
             _proposal = proposal;
         }
 
-        public IEnumerable<Proposal> GetProposals(int observationId)
+        public IEnumerable<ProposalDto> GetProposals(int observationId)
         {
             if (_proposal.ObservationId == observationId)
             {
-                return new List<Proposal> { _proposal };
+                return new[] { DtoMapper.ToProposalDto(_proposal) };
             }
-            return new List<Proposal>();
+
+            return Enumerable.Empty<ProposalDto>();
         }
+    
 
         // Implement other methods from IPostRepository as needed, throwing NotImplementedException for unneeded methods.
+        public IEnumerable<ObservationDto> GetObservations(int page) =>
+            throw new NotImplementedException();
+
+        public IEnumerable<ObservationDto> GetObservationsByAuthor(string author, int page) =>
+            throw new NotImplementedException();
+
+        public ObservationDto? GetObservationDetails(int id) =>
+            throw new NotImplementedException();
+
+        public IEnumerable<CommentDto> GetComments(int observationId) =>
+            throw new NotImplementedException();
+
+        public Observation? GetObservationEntity(int id) =>
+            throw new NotImplementedException();
+
+        public Taxon? GetTaxon(int id) =>
+            throw new NotImplementedException();
+
+        public Author? GetAuthorByName(string name) =>
+            throw new NotImplementedException();
+
+        public IReadOnlyList<Taxon> GetTaxons() =>
+            throw new NotImplementedException();
+
+        public void InsertPost(Post post) =>
+            throw new NotImplementedException();
+
+        public Post GetPost(int id) =>
+            throw new NotImplementedException();
+
+        public void UpdatePost(Post post) =>
+            throw new NotImplementedException();
+
+        public List<Observation> GetAllObservations() =>
+            throw new NotImplementedException();
+
+        public void DeletePost(int post) =>
+            throw new NotImplementedException();
+
+        public void Save() =>
+            throw new NotImplementedException();
+
         public void Dispose() { }
-        public void InsertPost(Post post) => throw new NotImplementedException();
-        public IEnumerable<T> GetPosts<T>(int page) where T : Post => throw new NotImplementedException();
-        public IEnumerable<T> GetPostsByAuthor<T>(string author, int page) where T : Post => throw new NotImplementedException();
-        public Post GetPost(int id) => throw new NotImplementedException();
-        public void UpdatePost(Post post) => throw new NotImplementedException();
-        public void DeletePost(int post) => throw new NotImplementedException();
-        public void Save() => throw new NotImplementedException();
-        public Observation? GetObservationDetails(int id) => throw new NotImplementedException();
-        public IEnumerable<Comment> GetComments(int ObservationId) => throw new NotImplementedException();
-        public Taxon? GetTaxon(int id) => throw new NotImplementedException();
-
-        public List<Observation> GetAllObservations() => throw new NotImplementedException();
-
-
-    // Disse testklasser bruges til andre funktioner end oprettelse.
-    public Author? GetAuthorByName(string name) =>
-        throw new NotImplementedException();
-
-    public IReadOnlyList<Taxon> GetTaxons() =>
-        throw new NotImplementedException();
 
 }
 }

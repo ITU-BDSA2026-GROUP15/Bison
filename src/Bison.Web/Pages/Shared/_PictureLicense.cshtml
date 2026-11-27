@@ -1,0 +1,25 @@
+@model string
+@{
+    // Lav et link til licensens side på creativecommons.org ud fra teksten,
+    // fx "CC BY-SA 4.0" → https://creativecommons.org/licenses/by-sa/4.0/
+    // CC0 er ikke en "licenses"-side, men ligger under publicdomain.
+    var parts = Model.Split(' ');
+    string? url = null;
+
+    if (Model == "CC0 1.0")
+        url = "https://creativecommons.org/publicdomain/zero/1.0/";
+    else if (parts.Length == 3 && parts[0] == "CC" && parts[1].StartsWith("BY"))
+        url = $"https://creativecommons.org/licenses/{parts[1].ToLower()}/{parts[2]}/";
+}
+
+<small class="picture-license">
+    License:
+    @if (url != null)
+    {
+        <a href="@url" target="_blank" rel="noopener">@Model</a>
+    }
+    else
+    {
+        @Model
+    }
+</small>

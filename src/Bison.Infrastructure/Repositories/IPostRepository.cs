@@ -1,4 +1,5 @@
 using Bison.Core.Models;
+using Bison.Core.ModelsDTO;
 
 namespace Bison.Infrastructure.Repositories
 {
@@ -10,15 +11,26 @@ namespace Bison.Infrastructure.Repositories
         //create
         void InsertPost(Post post);
 
-        //read -> returns all posts
-       IEnumerable<T> GetPosts<T>(int page) where T : Post;
+       
+        IEnumerable<ObservationDto> GetObservations (int page);
 
-       //read -> returns posts by a certain author
-        IEnumerable<T> GetPostsByAuthor<T>(string author, int page) where T : Post;
-        //read -> retuans a single post
-        Post GetPost(int id);
+        IEnumerable<ObservationDto> GetObservationsByAuthor (string author, int page);
+        ObservationDto? GetObservationDetails(int id);
+        IEnumerable<CommentDto> GetComments (int observationId);
+        IEnumerable<ProposalDto> GetProposals (int observationId);
 
-        //update
+     
+        Observation? GetObservationEntity(int id);
+        Taxon? GetTaxon(int id);
+        // Finder den forfatter, der svarer til brugerens login-navn.
+        Author? GetAuthorByName (string name);
+        IReadOnlyList<Taxon>GetTaxons();
+
+
+
+
+
+         //update
         void UpdatePost(Post post);
 
         //delete
@@ -26,17 +38,10 @@ namespace Bison.Infrastructure.Repositories
 
         void Save();
 
-        Observation? GetObservationDetails(int id);
-        Taxon? GetTaxon(int id);
-        IEnumerable<Comment> GetComments(int ObservationId);
-        IEnumerable<Proposal> GetProposals(int ObservationId);
-        List<Observation> GetAllObservations();
-
-       // Finder den forfatter, der svarer til brugerens login-navn.
-        Author? GetAuthorByName(string name);
-
-        // Henter de taxoner, brugeren kan vælge i formularen.
-        IReadOnlyList<Taxon> GetTaxons();
+    
+       //read -> retuans a single post
+        Post GetPost(int id);
+       List<Observation> GetAllObservations();
 
     }
 

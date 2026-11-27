@@ -106,6 +106,80 @@ namespace Bison.Infrastructure.Migrations
                     b.ToTable("Taxons");
                 });
 
+            modelBuilder.Entity("Bison.Core.Models.Author", b =>
+                {
+                    b.Property<int>("AuthorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("AuthorId");
+
+                    b.ToTable("Authors");
+                });
+
+            modelBuilder.Entity("Bison.Core.Models.Post", b =>
+                {
+                    b.Property<int>("PostId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PostType")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("PostId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("Posts");
+
+                    b.HasDiscriminator<string>("PostType").HasValue("Post");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Bison.Core.Models.Taxon", b =>
+                {
+                    b.Property<int>("TaxonId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("VernacularName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("dwc_TaxonID")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("TaxonId");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Taxons");
+                });
+
             modelBuilder.Entity("Bison.Infrastructure.Data.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -317,6 +391,9 @@ namespace Bison.Infrastructure.Migrations
             modelBuilder.Entity("Bison.Core.Models.Observation", b =>
                 {
                     b.HasBaseType("Bison.Core.Models.Post");
+
+                    b.Property<string>("License")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PictureUrl")
                         .HasColumnType("TEXT");

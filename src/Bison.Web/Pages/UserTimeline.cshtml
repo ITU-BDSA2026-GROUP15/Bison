@@ -31,14 +31,18 @@
                 <li>
                     <p>
                         <strong>
-                            <a href="/obs/@ob.Author">@ob.Author</a>
+                            <a href="/obs/@ob.AuthorName">@ob.AuthorName</a>
                         </strong>
-                        @ob.Message
-                        <small>&mdash; @ob.Timestamp</small>
+                        @ob.Text
+                        <small>&mdash; @ob.TimeStamp</small>
                     </p>
                     @if (ob.PictureUrl != null)
                     {
                         <img class="observation-picture" src=@ob.PictureUrl alt="Picture of the observed animal">
+                        @if (ob.License != null)
+                        {
+                            <partial name="_PictureLicense" model="ob.License" />
+                        }
                     }
                 </li>
             }

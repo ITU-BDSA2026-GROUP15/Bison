@@ -31,7 +31,7 @@ public class ObservationCreationIntegrationTest
         const string observationText = "Jeg så en solsort i haven";
 
         //act - Opret en observation for en forfatter, der endnu ikke findes.
-        var created = writeService.TryCreateObservation(authorName , authorEmail, observationText,  taxon.TaxonId, null);
+        var created = writeService.TryCreateObservation(authorName , authorEmail, observationText,  taxon.TaxonId, null, null);
 
         // Assert: Læs tilbage med en ny context på samme database,
         // så vi kontrollerer det, der faktisk blev gemt.
@@ -45,8 +45,13 @@ public class ObservationCreationIntegrationTest
         var authorObservation = Assert.Single(
             readService.GetObservationsFromAuthor(authorName));
 
-        Assert.Equal(authorName, publicObservation.Author);
-        Assert.Equal(observationText, publicObservation.Message);
-        Assert.Equal(publicObservation, authorObservation);
+        Assert.Equal(authorName, publicObservation.AuthorName);
+        Assert.Equal(observationText, publicObservation.Text);
+
+        Assert.Equal(publicObservation.Id, authorObservation.Id);
+        Assert.Equal(publicObservation.AuthorName, authorObservation.AuthorName);
+        Assert.Equal(publicObservation.Comments, authorObservation.Comments);
+        Assert.Equal(publicObservation.DanishVernacularName, authorObservation.DanishVernacularName);
+        Assert.Equal(publicObservation.TimeStamp, authorObservation.TimeStamp);
     }
 }
