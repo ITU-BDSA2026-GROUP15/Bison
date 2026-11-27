@@ -50,15 +50,12 @@
                         }
                     }
 
-                    @{
-                    // Slå observationens like-antal op. Vis 0, hvis den endnu ikke har likes.
-                    var likeCount = Model.LikeStatuses.TryGetValue(obs.Id, out var status) ? status.LikeCount : 0;
-                    }
-                    <small>@likeCount likes</small>
+            
+                    <small>@obs.LikeCount likes</small>
 
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        var isLiked = status?.IsLikedByCurrentUser == true;
+                        var isLiked = obs.IsLikedByCurrentUser;
 
                         <form method="post" asp-page="/Public" asp-page-handler="Like">
                             <input type="hidden" name="observationId" value="@obs.Id" />

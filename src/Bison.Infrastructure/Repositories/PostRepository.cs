@@ -181,6 +181,58 @@ namespace Bison.Infrastructure.Repositories
                 .ToList();
         }
 
+        //FOR LIKES FEATURE
+
+        public async Task<Dictionary<int, (int LikeCount, bool IsLikedByCurrentUser)>>
+    GetLikeStatusesAsync(int[] observationIds, string? currentUserId)
+{
+    var statuses = await _context.ObservationLikes
+        .Where(like => observationIds.Contains(like.ObservationId))
+        .GroupBy(like => like.ObservationId)
+        .Select(group => new
+        {
+            ObservationId = group.Key,
+            LikeCount = group.Count(),
+            IsLikedByCurrentUser = currentUserId != null &&
+                group.Any(like => like.UserId == currentUserId)
+        })
+        .ToListAsync();
+
+    return statuses.ToDictionary(
+        status => status.ObservationId,
+        status => (status.LikeCount, status.IsLikedByCurrentUser));
+}
+
+    public async Task<bool> SetLikeAsync(
+        int observationId, string userId, bool isLiked)
+    {
+    
+    var observationExists = await _context.Posts
+        .OfType<Observation>()
+        .AnyAsync(observation => observation.PostId == observationId);
+
+    if (!observationExists)
+        return false;
+
+    var existingLike = await _context.ObservationLikes
+        .FindAsync(observationId, userId);
+
+    if (isLiked && existingLike is null)
+    {
+        _context.ObservationLikes.Add(new ObservationLike
+        {
+            ObservationId = observationId,
+            UserId = userId
+        });
+    }
+    else if (!isLiked && existingLike is not null)
+    {
+        _context.ObservationLikes.Remove(existingLike);
+}
+
+        await _context.SaveChangesAsync();
+            return true;
+    }
 
 
         public Author? GetAuthorByName(string name)
