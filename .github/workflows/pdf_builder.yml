@@ -1,0 +1,23 @@
+name: Build PDF
+
+on:
+  push:
+    paths:
+      - 'docs/report.md'
+
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build PDF with Pandoc
+        uses: docker://pandoc/latex:latest
+        with:
+          args: docs/report.md -o docs/report.pdf --pdf-engine=xelatex
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: report
+          path: docs/report.pdf
