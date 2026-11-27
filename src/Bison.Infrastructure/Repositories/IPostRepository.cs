@@ -19,7 +19,7 @@ namespace Bison.Infrastructure.Repositories
         IEnumerable<CommentDto> GetComments (int observationId);
         IEnumerable<ProposalDto> GetProposals (int observationId);
 
-     
+        IEnumerable <ObservationDto> GetFavouriteObservations (string userId);
         Observation? GetObservationEntity(int id);
         Taxon? GetTaxon(int id);
         // Finder den forfatter, der svarer til brugerens login-navn.
