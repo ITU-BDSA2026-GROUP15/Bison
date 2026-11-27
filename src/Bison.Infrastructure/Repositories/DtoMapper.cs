@@ -12,7 +12,8 @@ public static class DtoMapper
         TimeStamp = o.TimeStamp.ToString("yyyy-MM-dd HH:mm"),
         AuthorName = o.Author.Name,
         DanishVernacularName = o.Taxon?.VernacularName ?? "",
-        PictureUrl = o.PictureUrl
+        PictureUrl = o.PictureUrl,
+        License = o.License
     };
 
     public static CommentDto ToCommentDto (Comment c) => new CommentDto
