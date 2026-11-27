@@ -184,13 +184,13 @@ namespace Bison.Infrastructure.Repositories
         //FOR LIKES FEATURE
 
         public async Task<Dictionary<int, (int LikeCount, bool IsLikedByCurrentUser)>>
-    GetLikeStatusesAsync(int[] observationIds, string? currentUserId)
-{
-    var statuses = await _context.ObservationLikes
-        .Where(like => observationIds.Contains(like.ObservationId))
-        .GroupBy(like => like.ObservationId)
-        .Select(group => new
+            GetLikeStatusesAsync(int[] observationIds, string? currentUserId)
         {
+            var statuses = await _context.ObservationLikes
+                .Where(like => observationIds.Contains(like.ObservationId))
+                .GroupBy(like => like.ObservationId)
+                .Select(group => new
+                {
             ObservationId = group.Key,
             LikeCount = group.Count(),
             IsLikedByCurrentUser = currentUserId != null &&
@@ -204,9 +204,8 @@ namespace Bison.Infrastructure.Repositories
 }
 
     public async Task<bool> SetLikeAsync(
-        int observationId, string userId, bool isLiked)
-    {
-    
+    int observationId, string userId, bool isLiked)
+{
     var observationExists = await _context.Posts
         .OfType<Observation>()
         .AnyAsync(observation => observation.PostId == observationId);
@@ -228,11 +227,11 @@ namespace Bison.Infrastructure.Repositories
     else if (!isLiked && existingLike is not null)
     {
         _context.ObservationLikes.Remove(existingLike);
-}
-
-        await _context.SaveChangesAsync();
-            return true;
     }
+
+    await _context.SaveChangesAsync();
+    return true;
+}
 
 
         public Author? GetAuthorByName(string name)
